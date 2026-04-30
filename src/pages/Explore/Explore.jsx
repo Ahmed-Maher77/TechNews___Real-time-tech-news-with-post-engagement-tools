@@ -1,7 +1,9 @@
+import ExpoBanner from "../../components/Explore_Components/ExpoBanner/ExpoBanner";
+
 function Explore() {
     return (
         <section className="Explore">
-            <h1>Explore</h1>
+            <ExpoBanner />
         </section>
     )
 }
