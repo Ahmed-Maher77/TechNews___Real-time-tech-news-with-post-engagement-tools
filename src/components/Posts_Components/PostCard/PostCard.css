@@ -5,7 +5,6 @@
     background-color: #fff;
     position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
 }
 
 .PostCard:hover .post-image img {
@@ -84,6 +83,20 @@
     z-index: 2;
 }
 
+.PostCard .post-link-btn {
+    position: absolute;
+    left: 0.8rem;
+    top: 0.8rem;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.92);
+}
+.PostCard .post-link-btn:hover {
+    color: var(--black-color);
+    border-color: #98a2b3;
+    background-color: #f8fafc;
+    rotate: 360deg;
+}
+
 .PostCard .post-action-btn {
     width: 2.2rem;
     height: 2.2rem;
@@ -108,10 +121,15 @@
     font-size: 0.85rem;
 }
 
-.PostCard .stat-pill {
-    font-size: 0.8rem;
-    color: #334155;
-    background-color: #f1f5f9;
-    border-radius: 999px;
-    padding: 0.35rem 0.7rem;
+.PostCard .comment-reaction-btn {
+    cursor: default;
+    border-color: #d7dde6;
+    background: #f8fafc;
+    color: #475467;
+}
+
+.PostCard .comment-reaction-btn:hover {
+    border-color: #d7dde6;
+    background: #f8fafc;
+    color: #475467;
 }

@@ -2,8 +2,15 @@ import { Component } from "react";
 import "./PostCard.css";
 import TooltipText from "../../common/TooltipText/TooltipText";
 import formatDate from "../../../utils/functions/formatDate";
+import LikeDislikeCounter from "../LikeDislikeCounter/LikeDislikeCounter";
 
 class PostCard extends Component {
+    state = {
+        likes: this.props.likes || 0,
+        dislikes: this.props.dislikes || 0,
+        reaction: null,
+    };
+
     fallbackImage = "https://placehold.net/800x600.png";
 
     handleImageError = (event) => {
@@ -11,16 +18,61 @@ class PostCard extends Component {
         event.currentTarget.src = this.fallbackImage;
     };
 
+    handleLike = () => {
+        const { reaction } = this.state;
+        if (reaction === "like") {
+            this.setState((prev) => ({
+                likes: Math.max(0, prev.likes - 1),
+                reaction: null,
+            }));
+            return;
+        }
+
+        if (reaction === "dislike") {
+            this.setState((prev) => ({
+                dislikes: Math.max(0, prev.dislikes - 1),
+            }));
+        }
+
+        this.setState((prev) => ({
+            likes: prev.likes + 1,
+            reaction: "like",
+        }));
+    };
+
+    handleDislike = () => {
+        const { reaction } = this.state;
+        if (reaction === "dislike") {
+            this.setState((prev) => ({
+                dislikes: Math.max(0, prev.dislikes - 1),
+                reaction: null,
+            }));
+            return;
+        }
+
+        if (reaction === "like") {
+            this.setState((prev) => ({
+                likes: Math.max(0, prev.likes - 1),
+            }));
+        }
+
+        this.setState((prev) => ({
+            dislikes: prev.dislikes + 1,
+            reaction: "dislike",
+        }));
+    };
+
     render() {
         const {
+            id,
             title,
             description,
-            likes,
             comments,
             author,
             date,
             image,
         } = this.props;
+        const { likes, dislikes, reaction } = this.state;
 
         return (
             <article className="PostCard">
@@ -41,6 +93,14 @@ class PostCard extends Component {
                             loading="lazy"
                             onError={this.handleImageError}
                         />
+                        <button
+                            type="button"
+                            className="post-action-btn post-link-btn"
+                            aria-label="Open post link"
+                            onClick={() => console.log(id)}
+                        >
+                            <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                        </button>
                     </figure>
                 )}
 
@@ -65,13 +125,16 @@ class PostCard extends Component {
                         </div>
 
                         <div className="post-stats d-flex align-items-center gap-3 mt-3">
-                            <span className="stat-pill">
-                                <i className="fa-regular fa-heart me-2"></i>
-                                {likes} likes
-                            </span>
-                            <span className="stat-pill">
-                                <i className="fa-regular fa-comment me-2"></i>
-                                {comments} comments
+                            <LikeDislikeCounter
+                                likes={likes}
+                                dislikes={dislikes}
+                                reaction={reaction}
+                                onLike={this.handleLike}
+                                onDislike={this.handleDislike}
+                            />
+                            <span className="reaction-btn comment-reaction-btn">
+                                <i className="fa-regular fa-comment"></i>
+                                {comments}
                             </span>
                         </div>
                     </footer>
