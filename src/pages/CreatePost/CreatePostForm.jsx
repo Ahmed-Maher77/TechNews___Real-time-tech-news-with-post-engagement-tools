@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import "./CreatePostForm.css";
+import MainButton from "../../components/common/MainButton/MainButton";
 
 const CreatePostForm = () => {
     const fileInputRef = useRef(null);
@@ -78,9 +79,9 @@ const CreatePostForm = () => {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="btn create-post-btn w-100 mt-3">
+            <MainButton type="submit" className="create-post-btn mt-3" fullWidth>
                 Create Post
-            </button>
+            </MainButton>
         </form>
     );
 };

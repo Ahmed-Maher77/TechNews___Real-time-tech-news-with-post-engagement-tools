@@ -70,17 +70,6 @@
     color: var(--gray-color);
 }
 
-.create-post-form .create-post-btn {
-    background-color: var(--black-color);
-    border: 1px solid var(--black-color);
-    color: #fff;
-    font-weight: 600;
-    transition: var(--trans-3);
-}
-
-.create-post-form .create-post-btn:hover,
-.create-post-form .create-post-btn:focus {
-    background-color: #1b2432;
-    border-color: #1b2432;
-    color: #fff;
+.create-post-form .create-post-btn > span {
+    padding-block: 0.78rem;
 }
