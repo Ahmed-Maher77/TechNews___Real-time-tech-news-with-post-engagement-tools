@@ -49,7 +49,7 @@ class Navbar extends Component {
                         (this.state.isSidebarOpen ? "open" : "")
                     }
                 >
-                    <Sidebar isMobile />
+                    <Sidebar isMobile isLoggedIn={this.props.isLoggedIn} />
                 </div>
             </nav>
         );

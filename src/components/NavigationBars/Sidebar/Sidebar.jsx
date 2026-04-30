@@ -68,6 +68,7 @@ class Sidebar extends Component {
                         <BottomRoutes
                             {...this.state.userData}
                             isCollapsed={this.props.isCollapsed}
+                            isLoggedIn={this.props.isLoggedIn}
                         />
                     )}
                 </ul>

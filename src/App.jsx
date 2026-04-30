@@ -11,6 +11,7 @@ class App extends Component {
     state = {
         isSmallScreen: window.innerWidth < 992,
         isSidebarCollapsed: false,
+        isLoggedIn: false,
     };
 
     handleResize = () => {
@@ -29,7 +30,7 @@ class App extends Component {
     }
 
     render() {
-        const { isSmallScreen, isSidebarCollapsed } = this.state;
+        const { isSmallScreen, isSidebarCollapsed, isLoggedIn } = this.state;
         const pagesClasses = `pages w-100 pb-4 ${isSmallScreen ? "pt-8" : "pt-4"}${
             !isSmallScreen && isSidebarCollapsed ? " sidebar-collapsed" : ""
         }`;
@@ -37,10 +38,11 @@ class App extends Component {
         return (
             <div className="App min-vh-100 d-flex">
                 {isSmallScreen ? (
-                    <Navbar />
+                    <Navbar isLoggedIn={isLoggedIn} />
                 ) : (
                     <Sidebar
                         isCollapsed={isSidebarCollapsed}
+                        isLoggedIn={isLoggedIn}
                         onToggleCollapse={() =>
                             this.setState((prev) => ({
                                 isSidebarCollapsed: !prev.isSidebarCollapsed,
