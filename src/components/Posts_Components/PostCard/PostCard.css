@@ -4,7 +4,9 @@
     overflow: visible;
     background-color: #fff;
     position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .PostCard:hover .post-image img {
@@ -121,15 +123,16 @@
     font-size: 0.85rem;
 }
 
-.PostCard .comment-reaction-btn {
+.PostCard .post-comments-stat {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: #667085;
+    background: transparent;
+    border: 0;
+    padding: 0;
     cursor: default;
-    border-color: #d7dde6;
-    background: #f8fafc;
-    color: #475467;
-}
-
-.PostCard .comment-reaction-btn:hover {
-    border-color: #d7dde6;
-    background: #f8fafc;
-    color: #475467;
 }

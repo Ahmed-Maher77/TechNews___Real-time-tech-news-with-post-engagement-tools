@@ -63,24 +63,25 @@ class PostCard extends Component {
     };
 
     render() {
-        const {
-            id,
-            title,
-            description,
-            comments,
-            author,
-            date,
-            image,
-        } = this.props;
+        const { id, title, description, comments, author, date, image } =
+            this.props;
         const { likes, dislikes, reaction } = this.state;
 
         return (
             <article className="PostCard">
                 <div className="post-actions">
-                    <button type="button" className="post-action-btn" aria-label="Add to favourites">
+                    <button
+                        type="button"
+                        className="post-action-btn"
+                        aria-label="Add to favourites"
+                    >
                         <i className="fa-regular fa-bookmark"></i>
                     </button>
-                    <button type="button" className="post-action-btn" aria-label="Share post">
+                    <button
+                        type="button"
+                        className="post-action-btn"
+                        aria-label="Share post"
+                    >
                         <i className="fa-solid fa-share-nodes"></i>
                     </button>
                 </div>
@@ -124,7 +125,7 @@ class PostCard extends Component {
                             </span>
                         </div>
 
-                        <div className="post-stats d-flex align-items-center gap-3 mt-3">
+                        <div className="post-stats d-flex align-items-center justify-content-between gap-3 mt-3">
                             <LikeDislikeCounter
                                 likes={likes}
                                 dislikes={dislikes}
@@ -132,7 +133,7 @@ class PostCard extends Component {
                                 onLike={this.handleLike}
                                 onDislike={this.handleDislike}
                             />
-                            <span className="reaction-btn comment-reaction-btn">
+                            <span className="post-comments-stat" aria-label="Comments count">
                                 <i className="fa-regular fa-comment"></i>
                                 {comments}
                             </span>
@@ -143,7 +144,5 @@ class PostCard extends Component {
         );
     }
 }
-
-
 
 export default PostCard;

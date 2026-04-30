@@ -7,11 +7,13 @@ const MainButton = ({
     onClick,
     fullWidth = false,
     variant = "default",
+    disabled = false,
 }) => (
     <button
         type={type}
         className={`main-app-button main-app-button--${variant}${fullWidth ? " is-full-width" : ""}${className ? ` ${className}` : ""}`}
         onClick={onClick}
+        disabled={disabled}
     >
         <span>{children}</span>
     </button>

@@ -63,6 +63,15 @@
     width: 100%;
 }
 
+.main-app-button:disabled {
+    opacity: 0.72;
+    cursor: not-allowed;
+}
+
+.main-app-button:disabled::after {
+    width: 0;
+}
+
 .main-app-button > span {
     text-align: center;
     text-decoration: none;
@@ -79,6 +88,11 @@
 .main-app-button:hover > span {
     color: var(--btn-text-hover-color);
     animation: mainButtonScaleUp 0.3s ease-in-out;
+}
+
+.main-app-button:disabled:hover > span {
+    color: var(--btn-text-color);
+    animation: none;
 }
 
 @keyframes mainButtonScaleUp {

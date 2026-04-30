@@ -18,7 +18,7 @@
 .expo-banner-content {
     position: absolute;
     inset: 0;
-    padding: 1rem 1.35rem;
+    padding: 1rem clamp(1.35rem, 3vw, 2.15rem);
     display: flex;
     align-items: center;
     justify-content: space-between;

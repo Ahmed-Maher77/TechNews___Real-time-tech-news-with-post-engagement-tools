@@ -6,6 +6,8 @@ import Navbar from "./components/NavigationBars/Navbar/Navbar";
 import Posts from "./pages/Posts/Posts";
 import Explore from "./pages/Explore/Explore";
 import Footer from "./components/Footer/Footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class App extends Component {
     state = {
@@ -57,6 +59,7 @@ class App extends Component {
                     <Explore />
                     <Footer />
                 </div>
+                <ToastContainer position="top-right" autoClose={2500} />
             </div>
         );
     }
