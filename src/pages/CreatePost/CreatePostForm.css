@@ -1,0 +1,86 @@
+.create-post-form {
+    background-color: var(--gray-bg);
+    border: 2.5px solid #e7ecf1;
+    /* box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06); */
+}
+
+.create-post-form .form-title {
+    color: var(--black-color);
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.create-post-form .form-label {
+    color: var(--black-color);
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.create-post-form .app-form-control {
+    border-color: #d8dee6;
+    background-color: #fff;
+    color: var(--black-color);
+}
+
+.create-post-form .app-form-control::placeholder {
+    color: #98a2b3;
+}
+
+.create-post-form .app-form-control:focus {
+    border-color: #98a2b3;
+    box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.08);
+}
+
+.form-image .image-upload-placeholder {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #f8fafc 20%, #eef2f6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #c9d1da;
+    border-radius: 50%;
+    transition: var(--trans-3);
+    cursor: pointer;
+}
+.form-image .image-upload-placeholder:focus,
+.form-image .image-upload-placeholder:hover {
+    border-color: #98a2b3;
+    box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.08);
+    outline: none;
+}
+.form-image .image-upload-placeholder i {
+    opacity: 0.8;
+    color: var(--gray-color);
+}
+
+.create-post-form .create-post-btn {
+    background-color: var(--black-color);
+    border: 1px solid var(--black-color);
+    color: #fff;
+    font-weight: 600;
+    transition: var(--trans-3);
+}
+
+.create-post-form .create-post-btn:hover,
+.create-post-form .create-post-btn:focus {
+    background-color: #1b2432;
+    border-color: #1b2432;
+    color: #fff;
+}
