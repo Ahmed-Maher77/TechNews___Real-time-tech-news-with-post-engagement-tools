@@ -1,18 +1,96 @@
-# React + Vite
+# TechNews — Real-time tech news with post engagement tools
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TechNews is a responsive React news platform focused on technology content.  
+It demonstrates practical frontend engineering patterns including reusable component architecture, API-based content rendering, interactive UI states, and clean scalable styling.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The application allows users to:
 
-## React Compiler
+- Browse tech posts in a modern card-based layout
+- View a featured slider with curated/random highlighted posts
+- React to posts with like/dislike interactions
+- Create and submit new posts through a controlled form workflow
+- Navigate seamlessly across responsive sidebar/navbar layouts
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Key Features
 
-Note: This will impact Vite dev & build performances.
+- **Responsive navigation system** (Sidebar for large screens, Navbar for small screens)
+- **Featured posts slider** with smooth transitions and custom controls
+- **Post cards** with image handling, metadata, tooltip titles, and quick actions
+- **Like/Dislike counter** component with parent-controlled state management
+- **Professional loading states** using animated placeholders
+- **Create Post workflow** with controlled inputs, async submit handling, disabled-submit state, and toast feedback
+- **Reusable design system components** (e.g., `MainButton`, `TooltipText`, shared utilities)
+- **Local mock API integration** through `json-server`
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Frontend:** React, Vite
+- **Styling:** CSS, Bootstrap 5
+- **HTTP Client:** Axios
+- **Notifications:** React Toastify
+- **Icons:** Font Awesome
+- **Mock Backend/Data:** json-server (`db.json`)
+
+## Project Structure
+
+```text
+src/
+  components/
+    common/
+    NavigationBars/
+    Posts_Components/
+    Explore_Components/
+    Footer/
+  pages/
+    Home/
+    Posts/
+    Explore/
+    CreatePost/
+  utils/
+    functions/
+public/
+db.json
+```
+
+## Getting Started
+
+### 1) Install dependencies
+
+```bash
+npm install
+```
+
+### 2) Run mock API (json-server)
+
+```bash
+npx json-server --watch db.json --port 3000
+```
+
+### 3) Run frontend
+
+```bash
+npm run dev
+```
+
+### 4) Build for production
+
+```bash
+npm run build
+```
+
+## Scripts
+
+- `npm run dev` - Start Vite development server
+- `npm run build` - Build production bundle
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint
+
+## Engineering Highlights
+
+- Component decomposition for maintainability and reuse
+- Responsive behavior handled via state + CSS media rules
+- Controlled form design with explicit submit lifecycle (`isSubmitting`)
+- Utility extraction for shared logic (e.g., date formatting)
+- Defensive UI behavior (image fallback, disabled interactions during async operations)
