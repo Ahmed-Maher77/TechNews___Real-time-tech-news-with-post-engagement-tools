@@ -1,9 +1,9 @@
 import { Component } from "react";
 import navLinks from "./navLinks";
 import "./Sidebar.css";
-import Logo from "../subComponents/Logo";
-import ListItem from "../subComponents/ListItem";
-import BottomRoutes from "../subComponents/BottomRoutes";
+import Logo from "../Logo";
+import ListItem from "../ListItem";
+import BottomRoutes from "../BottomRoutes";
 
 class Sidebar extends Component {
     state = {
@@ -28,11 +28,17 @@ class Sidebar extends Component {
                             type="button"
                             className="sidebar-toggle-btn border-0 bg-transparent"
                             onClick={this.props.onToggleCollapse}
-                            aria-label={this.props.isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                            aria-label={
+                                this.props.isCollapsed
+                                    ? "Expand sidebar"
+                                    : "Collapse sidebar"
+                            }
                         >
                             <i
                                 className={`fa-solid ${
-                                    this.props.isCollapsed ? "fa-angles-right" : "fa-angles-left"
+                                    this.props.isCollapsed
+                                        ? "fa-angles-right"
+                                        : "fa-angles-left"
                                 }`}
                             ></i>
                         </button>
@@ -59,7 +65,10 @@ class Sidebar extends Component {
 
                     {/* ======== Bottom Routes ======== */}
                     {!this.state.isAdmin && (
-                        <BottomRoutes {...this.state.userData} isCollapsed={this.props.isCollapsed} />
+                        <BottomRoutes
+                            {...this.state.userData}
+                            isCollapsed={this.props.isCollapsed}
+                        />
                     )}
                 </ul>
             </aside>

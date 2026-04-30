@@ -1,4 +1,4 @@
-import generateProfileImage_Placeholder from "../../../utils/functions/generateProfileImage_Placeholder";
+import generateProfileImage_Placeholder from "../../utils/functions/generateProfileImage_Placeholder";
 import ListItem from "./ListItem";
 
 const BottomRoutes = ({ username, userPic, isCollapsed }) => (

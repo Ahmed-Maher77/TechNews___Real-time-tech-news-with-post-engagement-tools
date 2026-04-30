@@ -1,5 +1,5 @@
 import { Component } from "react";
-import Logo from "../subComponents/Logo";
+import Logo from "../Logo";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Navbar.css";
 
