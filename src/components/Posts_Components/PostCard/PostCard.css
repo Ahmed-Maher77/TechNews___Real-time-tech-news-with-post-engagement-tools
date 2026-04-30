@@ -8,16 +8,40 @@
     cursor: pointer;
 }
 
-.PostCard:hover .post-image img  {
+.PostCard:hover .post-image img {
     transform: scale(1.05);
+}
+
+.PostCard:hover .post-image::before {
+    left: 125%;
 }
 
 .PostCard .post-image {
     aspect-ratio: 16/9;
     background-color: #eef2f6;
     overflow: hidden;
+    position: relative;
     border-top-left-radius: calc(0.9rem - 2.5px);
     border-top-right-radius: calc(0.9rem - 2.5px);
+}
+
+.PostCard .post-image::before {
+    content: "";
+    position: absolute;
+    top: -25%;
+    left: -75%;
+    width: 55%;
+    height: 160%;
+    background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(12deg);
+    transition: left 0.45s ease;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .PostCard .post-image img {

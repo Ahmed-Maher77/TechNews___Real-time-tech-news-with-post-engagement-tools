@@ -62,6 +62,15 @@ class FeaturedPost extends Component {
                             className={`featured-slide ${index === activeIndex ? "active" : ""}`}
                             aria-hidden={index !== activeIndex}
                         >
+                            <button
+                                type="button"
+                                className="featured-link-btn"
+                                aria-label="Log featured post id"
+                                onClick={() => console.log(post.id)}
+                            >
+                                <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                            </button>
+
                             <img
                                 src={post.image}
                                 alt={post.title || "Featured post"}
