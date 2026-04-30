@@ -1,0 +1,102 @@
+.AppFooter {
+    border-top: 1px solid #e6ebf1;
+    color: var(--gray-color);
+}
+
+.footer-main {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+    padding-bottom: 1.25rem;
+}
+
+.footer-logo-wrap .logo {
+    padding: 0 !important;
+}
+
+.footer-logo-wrap .logo h1 {
+    color: var(--black-color);
+}
+
+.footer-description {
+    max-width: 540px;
+    line-height: 1.7;
+    margin: 0.7rem 0 1rem;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--black-color);
+    font-weight: 600;
+    position: relative;
+    transition: var(--trans-3);
+}
+
+.footer-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 1.5px;
+    background-color: var(--black-color);
+    transition: var(--trans-3);
+}
+
+.footer-links a:hover {
+    color: #000;
+}
+
+.footer-links a:hover::after {
+    width: 100%;
+}
+
+.footer-newsletter h3 {
+    color: var(--black-color);
+    margin: 0;
+}
+
+.footer-newsletter p {
+    margin: 0.7rem 0 1rem;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.newsletter-form input {
+    flex: 1;
+    border: 1px solid #d7dde6;
+    border-radius: 0.65rem;
+    padding: 0.65rem 0.8rem;
+    outline: none;
+}
+
+.newsletter-form input:focus {
+    border-color: #aeb7c4;
+}
+
+.newsletter-form .footer-subscribe-btn > span {
+    padding: 0.65rem 0.95rem;
+    letter-spacing: 0.04em;
+    font-size: 0.88rem;
+}
+
+.footer-bottom {
+    border-top: 1px solid #e6ebf1;
+    padding: 0.85rem 0 0.2rem;
+    font-size: 0.92rem;
+}
+
+@media (max-width: 900px) {
+    .footer-main {
+        grid-template-columns: 1fr;
+    }
+}

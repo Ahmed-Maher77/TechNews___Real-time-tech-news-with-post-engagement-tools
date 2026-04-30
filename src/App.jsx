@@ -5,6 +5,7 @@ import Sidebar from "./components/NavigationBars/Sidebar/Sidebar";
 import Navbar from "./components/NavigationBars/Navbar/Navbar";
 import Posts from "./pages/Posts/Posts";
 import Explore from "./pages/Explore/Explore";
+import Footer from "./components/Footer/Footer";
 
 class App extends Component {
     state = {
@@ -52,6 +53,7 @@ class App extends Component {
                     <CreatePost />
                     <Posts />
                     <Explore />
+                    <Footer />
                 </div>
             </div>
         );
