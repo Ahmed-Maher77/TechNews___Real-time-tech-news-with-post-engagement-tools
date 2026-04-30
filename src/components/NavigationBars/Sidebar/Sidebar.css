@@ -1,0 +1,128 @@
+aside.Sidebar {
+    width: 230px;
+    min-height: 100vh;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-right: 2px solid #bbbbbb30;
+    z-index: 1040;
+    box-shadow: 0 0px 4px 0 rgb(174 174 174 / 8%);
+    transition: var(--trans-3);
+}
+
+aside.Sidebar.is-mobile {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    position: static;
+    box-shadow: none;
+}
+
+aside.Sidebar .sidebar-toggle-btn {
+    color: var(--gray-color);
+    font-size: 1.05rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+}
+
+aside.Sidebar .sidebar-toggle-btn:hover {
+    background-color: #eef2f6 !important;
+}
+
+aside.Sidebar .sidebar-header .logo {
+    padding-left: 0 !important;
+}
+
+aside.Sidebar .sidebar-header .logo h1,
+aside.Sidebar .navlink-item span,
+aside.Sidebar .navlink-item figure,
+aside.Sidebar .navlink-item .fa-arrow-right-from-bracket {
+    transition: opacity 0.2s ease, transform 0.2s ease, max-width 0.2s ease;
+}
+
+aside.Sidebar .sidebar-header .logo h1 {
+    max-width: 140px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+aside.Sidebar .navlink-item span {
+    max-width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+aside.Sidebar.is-collapsed {
+    width: 88px;
+}
+
+aside.Sidebar.is-collapsed .top,
+aside.Sidebar.is-collapsed .bottom {
+    align-items: center;
+}
+
+aside.Sidebar.is-collapsed .sidebar-header {
+    justify-content: center !important;
+    gap: 0.35rem;
+}
+
+aside.Sidebar.is-collapsed .sidebar-header .logo {
+    padding: 0 !important;
+    gap: 0 !important;
+}
+
+aside.Sidebar.is-collapsed .sidebar-header .logo i {
+    font-size: 1.15rem !important;
+}
+
+aside.Sidebar.is-collapsed .navlink-item {
+    width: 52px;
+    justify-content: center;
+    padding-inline: 0;
+}
+
+aside.Sidebar.is-collapsed .navlink-item a {
+    justify-content: center !important;
+}
+
+aside.Sidebar.is-collapsed .navlink-item span,
+aside.Sidebar.is-collapsed .navlink-item figure,
+aside.Sidebar.is-collapsed .navlink-item .fa-arrow-right-from-bracket {
+    opacity: 0;
+    max-width: 0;
+    transform: translateX(-6px);
+    pointer-events: none;
+}
+
+aside.Sidebar.is-collapsed .sidebar-header .logo h1 {
+    opacity: 0;
+    max-width: 0;
+    transform: translateX(-6px);
+}
+
+.navlink-item {
+    border: 1px solid transparent;
+    transition: var(--trans-3);
+    color: var(--gray-color);
+}
+.navlink-item.active,
+.navlink-item:hover {
+    color: var(--gray-color);
+    background-color: #fefefe;
+    border-color: #f2f5f6;
+    color: var(--black-color);
+}
+
+.navlink-item.logout-item,
+.navlink-item.logout-item a {
+    color: #dc3545;
+}
+
+.navlink-item.logout-item:hover,
+.navlink-item.logout-item:hover a {
+    color: #bb2d3b;
+}
