@@ -1,4 +1,4 @@
-import generateProfileImage_Placeholder from "../../utils/functions/generateProfileImage_Placeholder";
+import Avatar from "../common/Avatar/Avatar";
 import ListItem from "./ListItem";
 import MainButton from "../common/MainButton/MainButton";
 
@@ -15,9 +15,13 @@ const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn }) => (
                 >
                     <figure className="mb-0 d-flex align-items-center gap-2 justify-content-between">
                         {userPic ? (
-                            <img src={userPic} alt="{username}'s picture" />
+                            <Avatar
+                                src={userPic}
+                                size={35}
+                                alt={`${username}'s picture`}
+                            />
                         ) : (
-                            generateProfileImage_Placeholder(username)
+                            <Avatar username={username} size={35} />
                         )}
                     </figure>
                 </ListItem>

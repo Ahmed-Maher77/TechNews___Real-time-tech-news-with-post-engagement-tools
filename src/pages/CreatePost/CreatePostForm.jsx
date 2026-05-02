@@ -41,7 +41,9 @@ const CreatePostForm = () => {
             // Notify other parts of the app (Posts page) about the new post
             try {
                 window.dispatchEvent(new CustomEvent("postCreated", { detail: createdPost }));
-            } catch (e) {}
+            } catch {
+                // ignore dispatch errors
+            }
 
             toast.success("Post created successfully.");
             setFormData(getInitialForm());
