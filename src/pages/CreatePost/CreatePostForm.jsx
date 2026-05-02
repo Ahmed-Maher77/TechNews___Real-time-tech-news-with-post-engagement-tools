@@ -35,7 +35,13 @@ const CreatePostForm = () => {
         setIsSubmitting(true);
 
         try {
-            await axios.post("http://localhost:3000/posts", formData);
+            const res = await axios.post("http://localhost:3000/posts", formData);
+            const createdPost = res.data;
+
+            // Notify other parts of the app (Posts page) about the new post
+            try {
+                window.dispatchEvent(new CustomEvent("postCreated", { detail: createdPost }));
+            } catch (e) {}
 
             toast.success("Post created successfully.");
             setFormData(getInitialForm());

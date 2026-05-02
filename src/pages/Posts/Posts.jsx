@@ -4,6 +4,7 @@ import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFou
 import FeaturedPost from "../../components/Posts_Components/FeaturedPost/FeaturedPost";
 import PostsLoading from "../../components/Posts_Components/PostsLoading/PostsLoading";
 import PostsContainer from "../../components/Posts_Components/PostsContainer/PostsContainer";
+import "./Posts.css";
 
 
 class Posts extends Component {
@@ -11,6 +12,8 @@ class Posts extends Component {
         posts: [],
         featuredPosts: [],
         isLoading: true,
+        searchQuery: "",
+        sortOrder: "newest",
     }
 
     fetchPosts = async () => {
@@ -43,27 +46,129 @@ class Posts extends Component {
     
     componentDidMount() {
         this.fetchPosts();
+        window.addEventListener("postCreated", this.handlePostCreated);
     }
+
+    componentWillUnmount() {
+        window.removeEventListener("postCreated", this.handlePostCreated);
+    }
+
+    handlePostCreated = (event) => {
+        const created = event?.detail;
+        if (!created) return;
+
+        this.setState((prev) => {
+            const existsInFeatured = prev.featuredPosts.some((p) => p.id === created.id);
+            const existsInPosts = prev.posts.some((p) => p.id === created.id);
+            if (existsInFeatured || existsInPosts) return null;
+
+            // Add the new post to the non-featured posts list
+            return { posts: [created, ...prev.posts] };
+        });
+    };
+
+    handleSearchChange = (event) => {
+        this.setState({ searchQuery: event.target.value });
+    };
+
+    handleSortChange = (sortOrder) => {
+        this.setState({ sortOrder });
+    };
+
+    getFilteredPosts = () => {
+        const { posts, searchQuery } = this.state;
+        const normalizedQuery = searchQuery.trim().toLowerCase();
+
+        if (!normalizedQuery) return posts;
+
+        return posts.filter((post) => {
+            const title = (post.title || "").toLowerCase();
+            const category = (post.category || "").toLowerCase();
+
+            return title.includes(normalizedQuery) || category.includes(normalizedQuery);
+        });
+    };
+
+    getSortedPosts = (posts) => {
+        const { sortOrder } = this.state;
+
+        return [...posts].sort((firstPost, secondPost) => {
+            const firstDate = new Date(firstPost.date || 0).getTime();
+            const secondDate = new Date(secondPost.date || 0).getTime();
+
+            return sortOrder === "oldest"
+                ? firstDate - secondDate
+                : secondDate - firstDate;
+        });
+    };
 
 
     render() {
-        const { posts, featuredPosts, isLoading } = this.state;
+        const { featuredPosts, isLoading, searchQuery, sortOrder } = this.state;
+        const filteredPosts = this.getSortedPosts(this.getFilteredPosts());
+        const hasNoMatchingPosts = !isLoading && featuredPosts.length > 0 && filteredPosts.length === 0;
 
         return (
             <div className="Posts">
-                {
-                    isLoading ? (
-                        <PostsLoading />
-                    ) : featuredPosts.length > 0 ? (
-                        <>
-                            <FeaturedPost posts={featuredPosts} />
-                            {posts.length > 0 && <PostsContainer posts={posts} />}
-                        </>
-                    ) :
-                    (
-                        <NoPostsFoundMessage />
-                    )
-                }
+                {isLoading ? (
+                    <PostsLoading />
+                ) : featuredPosts.length > 0 ? (
+                    <>
+                        <FeaturedPost posts={featuredPosts} />
+                        
+                        <div className="posts-toolbar">
+                            <div className="posts-toolbar__search-sort">
+                                <label className="posts-search" htmlFor="posts-search-input">
+                                    <div className="posts-search__field">
+                                        <i className="fa-solid fa-magnifying-glass posts-search__icon"></i>
+                                        <input
+                                            id="posts-search-input"
+                                            type="search"
+                                            className="form-control app-form-control posts-search__input"
+                                            placeholder="Search by title or category"
+                                            value={searchQuery}
+                                            onChange={this.handleSearchChange}
+                                        />
+                                    </div>
+                                </label>
+
+                                <div className="posts-sort" aria-label="Sort posts by date">
+                                    <div className="posts-sort__toggle" role="group" aria-label="Sort posts by date">
+                                        <button
+                                            type="button"
+                                            className={`posts-sort__btn ${sortOrder === "newest" ? "active" : ""}`}
+                                            onClick={() => this.handleSortChange("newest")}
+                                        >
+                                            Newest
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`posts-sort__btn ${sortOrder === "oldest" ? "active" : ""}`}
+                                            onClick={() => this.handleSortChange("oldest")}
+                                        >
+                                            Oldest
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {filteredPosts.length > 0 ? (
+                            <PostsContainer posts={filteredPosts} />
+                        ) : (
+                            hasNoMatchingPosts && (
+                                <NoPostsFoundMessage
+                                    title="No matching posts"
+                                    subtitle="Try a different title or category to find posts in the feed."
+                                    buttonLabel="Clear the search"
+                                    onButtonClick={() => this.setState({ searchQuery: "" })}
+                                />
+                            )
+                        )}
+                    </>
+                ) : (
+                    <NoPostsFoundMessage />
+                )}
             </div>
         );
     }

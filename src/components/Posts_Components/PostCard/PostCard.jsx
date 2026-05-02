@@ -63,8 +63,16 @@ class PostCard extends Component {
     };
 
     render() {
-        const { id, title, description, comments, author, date, image } =
-            this.props;
+        const {
+            id,
+            title,
+            description,
+            comments,
+            author,
+            date,
+            image,
+            category,
+        } = this.props;
         const { likes, dislikes, reaction } = this.state;
 
         return (
@@ -94,6 +102,12 @@ class PostCard extends Component {
                             loading="lazy"
                             onError={this.handleImageError}
                         />
+                        {category && (
+                            <span className="post-image-category">
+                                <i className="fa-solid fa-tag me-2"></i>
+                                {category}
+                            </span>
+                        )}
                         <button
                             type="button"
                             className="post-action-btn post-link-btn"
@@ -133,7 +147,10 @@ class PostCard extends Component {
                                 onLike={this.handleLike}
                                 onDislike={this.handleDislike}
                             />
-                            <span className="post-comments-stat" aria-label="Comments count">
+                            <span
+                                className="post-comments-stat"
+                                aria-label="Comments count"
+                            >
                                 <i className="fa-regular fa-comment"></i>
                                 {comments}
                             </span>
