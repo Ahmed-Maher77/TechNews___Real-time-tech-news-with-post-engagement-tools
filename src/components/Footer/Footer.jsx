@@ -1,6 +1,7 @@
 import Logo from "../NavigationBars/Logo";
 import "./Footer.css";
 import MainButton from "../common/MainButton/MainButton";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -17,9 +18,9 @@ const Footer = () => {
                         you informed every day.
                     </p>
                     <nav className="footer-links" aria-label="Footer links">
-                        <a href="/">Home</a>
-                        <a href="/explore">Explore</a>
-                        <a href="/my-posts">My Posts</a>
+                        <Link to="/">Home</Link>
+                        <Link to="/explore">Explore</Link>
+                        <Link to="/my-posts">My Posts</Link>
                     </nav>
                 </div>
 

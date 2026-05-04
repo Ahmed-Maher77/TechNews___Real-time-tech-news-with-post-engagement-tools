@@ -5,8 +5,8 @@ import Logo from "../Logo";
 import ListItem from "../ListItem";
 import BottomRoutes from "../BottomRoutes";
 
-function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn }) {
-    const isAdmin = false;
+function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role }) {
+    const isAdmin = role === "admin";
     const userData = {
         username: "Ahmed Maher",
         userPic: null,

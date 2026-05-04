@@ -4,7 +4,8 @@
 
 .featured-slider {
     position: relative;
-    height: clamp(360px, 46vw, 540px);
+    width: 100%;
+    height: clamp(260px, 32vw, 380px);
     border-radius: 1rem;
     overflow: hidden;
     background-color: #d9dde3;

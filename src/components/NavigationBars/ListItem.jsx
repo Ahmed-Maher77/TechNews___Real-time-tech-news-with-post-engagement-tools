@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 const ListItem = ({
     href,
     icon,
@@ -12,15 +14,15 @@ const ListItem = ({
             isCollapsed ? " is-collapsed-item" : ""
         }`}
     >
-        <a
-            href={href}
+        <NavLink
+            to={href}
             className={`d-flex gap-35 align-items-center w-100${justifyBetween ? " justify-content-between" : ""}`}
             title={label}
         >
             {icon && <i className={icon}></i>}
             <span>{label}</span>
             {children}
-        </a>
+        </NavLink>
     </li>
 );
 

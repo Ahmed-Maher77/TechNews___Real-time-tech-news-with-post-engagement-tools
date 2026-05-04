@@ -2,14 +2,29 @@ const navLinks = [
     {
         adminRoutes: [
             {
-                name: "Overview",
-                target: "/",
+                name: "Dashboard",
+                target: "/admin/dashboard",
                 icon: "fa-regular fa-house",
                 top: true,
             },
+            {
+                name: "User Management",
+                target: "/admin/user-management",
+                icon: "fa-regular fa-user",
+            },
+            {
+                name: "Post Management",
+                target: "/admin/post-management",
+                icon: "fa-regular fa-newspaper",
+            },
+            {
+                name: "Moderation Queue",
+                target: "/admin/moderation-queue",
+                icon: "fa-regular fa-flag",
+            },
         ],
         userRoutes: [
-            { name: "Home Feed", target: "/", icon: "fa-regular fa-house" },
+            { name: "Home Feed", target: "/home", icon: "fa-regular fa-house" },
             {
                 name: "Explore",
                 target: "/explore",

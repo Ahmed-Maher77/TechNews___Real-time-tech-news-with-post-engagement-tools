@@ -3,7 +3,7 @@ import Logo from "../Logo";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Navbar.css";
 
-function Navbar({ isLoggedIn }) {
+function Navbar({ isLoggedIn, role }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const handleToggleSidebar = useCallback(() => {
@@ -36,7 +36,7 @@ function Navbar({ isLoggedIn }) {
             />
 
             <div className={"mobile-menu " + (isSidebarOpen ? "open" : "")}>
-                <Sidebar isMobile isLoggedIn={isLoggedIn} />
+                <Sidebar isMobile isLoggedIn={isLoggedIn} role={role} />
             </div>
         </nav>
     );
