@@ -6,14 +6,17 @@ function LoginForm({ loginData, setLoginData, onSubmit }) {
             key="login-form"
             className="auth-form auth-form-panel auth-form-panel--login"
             onSubmit={onSubmit}
+            autoComplete="off"
         >
-            <h1 className="h4 mb-3">Welcome back</h1>
+            <h1 className="h4 mb-3 text-center">Welcome back</h1>
             <div className="mb-3">
                 <label htmlFor="login-email" className="form-label">Email</label>
                 <input
                     type="email"
                     className="form-control app-form-control"
                     id="login-email"
+                    name="login_email"
+                    autoComplete="off"
                     required
                     placeholder="Enter your email"
                     value={loginData.email}
@@ -31,6 +34,8 @@ function LoginForm({ loginData, setLoginData, onSubmit }) {
                     type="password"
                     className="form-control app-form-control"
                     id="login-password"
+                    name="login_password"
+                    autoComplete="new-password"
                     required
                     placeholder="Enter your password"
                     value={loginData.password}

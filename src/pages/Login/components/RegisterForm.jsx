@@ -6,14 +6,17 @@ function RegisterForm({ registerData, setRegisterData, onSubmit }) {
             key="register-form"
             className="auth-form auth-form-panel auth-form-panel--register"
             onSubmit={onSubmit}
+            autoComplete="off"
         >
-            <h1 className="h4 mb-3">Create account</h1>
+            <h1 className="h4 mb-3 text-center">Create account</h1>
             <div className="mb-3">
                 <label htmlFor="register-name" className="form-label">Full Name</label>
                 <input
                     type="text"
                     className="form-control app-form-control"
                     id="register-name"
+                    name="register_name"
+                    autoComplete="off"
                     required
                     placeholder="Enter your full name"
                     value={registerData.name}
@@ -31,6 +34,8 @@ function RegisterForm({ registerData, setRegisterData, onSubmit }) {
                     type="email"
                     className="form-control app-form-control"
                     id="register-email"
+                    name="register_email"
+                    autoComplete="off"
                     required
                     placeholder="Enter your email"
                     value={registerData.email}
@@ -48,6 +53,8 @@ function RegisterForm({ registerData, setRegisterData, onSubmit }) {
                     type="password"
                     className="form-control app-form-control"
                     id="register-password"
+                    name="register_password"
+                    autoComplete="new-password"
                     required
                     placeholder="Create a password"
                     value={registerData.password}
@@ -67,6 +74,8 @@ function RegisterForm({ registerData, setRegisterData, onSubmit }) {
                     type="password"
                     className="form-control app-form-control"
                     id="register-confirm-password"
+                    name="register_confirm_password"
+                    autoComplete="new-password"
                     required
                     placeholder="Confirm your password"
                     value={registerData.confirmPassword}

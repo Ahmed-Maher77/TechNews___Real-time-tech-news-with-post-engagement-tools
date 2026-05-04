@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
     loginUser,
     registerUser,
@@ -43,6 +44,7 @@ function Login() {
             role: result.user.role,
         };
         saveStoredAuth(authPayload);
+        toast.success("Logged in successfully.");
         navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
             replace: true,
         });
@@ -70,6 +72,15 @@ function Login() {
             return;
         }
 
+        const authPayload = {
+            isLoggedIn: true,
+            email: result.user.email,
+            name: result.user.name,
+            role: result.user.role,
+        };
+        saveStoredAuth(authPayload);
+        toast.success("Account created successfully.");
+
         setLoginData({
             email: registerData.email,
             password: registerData.password,
@@ -81,8 +92,10 @@ function Login() {
             confirmPassword: "",
             role: "user",
         });
-        setSuccessMessage("Registration successful. You can login now.");
-        setMode("login");
+        setSuccessMessage("");
+        navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
+            replace: true,
+        });
     };
 
     return (

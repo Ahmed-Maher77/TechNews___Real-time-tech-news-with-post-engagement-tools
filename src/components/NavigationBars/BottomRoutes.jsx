@@ -3,11 +3,13 @@ import ListItem from "./ListItem";
 import MainButton from "../common/MainButton/MainButton";
 import { useNavigate } from "react-router-dom";
 import { clearStoredAuth } from "../../utils/authStorage";
+import { toast } from "react-toastify";
 
 const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn }) => {
     const navigate = useNavigate();
     const handleLogout = () => {
         clearStoredAuth();
+        toast.success("Logged out successfully.");
         navigate("/login", { replace: true });
     };
 
@@ -35,7 +37,6 @@ const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn }) => {
                         </figure>
                     </ListItem>
                     <ListItem
-                        href="/login"
                         label="Logout"
                         justifyBetween={true}
                         itemClassName="logout-item"
