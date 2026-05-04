@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Home from "./pages/Home/Home";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import Sidebar from "./components/NavigationBars/Sidebar/Sidebar";
@@ -9,60 +9,58 @@ import Footer from "./components/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-class App extends Component {
-    state = {
-        isSmallScreen: window.innerWidth < 992,
-        isSidebarCollapsed: false,
-        isLoggedIn: false,
-    };
+function App() {
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 992);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [isLoggedIn] = useState(false);
 
-    handleResize = () => {
-        const isSmallScreen = window.innerWidth < 992;
-        if (isSmallScreen !== this.state.isSmallScreen) {
-            this.setState({ isSmallScreen });
-        }
-    };
-
-    componentDidMount() {
-        window.addEventListener("resize", this.handleResize);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize);
-    }
-
-    render() {
-        const { isSmallScreen, isSidebarCollapsed, isLoggedIn } = this.state;
-        const pagesClasses = `pages w-100 pb-4 ${isSmallScreen ? "pt-8" : "pt-4"}${
-            !isSmallScreen && isSidebarCollapsed ? " sidebar-collapsed" : ""
-        }`;
-
-        return (
-            <div className="App min-vh-100 d-flex">
-                {isSmallScreen ? (
-                    <Navbar isLoggedIn={isLoggedIn} />
-                ) : (
-                    <Sidebar
-                        isCollapsed={isSidebarCollapsed}
-                        isLoggedIn={isLoggedIn}
-                        onToggleCollapse={() =>
-                            this.setState((prev) => ({
-                                isSidebarCollapsed: !prev.isSidebarCollapsed,
-                            }))
-                        }
-                    />
-                )}
-                <div className={pagesClasses}>
-                    <Home />
-                    <CreatePost />
-                    <Posts />
-                    <Explore />
-                    <Footer />
-                </div>
-                <ToastContainer position="top-right" autoClose={2500} />
-            </div>
+    const handleResize = useCallback(() => {
+        const nextIsSmallScreen = window.innerWidth < 992;
+        setIsSmallScreen((prevIsSmallScreen) =>
+            prevIsSmallScreen === nextIsSmallScreen ? prevIsSmallScreen : nextIsSmallScreen
         );
-    }
+    }, []);
+
+    const handleToggleSidebar = useCallback(() => {
+        setIsSidebarCollapsed((prev) => !prev);
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [handleResize]);
+
+    const pagesClasses = useMemo(
+        () =>
+            `pages w-100 pb-4 ${isSmallScreen ? "pt-8" : "pt-4"}${
+                !isSmallScreen && isSidebarCollapsed ? " sidebar-collapsed" : ""
+            }`,
+        [isSmallScreen, isSidebarCollapsed]
+    );
+
+    return (
+        <div className="App min-vh-100 d-flex">
+            {isSmallScreen ? (
+                <Navbar isLoggedIn={isLoggedIn} />
+            ) : (
+                <Sidebar
+                    isCollapsed={isSidebarCollapsed}
+                    isLoggedIn={isLoggedIn}
+                    onToggleCollapse={handleToggleSidebar}
+                />
+            )}
+            <div className={pagesClasses}>
+                <Home />
+                <CreatePost />
+                <Posts />
+                <Explore />
+                <Footer />
+            </div>
+            <ToastContainer position="top-right" autoClose={2500} />
+        </div>
+    );
 }
 
 export default App;

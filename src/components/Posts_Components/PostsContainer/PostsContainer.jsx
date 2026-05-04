@@ -1,19 +1,15 @@
-import { Component } from "react";
+import { memo } from "react";
 import PostCard from "../PostCard/PostCard";
 import "./PostsContainer.css";
 
-class PostsContainer extends Component {
-    render() {
-        return (
-            <div className="PostsContainer">
-                {
-                    this.props.posts.map((post) => (
-                        <PostCard key={post.id} {...post} />
-                    ))
-                }
-            </div>
-        );
-    }
+function PostsContainer({ posts }) {
+    return (
+        <div className="PostsContainer">
+            {posts.map((post) => (
+                <PostCard key={post.id} {...post} />
+            ))}
+        </div>
+    );
 }
 
-export default PostsContainer;
+export default memo(PostsContainer);

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Component } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFoundMessage";
 import FeaturedPost from "../../components/Posts_Components/FeaturedPost/FeaturedPost";
 import PostsLoading from "../../components/Posts_Components/PostsLoading/PostsLoading";
@@ -7,38 +7,15 @@ import PostsContainer from "../../components/Posts_Components/PostsContainer/Pos
 import PostsToolbar from "../../components/common/PostsToolbar/PostsToolbar";
 import "./Posts.css";
 
-class Posts extends Component {
-    state = {
-        posts: [],
-        featuredPosts: [],
-        isLoading: true,
-        searchQuery: "",
-        sortOrder: "newest",
-    };
+function Posts() {
+    const [posts, setPosts] = useState([]);
+    const [featuredPosts, setFeaturedPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [sortOrder, setSortOrder] = useState("newest");
 
-    fetchPosts = async () => {
-        try {
-            const res = await axios.get("http://localhost:3000/posts");
-            const data = res.data;
-            if (data.length > 0) {
-                const featuredPosts = this.getRandomPosts(data, 3);
-                const featuredIds = new Set(
-                    featuredPosts.map((post) => post.id),
-                );
-                const posts = data.filter((post) => !featuredIds.has(post.id));
-                this.setState({ posts, featuredPosts, isLoading: false });
-                return;
-            }
-
-            this.setState({ posts: [], featuredPosts: [], isLoading: false });
-        } catch (error) {
-            console.log(error);
-            this.setState({ isLoading: false });
-        }
-    };
-
-    getRandomPosts = (posts, count) => {
-        const shuffled = [...posts];
+    const getRandomPosts = useCallback((nextPosts, count) => {
+        const shuffled = [...nextPosts];
         for (let i = shuffled.length - 1; i > 0; i--) {
             const randomIndex = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[randomIndex]] = [
@@ -47,43 +24,62 @@ class Posts extends Component {
             ];
         }
         return shuffled.slice(0, Math.min(count, shuffled.length));
-    };
+    }, []);
 
-    componentDidMount() {
-        this.fetchPosts();
-        window.addEventListener("postCreated", this.handlePostCreated);
-    }
+    const fetchPosts = useCallback(async () => {
+        try {
+            const res = await axios.get("http://localhost:3000/posts");
+            const data = res.data;
+            if (data.length > 0) {
+                const featuredPosts = getRandomPosts(data, 3);
+                setPosts(data);
+                setFeaturedPosts(featuredPosts);
+                setIsLoading(false);
+                return;
+            }
 
-    componentWillUnmount() {
-        window.removeEventListener("postCreated", this.handlePostCreated);
-    }
+            setPosts([]);
+            setFeaturedPosts([]);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false);
+        }
+    }, [getRandomPosts]);
 
-    handlePostCreated = (event) => {
+    const handlePostCreated = useCallback((event) => {
         const created = event?.detail;
         if (!created) return;
 
-        this.setState((prev) => {
-            const existsInFeatured = prev.featuredPosts.some(
-                (p) => p.id === created.id,
-            );
-            const existsInPosts = prev.posts.some((p) => p.id === created.id);
-            if (existsInFeatured || existsInPosts) return null;
-
-            // Add the new post to the non-featured posts list
-            return { posts: [created, ...prev.posts] };
+        setPosts((prevPosts) => {
+            const existsInPosts = prevPosts.some((p) => p.id === created.id);
+            if (existsInPosts) return prevPosts;
+            return [created, ...prevPosts];
         });
-    };
+    }, []);
 
-    handleSearchChange = (event) => {
-        this.setState({ searchQuery: event.target.value });
-    };
+    useEffect(() => {
+        (async () => {
+            await fetchPosts();
+        })();
+    }, [fetchPosts]);
 
-    handleSortChange = (sortOrder) => {
-        this.setState({ sortOrder });
-    };
+    useEffect(() => {
+        window.addEventListener("postCreated", handlePostCreated);
+        return () => {
+            window.removeEventListener("postCreated", handlePostCreated);
+        };
+    }, [handlePostCreated]);
 
-    getFilteredPosts = () => {
-        const { posts, searchQuery } = this.state;
+    const handleSearchChange = useCallback((event) => {
+        setSearchQuery(event.target.value);
+    }, []);
+
+    const handleSortChange = useCallback((nextSortOrder) => {
+        setSortOrder(nextSortOrder);
+    }, []);
+
+    const filteredPosts = useMemo(() => {
         const normalizedQuery = searchQuery.trim().toLowerCase();
 
         if (!normalizedQuery) return posts;
@@ -97,12 +93,10 @@ class Posts extends Component {
                 category.includes(normalizedQuery)
             );
         });
-    };
+    }, [posts, searchQuery]);
 
-    getSortedPosts = (posts) => {
-        const { sortOrder } = this.state;
-
-        return [...posts].sort((firstPost, secondPost) => {
+    const sortedPosts = useMemo(() => {
+        return [...filteredPosts].sort((firstPost, secondPost) => {
             const firstDate = new Date(firstPost.date || 0).getTime();
             const secondDate = new Date(secondPost.date || 0).getTime();
 
@@ -110,52 +104,48 @@ class Posts extends Component {
                 ? firstDate - secondDate
                 : secondDate - firstDate;
         });
-    };
+    }, [filteredPosts, sortOrder]);
 
-    render() {
-        const { featuredPosts, isLoading, searchQuery, sortOrder } = this.state;
-        const filteredPosts = this.getSortedPosts(this.getFilteredPosts());
-        const hasNoMatchingPosts =
-            !isLoading &&
-            featuredPosts.length > 0 &&
-            filteredPosts.length === 0;
+    const hasNoMatchingPosts =
+        !isLoading && featuredPosts.length > 0 && sortedPosts.length === 0;
 
-        return (
-            <div className="Posts">
-                {isLoading ? (
-                    <PostsLoading />
-                ) : featuredPosts.length > 0 ? (
-                    <>
-                        <FeaturedPost posts={featuredPosts} />
+    const handleClearSearch = useCallback(() => {
+        setSearchQuery("");
+    }, []);
 
-                        <PostsToolbar
-                            searchQuery={searchQuery}
-                            onSearchChange={this.handleSearchChange}
-                            sortOrder={sortOrder}
-                            onSortChange={this.handleSortChange}
-                        />
+    return (
+        <div className="Posts">
+            {isLoading ? (
+                <PostsLoading />
+            ) : featuredPosts.length > 0 ? (
+                <>
+                    <FeaturedPost posts={featuredPosts} />
 
-                        {filteredPosts.length > 0 ? (
-                            <PostsContainer posts={filteredPosts} />
-                        ) : (
-                            hasNoMatchingPosts && (
-                                <NoPostsFoundMessage
-                                    title="No matching posts"
-                                    subtitle="Try a different title or category to find posts in the feed."
-                                    buttonLabel="Clear the search"
-                                    onButtonClick={() =>
-                                        this.setState({ searchQuery: "" })
-                                    }
-                                />
-                            )
-                        )}
-                    </>
-                ) : (
-                    <NoPostsFoundMessage />
-                )}
-            </div>
-        );
-    }
+                    <PostsToolbar
+                        searchQuery={searchQuery}
+                        onSearchChange={handleSearchChange}
+                        sortOrder={sortOrder}
+                        onSortChange={handleSortChange}
+                    />
+
+                    {sortedPosts.length > 0 ? (
+                        <PostsContainer posts={sortedPosts} />
+                    ) : (
+                        hasNoMatchingPosts && (
+                            <NoPostsFoundMessage
+                                title="No matching posts"
+                                subtitle="Try a different title or category to find posts in the feed."
+                                buttonLabel="Clear the search"
+                                onButtonClick={handleClearSearch}
+                            />
+                        )
+                    )}
+                </>
+            ) : (
+                <NoPostsFoundMessage />
+            )}
+        </div>
+    );
 }
 
 export default Posts;
