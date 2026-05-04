@@ -5,6 +5,7 @@ import FeaturedPost from "../../components/Posts_Components/FeaturedPost/Feature
 import PostsLoading from "../../components/Posts_Components/PostsLoading/PostsLoading";
 import PostsContainer from "../../components/Posts_Components/PostsContainer/PostsContainer";
 import PostsToolbar from "../../components/common/PostsToolbar/PostsToolbar";
+import useDebounce from "../../hooks/useDebounce";
 import "./Posts.css";
 
 function Posts() {
@@ -13,6 +14,7 @@ function Posts() {
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState("newest");
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
     const getRandomPosts = useCallback((nextPosts, count) => {
         const shuffled = [...nextPosts];
@@ -80,7 +82,7 @@ function Posts() {
     }, []);
 
     const filteredPosts = useMemo(() => {
-        const normalizedQuery = searchQuery.trim().toLowerCase();
+        const normalizedQuery = debouncedSearchQuery.trim().toLowerCase();
 
         if (!normalizedQuery) return posts;
 
@@ -93,7 +95,7 @@ function Posts() {
                 category.includes(normalizedQuery)
             );
         });
-    }, [posts, searchQuery]);
+    }, [debouncedSearchQuery, posts]);
 
     const sortedPosts = useMemo(() => {
         return [...filteredPosts].sort((firstPost, secondPost) => {
