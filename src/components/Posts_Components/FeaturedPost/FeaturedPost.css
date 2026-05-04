@@ -1,12 +1,13 @@
 .FeaturedPost {
-    width: 100%;
+    width: calc(100% + (2 * clamp(2rem, 5vw, 3rem)));
+    margin-inline: calc(clamp(2rem, 5vw, 3rem) * -1);
+    margin-top: -1.5rem;
 }
 
 .featured-slider {
     position: relative;
     width: 100%;
     height: clamp(260px, 32vw, 380px);
-    border-radius: 1rem;
     overflow: hidden;
     background-color: #d9dde3;
 }
@@ -67,8 +68,8 @@
     inset: 0;
     background: linear-gradient(
         180deg,
-        rgba(9, 15, 26, 0.08) 25%,
-        rgba(9, 15, 26, 0.78) 100%
+        rgba(9, 15, 26, 0.35) 20%,
+        rgba(9, 15, 26, 0.9) 100%
     );
 }
 
@@ -146,6 +147,10 @@
 }
 
 @media (max-width: 992px) {
+    .FeaturedPost {
+        margin-top: 0;
+    }
+
     .featured-content {
         left: 1.2rem;
         right: 1.2rem;

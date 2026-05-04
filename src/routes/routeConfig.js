@@ -2,18 +2,20 @@ import { lazy } from "react";
 
 export const LoginPage = lazy(() => import("../pages/Login/Login"));
 export const HomePage = lazy(() => import("../pages/Home/Home"));
-export const CreatePostPage = lazy(() => import("../pages/CreatePost/CreatePost"));
+export const CreatePostPage = lazy(
+    () => import("../pages/CreatePost/CreatePost"),
+);
 export const MyPostsPage = lazy(() => import("../pages/MyPosts/MyPosts"));
 export const ExplorePage = lazy(() => import("../pages/Explore/Explore"));
 export const DashboardPage = lazy(() => import("../pages/Admin/Dashboard"));
 export const UserManagementPage = lazy(
-    () => import("../pages/Admin/UserManagement")
+    () => import("../pages/Admin/UserManagement"),
 );
 export const PostManagementPage = lazy(
-    () => import("../pages/Admin/PostManagement")
+    () => import("../pages/Admin/PostManagement"),
 );
 export const ModerationQueuePage = lazy(
-    () => import("../pages/Admin/ModerationQueue")
+    () => import("../pages/Admin/ModerationQueue"),
 );
 
 export const USER_ROUTES = [

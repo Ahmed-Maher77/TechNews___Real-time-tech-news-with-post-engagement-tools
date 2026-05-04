@@ -2,9 +2,14 @@ import Avatar from "../common/Avatar/Avatar";
 import ListItem from "./ListItem";
 import MainButton from "../common/MainButton/MainButton";
 import { useNavigate } from "react-router-dom";
+import { clearStoredAuth } from "../../utils/authStorage";
 
 const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn }) => {
     const navigate = useNavigate();
+    const handleLogout = () => {
+        clearStoredAuth();
+        navigate("/login", { replace: true });
+    };
 
     return (
         <div className="bottom d-flex flex-column gap-2">
@@ -30,11 +35,12 @@ const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn }) => {
                         </figure>
                     </ListItem>
                     <ListItem
-                        href="/logout"
+                        href="/login"
                         label="Logout"
                         justifyBetween={true}
                         itemClassName="logout-item"
                         isCollapsed={isCollapsed}
+                        onClick={handleLogout}
                     >
                         <i className="fa-solid fa-arrow-right-from-bracket"></i>
                     </ListItem>

@@ -4,17 +4,15 @@ import AppLayout from "./components/layout/AppLayout";
 import LazyPage from "./components/routing/LazyPage";
 import NotFoundPage from "./components/routing/NotFoundPage";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
-import {
-    ADMIN_ROUTES,
-    LoginPage,
-    USER_ROUTES,
-} from "./routes/routeConfig.js";
+import { getStoredAuth } from "./utils/authStorage";
+import { ADMIN_ROUTES, LoginPage, USER_ROUTES } from "./routes/routeConfig.js";
 
 function App() {
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 992);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [role] = useState("user");
-    const isLoggedIn = Boolean(role);
+    const [auth, setAuth] = useState(() => getStoredAuth());
+    const isLoggedIn = Boolean(auth?.isLoggedIn);
+    const role = auth?.role || "user";
     const homePath = role === "admin" ? "/admin/dashboard" : "/home";
 
     const handleResize = useCallback(() => {
@@ -22,7 +20,7 @@ function App() {
         setIsSmallScreen((prevIsSmallScreen) =>
             prevIsSmallScreen === nextIsSmallScreen
                 ? prevIsSmallScreen
-                : nextIsSmallScreen
+                : nextIsSmallScreen,
         );
     }, []);
 
@@ -37,9 +35,36 @@ function App() {
         };
     }, [handleResize]);
 
+    useEffect(() => {
+        const syncAuthFromStorage = () => {
+            setAuth(getStoredAuth());
+        };
+
+        window.addEventListener("storage", syncAuthFromStorage);
+        window.addEventListener("focus", syncAuthFromStorage);
+
+        return () => {
+            window.removeEventListener("storage", syncAuthFromStorage);
+            window.removeEventListener("focus", syncAuthFromStorage);
+        };
+    }, []);
+
     return (
         <Routes>
-            <Route path="/login" element={<LazyPage Component={LoginPage} />} />
+            <Route
+                path="/login"
+                element={
+                    isLoggedIn ? (
+                        <Navigate to={homePath} replace />
+                    ) : (
+                        <LazyPage Component={LoginPage} />
+                    )
+                }
+            />
+            <Route
+                path="/register"
+                element={<Navigate to="/login" replace />}
+            />
 
             <Route
                 path="/"

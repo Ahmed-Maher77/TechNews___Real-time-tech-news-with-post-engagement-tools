@@ -1,0 +1,89 @@
+.LoginPage {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.auth-card {
+    max-width: 560px;
+    background-color: #fff;
+    border: 1px solid rgba(16, 24, 40, 0.1);
+    border-radius: 1rem;
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.1);
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.auth-toggle {
+    background-color: #f3f6fa;
+    border-radius: 999px;
+    padding: 0.35rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+}
+
+.auth-toggle-btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-weight: 600;
+    background: transparent;
+    color: #5f6570;
+    transition: var(--trans-3);
+}
+
+.auth-toggle-btn.active {
+    background: var(--black-color);
+    color: #fff;
+}
+
+.auth-forms-slider {
+    overflow: hidden;
+}
+
+.auth-forms-track {
+    width: 200%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    transition: transform 0.35s ease;
+}
+
+.auth-forms-slider.register-mode .auth-forms-track {
+    transform: translateX(-50%);
+}
+
+.auth-form {
+    width: 100%;
+    padding: 0.3rem 0.2rem 0.2rem;
+}
+
+.auth-form .form-label {
+    font-weight: 600;
+    color: #2b3442;
+}
+
+.auth-form h1 {
+    color: var(--black-color);
+    font-weight: 700;
+}
+
+.app-form-control {
+    min-height: 44px;
+    border-radius: 0.65rem;
+    border-color: rgba(16, 24, 40, 0.16);
+}
+
+.app-form-control:focus {
+    border-color: #6a9fff;
+    box-shadow: 0 0 0 0.2rem rgba(39, 110, 241, 0.15);
+}
+
+.auth-submit-btn > span {
+    letter-spacing: 0.04em;
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 1.1rem;
+    }
+}
