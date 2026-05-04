@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainButton from "../../components/common/MainButton/MainButton";
 import {
     loginUser,
     registerUser,
     saveStoredAuth,
 } from "../../utils/authStorage";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 import "./Login.css";
 
 function Login() {
@@ -123,151 +124,20 @@ function Login() {
                     </div>
                 ) : null}
 
-                <div className={`auth-forms-slider ${mode === "register" ? "register-mode" : ""}`}>
-                    <div className="auth-forms-track">
-                        <form className="auth-form" onSubmit={handleLoginSubmit}>
-                            <h1 className="h4 mb-3">Welcome back</h1>
-                            <div className="mb-3">
-                                <label htmlFor="login-email" className="form-label">Email</label>
-                                <input
-                                    type="email"
-                                    className="form-control app-form-control"
-                                    id="login-email"
-                                    required
-                                    placeholder="Enter your email"
-                                    value={loginData.email}
-                                    onChange={(event) =>
-                                        setLoginData((prev) => ({
-                                            ...prev,
-                                            email: event.target.value,
-                                        }))
-                                    }
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="login-password" className="form-label">Password</label>
-                                <input
-                                    type="password"
-                                    className="form-control app-form-control"
-                                    id="login-password"
-                                    required
-                                    placeholder="Enter your password"
-                                    value={loginData.password}
-                                    onChange={(event) =>
-                                        setLoginData((prev) => ({
-                                            ...prev,
-                                            password: event.target.value,
-                                        }))
-                                    }
-                                />
-                            </div>
-                            <MainButton
-                                type="submit"
-                                className="auth-submit-btn mt-2"
-                                fullWidth
-                            >
-                                Login
-                            </MainButton>
-                        </form>
-
-                        <form className="auth-form" onSubmit={handleRegisterSubmit}>
-                            <h1 className="h4 mb-3">Create account</h1>
-                            <div className="mb-3">
-                                <label htmlFor="register-name" className="form-label">Full Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control app-form-control"
-                                    id="register-name"
-                                    required
-                                    placeholder="Enter your full name"
-                                    value={registerData.name}
-                                    onChange={(event) =>
-                                        setRegisterData((prev) => ({
-                                            ...prev,
-                                            name: event.target.value,
-                                        }))
-                                    }
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="register-email" className="form-label">Email</label>
-                                <input
-                                    type="email"
-                                    className="form-control app-form-control"
-                                    id="register-email"
-                                    required
-                                    placeholder="Enter your email"
-                                    value={registerData.email}
-                                    onChange={(event) =>
-                                        setRegisterData((prev) => ({
-                                            ...prev,
-                                            email: event.target.value,
-                                        }))
-                                    }
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="register-password" className="form-label">Password</label>
-                                <input
-                                    type="password"
-                                    className="form-control app-form-control"
-                                    id="register-password"
-                                    required
-                                    placeholder="Create a password"
-                                    value={registerData.password}
-                                    onChange={(event) =>
-                                        setRegisterData((prev) => ({
-                                            ...prev,
-                                            password: event.target.value,
-                                        }))
-                                    }
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="register-confirm-password" className="form-label">
-                                    Confirm Password
-                                </label>
-                                <input
-                                    type="password"
-                                    className="form-control app-form-control"
-                                    id="register-confirm-password"
-                                    required
-                                    placeholder="Confirm your password"
-                                    value={registerData.confirmPassword}
-                                    onChange={(event) =>
-                                        setRegisterData((prev) => ({
-                                            ...prev,
-                                            confirmPassword: event.target.value,
-                                        }))
-                                    }
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="register-role" className="form-label">Role</label>
-                                <select
-                                    id="register-role"
-                                    className="form-select app-form-control"
-                                    value={registerData.role}
-                                    onChange={(event) =>
-                                        setRegisterData((prev) => ({
-                                            ...prev,
-                                            role: event.target.value,
-                                        }))
-                                    }
-                                >
-                                    <option value="user">User</option>
-                                    <option value="admin">Admin</option>
-                                </select>
-                            </div>
-                            <MainButton
-                                type="submit"
-                                className="auth-submit-btn mt-2"
-                                fullWidth
-                            >
-                                Create account
-                            </MainButton>
-                        </form>
-                    </div>
+                <div className="auth-forms-slider">
+                    {mode === "login" ? (
+                        <LoginForm
+                            loginData={loginData}
+                            setLoginData={setLoginData}
+                            onSubmit={handleLoginSubmit}
+                        />
+                    ) : (
+                        <RegisterForm
+                            registerData={registerData}
+                            setRegisterData={setRegisterData}
+                            onSubmit={handleRegisterSubmit}
+                        />
+                    )}
                 </div>
             </div>
         </section>

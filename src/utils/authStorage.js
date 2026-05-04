@@ -1,5 +1,6 @@
 const AUTH_STORAGE_KEY = "tech_news_auth";
 const USERS_STORAGE_KEY = "tech_news_users";
+const AUTH_CHANGED_EVENT = "authChanged";
 
 function parseJson(value, fallback) {
     try {
@@ -29,10 +30,12 @@ export function getStoredAuth() {
 
 export function saveStoredAuth(auth) {
     window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(auth));
+    window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
 }
 
 export function clearStoredAuth() {
     window.localStorage.removeItem(AUTH_STORAGE_KEY);
+    window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
 }
 
 export function registerUser({ name, email, password, role = "user" }) {
@@ -66,4 +69,8 @@ export function loginUser({ email, password }) {
         return { ok: false, message: "Invalid email or password." };
     }
     return { ok: true, user };
+}
+
+export function getAuthChangedEventName() {
+    return AUTH_CHANGED_EVENT;
 }

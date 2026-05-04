@@ -4,7 +4,7 @@ import AppLayout from "./components/layout/AppLayout";
 import LazyPage from "./components/routing/LazyPage";
 import NotFoundPage from "./components/routing/NotFoundPage";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
-import { getStoredAuth } from "./utils/authStorage";
+import { getAuthChangedEventName, getStoredAuth } from "./utils/authStorage";
 import { ADMIN_ROUTES, LoginPage, USER_ROUTES } from "./routes/routeConfig.js";
 
 function App() {
@@ -36,16 +36,19 @@ function App() {
     }, [handleResize]);
 
     useEffect(() => {
+        const authChangedEventName = getAuthChangedEventName();
         const syncAuthFromStorage = () => {
             setAuth(getStoredAuth());
         };
 
         window.addEventListener("storage", syncAuthFromStorage);
         window.addEventListener("focus", syncAuthFromStorage);
+        window.addEventListener(authChangedEventName, syncAuthFromStorage);
 
         return () => {
             window.removeEventListener("storage", syncAuthFromStorage);
             window.removeEventListener("focus", syncAuthFromStorage);
+            window.removeEventListener(authChangedEventName, syncAuthFromStorage);
         };
     }, []);
 

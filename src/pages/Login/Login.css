@@ -40,20 +40,21 @@
     overflow: hidden;
 }
 
-.auth-forms-track {
-    width: 200%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    transition: transform 0.35s ease;
-}
-
-.auth-forms-slider.register-mode .auth-forms-track {
-    transform: translateX(-50%);
-}
-
 .auth-form {
     width: 100%;
     padding: 0.3rem 0.2rem 0.2rem;
+}
+
+.auth-form-panel {
+    animation: authPanelEnter 0.28s ease;
+}
+
+.auth-form-panel--login {
+    transform-origin: left center;
+}
+
+.auth-form-panel--register {
+    transform-origin: right center;
 }
 
 .auth-form .form-label {
@@ -73,8 +74,8 @@
 }
 
 .app-form-control:focus {
-    border-color: #6a9fff;
-    box-shadow: 0 0 0 0.2rem rgba(39, 110, 241, 0.15);
+    border-color: #98a2b3;
+    box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.08);
 }
 
 .auth-submit-btn > span {
@@ -85,5 +86,16 @@
 @media (max-width: 576px) {
     .auth-card {
         padding: 1.1rem;
+    }
+}
+
+@keyframes authPanelEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
