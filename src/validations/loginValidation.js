@@ -13,6 +13,6 @@ export const loginSchema = z.object({
         .email("Please enter a valid email."),
     password: z
         .string()
-        .trim()
         .min(1, "Password is required.")
+        .refine((value) => value.trim().length > 0, "Password is required."),
 });

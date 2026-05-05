@@ -44,10 +44,11 @@ function RegisterForm({ onSubmit }) {
     };
 
     const submitHandler = (values) => {
-        onSubmit({
+        const isSuccess = onSubmit({
             ...values,
             userPic,
         });
+        if (!isSuccess) return;
         reset();
         setUserPic("");
         setImageError("");

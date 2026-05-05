@@ -2,7 +2,9 @@ import { Fragment, StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { Provider } from "react-redux";
 import App from './App.jsx';
+import store from "./store/store";
 // Font Awesome
 import '@fortawesome/fontawesome-free/css/all.min.css';
 // Bootstrap
@@ -14,11 +16,13 @@ import './index.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <Fragment>
-        <App />
-        <ToastContainer position="top-right" autoClose={2800} closeOnClick pauseOnHover />
-      </Fragment>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Fragment>
+          <App />
+          <ToastContainer position="top-right" autoClose={2800} closeOnClick pauseOnHover />
+        </Fragment>
+      </BrowserRouter>
+    </Provider>
   </StrictMode>,
 )

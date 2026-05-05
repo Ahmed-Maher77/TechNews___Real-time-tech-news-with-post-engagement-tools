@@ -7,7 +7,6 @@ function LoginForm({ onSubmit }) {
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: zodResolver(loginSchema),
@@ -16,9 +15,9 @@ function LoginForm({ onSubmit }) {
         defaultValues: loginDefaultValues,
     });
 
-    const submitHandler = (values) => {
-        onSubmit(values);
-        reset({ ...values, password: "" });
+    const submitHandler = async (values) => {
+        const isSuccess = await onSubmit(values);
+        if (!isSuccess) return;
     };
 
     return (

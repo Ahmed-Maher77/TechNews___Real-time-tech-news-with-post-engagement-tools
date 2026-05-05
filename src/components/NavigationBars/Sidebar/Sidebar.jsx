@@ -1,16 +1,18 @@
 import { memo, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import navLinks from "./navLinks";
 import "./Sidebar.css";
 import Logo from "../Logo";
 import ListItem from "../ListItem";
 import BottomRoutes from "../BottomRoutes";
+import { selectRole } from "../../../store/authSlice";
+import { selectIsSidebarCollapsed, toggleSidebarCollapsed } from "../../../store/uiSlice";
 
-function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role, onNavigate }) {
+function Sidebar({ isMobile, onNavigate }) {
+    const dispatch = useDispatch();
+    const role = useSelector(selectRole);
+    const isCollapsed = useSelector(selectIsSidebarCollapsed);
     const isAdmin = role === "admin";
-    const userData = {
-        username: "Ahmed Maher",
-        userPic: null,
-    };
     const topRoutes = isAdmin ? navLinks[0].adminRoutes : navLinks[0].userRoutes;
 
     const sidebarClasses = useMemo(
@@ -29,7 +31,7 @@ function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role, on
                     <button
                         type="button"
                         className="sidebar-toggle-btn border-0 bg-transparent"
-                        onClick={onToggleCollapse}
+                        onClick={() => dispatch(toggleSidebarCollapsed())}
                         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                     >
                         <i
@@ -59,10 +61,6 @@ function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role, on
 
                 {/* ======== Bottom Routes ======== */}
                 <BottomRoutes
-                    {...userData}
-                    role={role}
-                    isCollapsed={isCollapsed}
-                    isLoggedIn={isLoggedIn}
                     onNavigate={onNavigate}
                 />
             </ul>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import LazyPage from "./components/routing/LazyPage";
@@ -6,13 +7,13 @@ import NotFoundPage from "./components/routing/NotFoundPage";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import { getAuthChangedEventName, getStoredAuth } from "./utils/authStorage";
 import { ADMIN_ROUTES, LoginPage, USER_ROUTES } from "./routes/routeConfig.js";
+import { selectIsLoggedIn, selectRole, setAuth } from "./store/authSlice";
 
 function App() {
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 992);
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [auth, setAuth] = useState(() => getStoredAuth());
-    const isLoggedIn = Boolean(auth?.isLoggedIn);
-    const role = auth?.role || "user";
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const role = useSelector(selectRole);
     const homePath = role === "admin" ? "/admin/dashboard" : "/home";
 
     const handleResize = useCallback(() => {
@@ -22,10 +23,6 @@ function App() {
                 ? prevIsSmallScreen
                 : nextIsSmallScreen,
         );
-    }, []);
-
-    const handleToggleSidebar = useCallback(() => {
-        setIsSidebarCollapsed((prev) => !prev);
     }, []);
 
     useEffect(() => {
@@ -38,7 +35,7 @@ function App() {
     useEffect(() => {
         const authChangedEventName = getAuthChangedEventName();
         const syncAuthFromStorage = () => {
-            setAuth(getStoredAuth());
+            dispatch(setAuth(getStoredAuth()));
         };
 
         window.addEventListener("storage", syncAuthFromStorage);
@@ -50,7 +47,7 @@ function App() {
             window.removeEventListener("focus", syncAuthFromStorage);
             window.removeEventListener(authChangedEventName, syncAuthFromStorage);
         };
-    }, []);
+    }, [dispatch]);
 
     return (
         <Routes>
@@ -73,13 +70,7 @@ function App() {
                 path="/"
                 element={
                     <ProtectedRoute isLoggedIn={isLoggedIn}>
-                        <AppLayout
-                            isSmallScreen={isSmallScreen}
-                            isSidebarCollapsed={isSidebarCollapsed}
-                            isLoggedIn={isLoggedIn}
-                            role={role}
-                            onToggleSidebar={handleToggleSidebar}
-                        />
+                        <AppLayout isSmallScreen={isSmallScreen} />
                     </ProtectedRoute>
                 }
             >

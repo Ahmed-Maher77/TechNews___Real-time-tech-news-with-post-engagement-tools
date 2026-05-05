@@ -20,7 +20,7 @@ function Login() {
         const result = loginUser(loginData);
         if (!result.ok) {
             setError(result.message);
-            return;
+            return false;
         }
 
         const authPayload = {
@@ -40,6 +40,7 @@ function Login() {
                 },
             );
         }, 700);
+        return true;
     };
 
     const handleRegisterSubmit = (registerData) => {
@@ -55,7 +56,7 @@ function Login() {
 
         if (!result.ok) {
             setError(result.message);
-            return;
+            return false;
         }
 
         const authPayload = {
@@ -75,6 +76,7 @@ function Login() {
                 },
             );
         }, 700);
+        return true;
     };
 
     return (

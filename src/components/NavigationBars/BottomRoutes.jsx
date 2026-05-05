@@ -2,11 +2,25 @@ import Avatar from "../common/Avatar/Avatar";
 import ListItem from "./ListItem";
 import MainButton from "../common/MainButton/MainButton";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { clearStoredAuth } from "../../utils/authStorage";
 import { toast } from "react-toastify";
+import {
+    selectAuth,
+    selectIsLoggedIn,
+    selectRole,
+} from "../../store/authSlice";
+import { selectIsSidebarCollapsed } from "../../store/uiSlice";
 
-const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn, role, onNavigate }) => {
+const BottomRoutes = ({ onNavigate }) => {
     const navigate = useNavigate();
+    const auth = useSelector(selectAuth);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const role = useSelector(selectRole);
+    const isCollapsed = useSelector(selectIsSidebarCollapsed);
+    const username = auth?.name || "User";
+    const userPic = auth?.userPic || null;
+
     const handleLogout = () => {
         onNavigate?.();
         clearStoredAuth();

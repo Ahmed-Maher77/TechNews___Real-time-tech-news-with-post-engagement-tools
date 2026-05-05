@@ -22,13 +22,16 @@ export const registerSchema = z
             .email("Please enter a valid email."),
         password: z
             .string()
-            .trim()
             .min(1, "Password is required.")
+            .refine((value) => value.trim().length > 0, "Password is required.")
             .min(6, "Password must be at least 6 characters."),
         confirmPassword: z
             .string()
-            .trim()
-            .min(1, "Please confirm your password."),
+            .min(1, "Please confirm your password.")
+            .refine(
+                (value) => value.trim().length > 0,
+                "Please confirm your password.",
+            ),
         role: z.enum(["user", "admin"]),
     })
     .refine((data) => data.password === data.confirmPassword, {
