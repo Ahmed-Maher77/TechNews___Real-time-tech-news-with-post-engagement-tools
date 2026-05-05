@@ -6,21 +6,26 @@ import Logo from "../Logo";
 import ListItem from "../ListItem";
 import BottomRoutes from "../BottomRoutes";
 import { selectRole } from "../../../store/authSlice";
-import { selectIsSidebarCollapsed, toggleSidebarCollapsed } from "../../../store/uiSlice";
+import {
+    selectIsSidebarCollapsed,
+    toggleSidebarCollapsed,
+} from "../../../store/uiSlice";
 
 function Sidebar({ isMobile, onNavigate }) {
     const dispatch = useDispatch();
     const role = useSelector(selectRole);
     const isCollapsed = useSelector(selectIsSidebarCollapsed);
     const isAdmin = role === "admin";
-    const topRoutes = isAdmin ? navLinks[0].adminRoutes : navLinks[0].userRoutes;
+    const topRoutes = isAdmin
+        ? navLinks[0].adminRoutes
+        : navLinks[0].userRoutes;
 
     const sidebarClasses = useMemo(
         () =>
             `Sidebar d-flex flex-column p-3 gray-bg${
                 isMobile ? " is-mobile" : " min-h-100 max-h-100"
             }${isCollapsed ? " is-collapsed" : ""}`,
-        [isCollapsed, isMobile]
+        [isCollapsed, isMobile],
     );
 
     return (
@@ -32,11 +37,15 @@ function Sidebar({ isMobile, onNavigate }) {
                         type="button"
                         className="sidebar-toggle-btn border-0 bg-transparent"
                         onClick={() => dispatch(toggleSidebarCollapsed())}
-                        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                        aria-label={
+                            isCollapsed ? "Expand sidebar" : "Collapse sidebar"
+                        }
                     >
                         <i
                             className={`fa-solid ${
-                                isCollapsed ? "fa-angles-right" : "fa-angles-left"
+                                isCollapsed
+                                    ? "fa-angles-right"
+                                    : "fa-angles-left"
                             }`}
                         ></i>
                     </button>
@@ -60,9 +69,7 @@ function Sidebar({ isMobile, onNavigate }) {
                 </div>
 
                 {/* ======== Bottom Routes ======== */}
-                <BottomRoutes
-                    onNavigate={onNavigate}
-                />
+                <BottomRoutes onNavigate={onNavigate} />
             </ul>
         </aside>
     );

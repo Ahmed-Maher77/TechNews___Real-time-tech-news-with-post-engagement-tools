@@ -9,6 +9,16 @@
 
 .menu-toggler {
     color: var(--black-color);
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    transition: var(--trans-3);
+}
+
+.menu-toggler:hover {
+    background: var(--theme-surface-hover);
 }
 
 .mobile-menu {

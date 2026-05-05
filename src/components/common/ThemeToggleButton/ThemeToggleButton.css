@@ -1,0 +1,71 @@
+.theme-toggle-btn {
+    border: none;
+    background: transparent;
+    color: var(--theme-text-primary);
+    min-height: 38px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: var(--trans-3);
+}
+
+.theme-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.theme-toggle-label {
+    color: var(--theme-text-secondary);
+    font-size: 0.9rem;
+}
+
+.theme-toggle-btn:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 2px var(--theme-focus-ring);
+}
+
+.theme-toggle-btn.compact {
+    width: 38px;
+    min-height: 38px;
+    padding: 0;
+    justify-content: center;
+}
+
+.theme-toggle-btn.switch {
+    min-height: 34px;
+    border-radius: 999px;
+    padding: 0;
+    gap: 0;
+}
+
+.theme-switch-track {
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    background: var(--theme-border);
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    transition: var(--trans-3);
+}
+
+.theme-switch-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translateX(0);
+    transition: var(--trans-3);
+}
+
+.theme-toggle-btn.switch[aria-pressed="true"] .theme-switch-track {
+    background: #1f7aec;
+}
+
+.theme-toggle-btn.switch[aria-pressed="true"] .theme-switch-thumb {
+    transform: translateX(16px);
+}

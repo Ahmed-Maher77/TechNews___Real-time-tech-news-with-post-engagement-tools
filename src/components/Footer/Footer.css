@@ -1,7 +1,7 @@
 .AppFooter {
-    border-top: 1px solid #1f2a3d;
-    background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
-    color: #cbd5e1;
+    border-top: 1px solid var(--footer-border);
+    background: var(--footer-bg);
+    color: var(--footer-text);
     padding: 2.6rem clamp(1.9rem, 4.6vw, 3.25rem) 1.15rem;
 }
 
@@ -17,7 +17,7 @@
 }
 
 .footer-logo-wrap .logo h1 {
-    color: #f8fafc;
+    color: var(--footer-heading);
 }
 
 .footer-description {
@@ -34,7 +34,7 @@
 }
 
 .footer-links a {
-    color: #e2e8f0;
+    color: var(--footer-link);
     font-weight: 600;
     position: relative;
     transition: var(--trans-3);
@@ -47,12 +47,12 @@
     bottom: -3px;
     width: 0;
     height: 1.5px;
-    background-color: #93c5fd;
+    background-color: var(--footer-link-underline);
     transition: var(--trans-3);
 }
 
 .footer-links a:hover {
-    color: #bfdbfe;
+    color: var(--footer-link-hover);
 }
 
 .footer-links a:hover::after {
@@ -60,7 +60,7 @@
 }
 
 .footer-newsletter h3 {
-    color: #f8fafc;
+    color: var(--footer-heading);
     margin: 0;
 }
 
@@ -75,16 +75,16 @@
 
 .newsletter-form input {
     flex: 1;
-    border: 1px solid #334155;
+    border: 1px solid var(--footer-input-border);
     border-radius: 0.65rem;
     padding: 0.65rem 0.8rem;
     outline: none;
-    background-color: #0b1220;
-    color: #e2e8f0;
+    background-color: var(--footer-input-bg);
+    color: var(--footer-input-text);
 }
 
 .newsletter-form input:focus {
-    border-color: #474c55;
+    border-color: var(--footer-input-border);
     box-shadow: 0 0 0 2px rgb(170 170 170 / 8%);
 }
 
@@ -95,10 +95,10 @@
 }
 
 .footer-bottom {
-    border-top: 1px solid #1f2a3d;
+    border-top: 1px solid var(--footer-border);
     padding: 1.3rem 0 0.75rem;
     font-size: 0.92rem;
-    color: #94a3b8;
+    color: var(--footer-muted);
 }
 
 @media (max-width: 900px) {

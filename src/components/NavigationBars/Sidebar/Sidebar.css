@@ -30,7 +30,7 @@ aside.Sidebar .sidebar-toggle-btn {
 }
 
 aside.Sidebar .sidebar-toggle-btn:hover {
-    background-color: #eef2f6 !important;
+    background-color: var(--theme-surface-hover) !important;
 }
 
 aside.Sidebar .sidebar-header .logo {
@@ -41,7 +41,10 @@ aside.Sidebar .sidebar-header .logo h1,
 aside.Sidebar .navlink-item span,
 aside.Sidebar .navlink-item figure,
 aside.Sidebar .navlink-item .fa-arrow-right-from-bracket {
-    transition: opacity 0.2s ease, transform 0.2s ease, max-width 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        max-width 0.2s ease;
 }
 
 aside.Sidebar .sidebar-header .logo h1 {
@@ -116,7 +119,9 @@ aside.Sidebar.is-collapsed .navlink-item .fa-arrow-right-from-bracket {
     pointer-events: none;
 }
 
-aside.Sidebar.is-collapsed .navlink-item.logout-item .fa-arrow-right-from-bracket {
+aside.Sidebar.is-collapsed
+    .navlink-item.logout-item
+    .fa-arrow-right-from-bracket {
     opacity: 1;
     max-width: 24px;
     transform: none;
@@ -166,8 +171,8 @@ aside.Sidebar.is-collapsed .sidebar-header .logo h1 {
 .navlink-item.active,
 .navlink-item:hover {
     color: var(--gray-color);
-    background-color: #fefefe;
-    border-color: #f2f5f6;
+    background-color: var(--theme-surface);
+    border-color: var(--theme-border-soft);
     color: var(--black-color);
 }
 
@@ -185,6 +190,47 @@ aside.Sidebar.is-collapsed .sidebar-header .logo h1 {
     letter-spacing: 0.04em;
     font-size: 0.88rem;
     padding-block: 0.7rem;
+}
+
+.theme-sidebar-row {
+    border: 1px solid var(--theme-border-soft);
+    border-radius: 0.8rem;
+    background: var(--theme-surface);
+    padding: 0.45rem 1rem;
+}
+
+.theme-sidebar-row:has(.theme-toggle-btn) {
+    border-color: transparent;
+    background: transparent;
+}
+.theme-sidebar-row:has(.theme-toggle-btn:hover) {
+    border-color: transparent;
+    background: transparent;
+}
+
+.theme-sidebar-row .theme-toggle-wrap {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.theme-sidebar-row .theme-toggle-btn.switch {
+    margin-left: auto;
+}
+
+.theme-sidebar-row.is-collapsed {
+    width: 64px;
+    min-width: 64px;
+    display: grid;
+    place-items: center;
+    padding: 0.45rem 0.35rem;
+}
+
+.theme-sidebar-row.is-collapsed .theme-toggle-wrap {
+    justify-content: center;
+}
+
+.theme-sidebar-row.is-collapsed .theme-toggle-btn.switch {
+    padding-inline: 0.35rem;
 }
 
 aside.Sidebar.is-collapsed .bottom .login-main-btn {

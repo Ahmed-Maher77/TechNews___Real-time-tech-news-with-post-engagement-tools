@@ -8,12 +8,14 @@ import ProtectedRoute from "./components/routing/ProtectedRoute";
 import { getAuthChangedEventName, getStoredAuth } from "./utils/authStorage";
 import { ADMIN_ROUTES, LoginPage, USER_ROUTES } from "./routes/routeConfig.js";
 import { selectIsLoggedIn, selectRole, setAuth } from "./store/authSlice";
+import { selectTheme, themeStorageKey } from "./store/uiSlice";
 
 function App() {
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 992);
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const role = useSelector(selectRole);
+    const theme = useSelector(selectTheme);
     const homePath = role === "admin" ? "/admin/dashboard" : "/home";
 
     const handleResize = useCallback(() => {
@@ -45,9 +47,17 @@ function App() {
         return () => {
             window.removeEventListener("storage", syncAuthFromStorage);
             window.removeEventListener("focus", syncAuthFromStorage);
-            window.removeEventListener(authChangedEventName, syncAuthFromStorage);
+            window.removeEventListener(
+                authChangedEventName,
+                syncAuthFromStorage,
+            );
         };
     }, [dispatch]);
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        window.localStorage.setItem(themeStorageKey, theme);
+    }, [theme]);
 
     return (
         <Routes>

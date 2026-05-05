@@ -36,10 +36,7 @@ function Navbar() {
             />
 
             <div className={"mobile-menu " + (isSidebarOpen ? "open" : "")}>
-                <Sidebar
-                    isMobile
-                    onNavigate={handleCloseSidebar}
-                />
+                <Sidebar isMobile onNavigate={handleCloseSidebar} />
             </div>
         </nav>
     );

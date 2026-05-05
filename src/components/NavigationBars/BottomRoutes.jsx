@@ -1,6 +1,7 @@
 import Avatar from "../common/Avatar/Avatar";
 import ListItem from "./ListItem";
 import MainButton from "../common/MainButton/MainButton";
+import ThemeToggleButton from "../common/ThemeToggleButton/ThemeToggleButton";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { clearStoredAuth } from "../../utils/authStorage";
@@ -10,7 +11,7 @@ import {
     selectIsLoggedIn,
     selectRole,
 } from "../../store/authSlice";
-import { selectIsSidebarCollapsed } from "../../store/uiSlice";
+import { selectIsSidebarCollapsed, selectTheme } from "../../store/uiSlice";
 
 const BottomRoutes = ({ onNavigate }) => {
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ const BottomRoutes = ({ onNavigate }) => {
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const role = useSelector(selectRole);
     const isCollapsed = useSelector(selectIsSidebarCollapsed);
+    const theme = useSelector(selectTheme);
     const username = auth?.name || "User";
     const userPic = auth?.userPic || null;
 
@@ -32,6 +34,18 @@ const BottomRoutes = ({ onNavigate }) => {
 
     return (
         <div className="bottom d-flex flex-column gap-2">
+            <div
+                className={`theme-sidebar-row ${isCollapsed ? "is-collapsed" : ""}`}
+            >
+                <ThemeToggleButton
+                    variant="switch"
+                    label={
+                        isCollapsed
+                            ? ""
+                            : `${theme === "dark" ? "Dark" : "Light"} mode`
+                    }
+                />
+            </div>
             {isLoggedIn ? (
                 <>
                     {role !== "admin" ? (
