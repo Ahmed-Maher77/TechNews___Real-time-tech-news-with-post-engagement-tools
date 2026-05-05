@@ -14,10 +14,17 @@ function AppLayout({
 }) {
     const pagesClasses = useMemo(
         () =>
-            `pages w-100 pb-4 ${isSmallScreen ? "pt-8" : "pt-4"}${
+            `pages pb-4 ${isSmallScreen ? "pt-8" : "pt-4"}${
                 !isSmallScreen && isSidebarCollapsed ? " sidebar-collapsed" : ""
             }`,
         [isSmallScreen, isSidebarCollapsed]
+    );
+    const footerOffsetClasses = useMemo(
+        () =>
+            `footer-offset ${
+                !isSmallScreen && isSidebarCollapsed ? "sidebar-collapsed" : ""
+            }`,
+        [isSmallScreen, isSidebarCollapsed],
     );
 
     return (
@@ -32,11 +39,15 @@ function AppLayout({
                     onToggleCollapse={onToggleSidebar}
                 />
             )}
-            <div className={pagesClasses}>
-                <Suspense fallback={<RouteLoader />}>
-                    <Outlet />
-                </Suspense>
-                <Footer />
+            <div className="flex-grow-1 d-flex flex-column">
+                <div className={pagesClasses}>
+                    <Suspense fallback={<RouteLoader />}>
+                        <Outlet />
+                    </Suspense>
+                </div>
+                <div className={footerOffsetClasses}>
+                    <Footer />
+                </div>
             </div>
         </div>
     );

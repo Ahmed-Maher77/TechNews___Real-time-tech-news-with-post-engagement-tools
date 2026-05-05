@@ -33,10 +33,24 @@ a {
     margin-left: 88px;
 }
 
+.footer-offset {
+    margin-left: 230px;
+    /* padding-inline: clamp(2rem, 5vw, 3rem); */
+    transition: var(--trans-3);
+}
+
+.footer-offset.sidebar-collapsed {
+    margin-left: 88px;
+}
+
 
 
 @media (max-width: 991.98px) {
     .pages {
+        margin-left: 0;
+    }
+
+    .footer-offset {
         margin-left: 0;
     }
 }
