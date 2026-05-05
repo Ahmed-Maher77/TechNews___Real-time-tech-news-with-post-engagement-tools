@@ -1,58 +1,92 @@
 import MainButton from "../../../components/common/MainButton/MainButton";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-function LoginForm({ loginData, setLoginData, onSubmit }) {
+const loginSchema = z.object({
+    email: z
+        .string()
+        .trim()
+        .min(1, "Email is required.")
+        .email("Please enter a valid email."),
+    password: z
+        .string()
+        .trim()
+        .min(1, "Password is required.")
+        .min(6, "Password must be at least 6 characters."),
+});
+
+function LoginForm({ onSubmit }) {
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: zodResolver(loginSchema),
+        mode: "onChange",
+        reValidateMode: "onChange",
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
+
+    const submitHandler = (values) => {
+        onSubmit(values);
+        reset({ ...values, password: "" });
+    };
+
     return (
         <form
             key="login-form"
             className="auth-form auth-form-panel auth-form-panel--login"
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit(submitHandler)}
             autoComplete="off"
+            noValidate
         >
             <h1 className="h4 mb-3 text-center">Welcome back</h1>
             <div className="mb-3">
-                <label htmlFor="login-email" className="form-label">Email</label>
+                <label htmlFor="login-email" className="form-label">
+                    Email
+                </label>
                 <input
                     type="email"
-                    className="form-control app-form-control"
+                    className={`form-control app-form-control ${errors.email ? "is-invalid" : ""}`}
                     id="login-email"
                     name="login_email"
                     autoComplete="off"
-                    required
                     placeholder="Enter your email"
-                    value={loginData.email}
-                    onChange={(event) =>
-                        setLoginData((prev) => ({
-                            ...prev,
-                            email: event.target.value,
-                        }))
-                    }
+                    {...register("email")}
                 />
+                {errors.email ? (
+                    <div className="auth-field-error">{errors.email.message}</div>
+                ) : null}
             </div>
             <div className="mb-3">
-                <label htmlFor="login-password" className="form-label">Password</label>
+                <label htmlFor="login-password" className="form-label">
+                    Password
+                </label>
                 <input
                     type="password"
-                    className="form-control app-form-control"
+                    className={`form-control app-form-control ${errors.password ? "is-invalid" : ""}`}
                     id="login-password"
                     name="login_password"
                     autoComplete="new-password"
-                    required
                     placeholder="Enter your password"
-                    value={loginData.password}
-                    onChange={(event) =>
-                        setLoginData((prev) => ({
-                            ...prev,
-                            password: event.target.value,
-                        }))
-                    }
+                    {...register("password")}
                 />
+                {errors.password ? (
+                    <div className="auth-field-error">{errors.password.message}</div>
+                ) : null}
             </div>
             <MainButton
                 type="submit"
                 className="auth-submit-btn mt-2"
                 fullWidth
+                disabled={isSubmitting}
             >
-                Login
+                {isSubmitting ? "Logging in..." : "Login"}
             </MainButton>
         </form>
     );

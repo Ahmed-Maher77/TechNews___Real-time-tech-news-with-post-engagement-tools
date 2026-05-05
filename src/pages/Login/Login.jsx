@@ -13,47 +13,10 @@ import "./Login.css";
 function Login() {
     const navigate = useNavigate();
     const [mode, setMode] = useState("login");
-    const [loginData, setLoginData] = useState({
-        email: "",
-        password: "",
-    });
-    const [registerData, setRegisterData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "user",
-        userPic: "",
-    });
     const [error, setError] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
 
-    const handleRegisterImageChange = (event) => {
-        const selectedFile = event.target.files?.[0];
-        if (!selectedFile) {
-            setRegisterData((prev) => ({ ...prev, userPic: "" }));
-            return;
-        }
-
-        if (!selectedFile.type.startsWith("image/")) {
-            setError("Please upload a valid image file.");
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            setRegisterData((prev) => ({
-                ...prev,
-                userPic: typeof reader.result === "string" ? reader.result : "",
-            }));
-        };
-        reader.readAsDataURL(selectedFile);
-    };
-
-    const handleLoginSubmit = (e) => {
-        e.preventDefault();
+    const handleLoginSubmit = (loginData) => {
         setError("");
-        setSuccessMessage("");
         const result = loginUser(loginData);
         if (!result.ok) {
             setError(result.message);
@@ -70,21 +33,17 @@ function Login() {
         saveStoredAuth(authPayload);
         toast.success("Logged in successfully.");
         setTimeout(() => {
-            navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
-                replace: true,
-            });
+            navigate(
+                authPayload.role === "admin" ? "/admin/dashboard" : "/home",
+                {
+                    replace: true,
+                },
+            );
         }, 700);
     };
 
-    const handleRegisterSubmit = (event) => {
-        event.preventDefault();
+    const handleRegisterSubmit = (registerData) => {
         setError("");
-        setSuccessMessage("");
-
-        if (registerData.password !== registerData.confirmPassword) {
-            setError("Passwords do not match.");
-            return;
-        }
 
         const result = registerUser({
             name: registerData.name,
@@ -108,24 +67,13 @@ function Login() {
         };
         saveStoredAuth(authPayload);
         toast.success("Account created successfully.");
-
-        setLoginData({
-            email: registerData.email,
-            password: registerData.password,
-        });
-        setRegisterData({
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-            role: "user",
-            userPic: "",
-        });
-        setSuccessMessage("");
         setTimeout(() => {
-            navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
-                replace: true,
-            });
+            navigate(
+                authPayload.role === "admin" ? "/admin/dashboard" : "/home",
+                {
+                    replace: true,
+                },
+            );
         }, 700);
     };
 
@@ -134,7 +82,9 @@ function Login() {
             <div className="auth-stack w-100">
                 <div className="auth-header mb-3">
                     <p className="auth-kicker mb-1">Tech News Platform</p>
-                    <h2 className="auth-system-title mb-0 lobster-font">TechNews</h2>
+                    <h2 className="auth-system-title mb-0 lobster-font">
+                        TechNews
+                    </h2>
                 </div>
                 <div className="auth-card w-100">
                     <div className="auth-toggle mb-3">
@@ -143,7 +93,6 @@ function Login() {
                             className={`auth-toggle-btn ${mode === "login" ? "active" : ""}`}
                             onClick={() => {
                                 setError("");
-                                setSuccessMessage("");
                                 setMode("login");
                             }}
                         >
@@ -154,7 +103,6 @@ function Login() {
                             className={`auth-toggle-btn ${mode === "register" ? "active" : ""}`}
                             onClick={() => {
                                 setError("");
-                                setSuccessMessage("");
                                 setMode("register");
                             }}
                         >
@@ -167,26 +115,12 @@ function Login() {
                             {error}
                         </div>
                     ) : null}
-                    {successMessage ? (
-                        <div className="alert alert-success py-2" role="alert">
-                            {successMessage}
-                        </div>
-                    ) : null}
 
                     <div className="auth-forms-slider">
                         {mode === "login" ? (
-                            <LoginForm
-                                loginData={loginData}
-                                setLoginData={setLoginData}
-                                onSubmit={handleLoginSubmit}
-                            />
+                            <LoginForm onSubmit={handleLoginSubmit} />
                         ) : (
-                            <RegisterForm
-                                registerData={registerData}
-                                setRegisterData={setRegisterData}
-                                onImageChange={handleRegisterImageChange}
-                                onSubmit={handleRegisterSubmit}
-                            />
+                            <RegisterForm onSubmit={handleRegisterSubmit} />
                         )}
                     </div>
                 </div>

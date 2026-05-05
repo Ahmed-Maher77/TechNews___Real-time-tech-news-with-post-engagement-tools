@@ -92,3 +92,22 @@
     color: var(--gray-color);
     font-size: 0.9rem;
 }
+
+.create-post-form .app-form-control.is-invalid {
+    border-color: #f04438;
+    box-shadow: 0 0 0 3px rgba(240, 68, 56, 0.12);
+}
+
+.create-post-form .app-field-error {
+    margin-top: 0.35rem;
+    color: #b42318;
+    font-size: 0.83rem;
+    font-weight: 500;
+}
+
+.create-post-form .app-field-counter {
+    margin-top: 0.35rem;
+    color: #667085;
+    font-size: 0.8rem;
+    text-align: right;
+}

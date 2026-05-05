@@ -54,7 +54,9 @@ function PostDetails() {
     useEffect(() => {
         const fetchPostById = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/posts/${postId}`);
+                const response = await axios.get(
+                    `http://localhost:3000/posts/${postId}`,
+                );
                 const fetchedPost = response.data;
                 setPost(fetchedPost);
                 setLikes(fetchedPost?.likes || 0);
@@ -71,7 +73,8 @@ function PostDetails() {
 
     const readMins = useMemo(() => {
         if (!post) return 1;
-        const text = `${post.title || ""} ${post.description || ""} ${post.content || ""}`.trim();
+        const text =
+            `${post.title || ""} ${post.description || ""} ${post.content || ""}`.trim();
         const words = text ? text.split(/\s+/).length : 0;
         return Math.max(1, Math.ceil(words / 220));
     }, [post]);
@@ -228,7 +231,8 @@ function PostDetails() {
         );
     }, []);
 
-    if (isLoading) return <section className="PostDetails">Loading post...</section>;
+    if (isLoading)
+        return <section className="PostDetails">Loading post...</section>;
     if (!post) {
         return (
             <section className="PostDetails">
@@ -298,7 +302,9 @@ function PostDetails() {
                         <h1 className="post-details-title">{post.title}</h1>
                     </header>
 
-                    <p className="post-details-description">{post.description}</p>
+                    <p className="post-details-description">
+                        {post.description}
+                    </p>
 
                     <div className="post-details-actions">
                         <button
@@ -313,7 +319,8 @@ function PostDetails() {
                             className={`post-details-action-btn ${reaction === "dislike" ? "active dislike" : ""}`}
                             onClick={handleDislike}
                         >
-                            <i className="fa-regular fa-thumbs-down"></i> {dislikes}
+                            <i className="fa-regular fa-thumbs-down"></i>{" "}
+                            {dislikes}
                         </button>
                     </div>
 
@@ -321,14 +328,23 @@ function PostDetails() {
 
                     <div className="post-details-comments">
                         <h2 className="h5 mb-3">Comments</h2>
-                        <form onSubmit={handleAddComment} className="post-details-comment-form">
+                        <form
+                            onSubmit={handleAddComment}
+                            className="post-details-comment-form"
+                        >
                             <div className="post-details-comment-author">
-                                <Avatar username={commenterName} src={commenterPic} size={34} />
+                                <Avatar
+                                    username={commenterName}
+                                    src={commenterPic}
+                                    size={34}
+                                />
                                 <strong>{commenterName}</strong>
                             </div>
                             <textarea
                                 value={commentText}
-                                onChange={(event) => setCommentText(event.target.value)}
+                                onChange={(event) =>
+                                    setCommentText(event.target.value)
+                                }
                                 className="form-control"
                                 rows={3}
                                 placeholder="Write your comment..."
@@ -341,7 +357,10 @@ function PostDetails() {
                         <div className="post-details-comment-list">
                             {comments.length ? (
                                 comments.map((comment) => (
-                                    <article key={comment.id} className="post-details-comment-item">
+                                    <article
+                                        key={comment.id}
+                                        className="post-details-comment-item"
+                                    >
                                         <Avatar
                                             username={comment.name}
                                             src={comment.userPic}
@@ -349,27 +368,39 @@ function PostDetails() {
                                         />
                                         <div>
                                             <strong>{comment.name}</strong>
-                                            <p className="mb-0">{comment.text}</p>
+                                            <p className="mb-0">
+                                                {comment.text}
+                                            </p>
                                             <div className="comment-votes mt-2">
                                                 <button
                                                     type="button"
                                                     className={`comment-vote-btn ${comment.reaction === "upvote" ? "active" : ""}`}
                                                     onClick={() =>
-                                                        handleCommentVote(comment.id, "upvote")
+                                                        handleCommentVote(
+                                                            comment.id,
+                                                            "upvote",
+                                                        )
                                                     }
                                                 >
                                                     <i className="fa-regular fa-thumbs-up"></i>
-                                                    <span>{comment.upvotes}</span>
+                                                    <span>
+                                                        {comment.upvotes}
+                                                    </span>
                                                 </button>
                                                 <button
                                                     type="button"
                                                     className={`comment-vote-btn ${comment.reaction === "downvote" ? "active dislike" : ""}`}
                                                     onClick={() =>
-                                                        handleCommentVote(comment.id, "downvote")
+                                                        handleCommentVote(
+                                                            comment.id,
+                                                            "downvote",
+                                                        )
                                                     }
                                                 >
                                                     <i className="fa-regular fa-thumbs-down"></i>
-                                                    <span>{comment.downvotes}</span>
+                                                    <span>
+                                                        {comment.downvotes}
+                                                    </span>
                                                 </button>
                                             </div>
                                         </div>
@@ -378,7 +409,9 @@ function PostDetails() {
                             ) : (
                                 <div className="post-details-empty-comments">
                                     <i className="fa-regular fa-comments"></i>
-                                    <p className="mb-0">No comments yet. Start the discussion.</p>
+                                    <p className="mb-0">
+                                        No comments yet. Start the discussion.
+                                    </p>
                                 </div>
                             )}
                         </div>

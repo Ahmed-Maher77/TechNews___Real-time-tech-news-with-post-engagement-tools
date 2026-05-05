@@ -1,56 +1,124 @@
-import { useState } from "react";
 import axios from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "react-toastify";
+import { z } from "zod";
 import "./CreatePostForm.css";
 import MainButton from "../../components/common/MainButton/MainButton";
 
+const DESCRIPTION_MAX_LENGTH = 180;
+const TITLE_MIN_LENGTH = 5;
+const CATEGORY_MIN_LENGTH = 3;
+const DESCRIPTION_MIN_LENGTH = 15;
+const CONTENT_MIN_LENGTH = 30;
+const HTTP_IMAGE_URL_REGEX = /^https?:\/\/.+$/i;
+const initialFormFactory = () => ({
+    title: "",
+    author: "",
+    category: "",
+    date: new Date().toISOString().slice(0, 10),
+    image: "",
+    description: "",
+    content: "",
+    views: 0,
+    likes: 0,
+    dislikes: 0,
+    comments: 0,
+});
+
+const createPostSchema = z.object({
+    title: z
+        .string()
+        .trim()
+        .min(1, "Title is required.")
+        .min(
+            TITLE_MIN_LENGTH,
+            `Title must be at least ${TITLE_MIN_LENGTH} characters.`,
+        ),
+    author: z.string().trim().min(1, "Author is required."),
+    category: z
+        .string()
+        .trim()
+        .min(1, "Category is required.")
+        .min(
+            CATEGORY_MIN_LENGTH,
+            `Category must be at least ${CATEGORY_MIN_LENGTH} characters.`,
+        ),
+    date: z.string().min(1),
+    image: z
+        .string()
+        .trim()
+        .min(1, "Image URL is required.")
+        .regex(
+            HTTP_IMAGE_URL_REGEX,
+            "Image URL must start with http:// or https://",
+        ),
+    description: z
+        .string()
+        .trim()
+        .min(1, "Description is required.")
+        .min(
+            DESCRIPTION_MIN_LENGTH,
+            `Description must be at least ${DESCRIPTION_MIN_LENGTH} characters.`,
+        )
+        .max(
+            DESCRIPTION_MAX_LENGTH,
+            `Description must be at most ${DESCRIPTION_MAX_LENGTH} characters.`,
+        ),
+    content: z
+        .string()
+        .trim()
+        .min(1, "Content is required.")
+        .min(
+            CONTENT_MIN_LENGTH,
+            `Content must be at least ${CONTENT_MIN_LENGTH} characters.`,
+        ),
+    views: z.number(),
+    likes: z.number(),
+    dislikes: z.number(),
+    comments: z.number(),
+});
+
 const CreatePostForm = () => {
-    const getInitialForm = () => ({
-        title: "",
-        author: "",
-        category: "",
-        date: new Date().toISOString().slice(0, 10),
-        image: "",
-        description: "",
-        content: "",
-        views: 0,
-        likes: 0,
-        dislikes: 0,
-        comments: 0,
+    const {
+        register,
+        handleSubmit,
+        control,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: zodResolver(createPostSchema),
+        mode: "onChange",
+        reValidateMode: "onChange",
+        defaultValues: initialFormFactory(),
     });
+    const descriptionValue =
+        useWatch({
+            control,
+            name: "description",
+        }) || "";
 
-    const [formData, setFormData] = useState(getInitialForm);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const handleChange = (event) => {
-        const { id, value, type } = event.target;
-        setFormData((prev) => ({
-            ...prev,
-            [id]: type === "number" ? Number(value) : value,
-        }));
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-
+    const onSubmit = async (formData) => {
         try {
-            const res = await axios.post("http://localhost:3000/posts", formData);
+            const res = await axios.post(
+                "http://localhost:3000/posts",
+                formData,
+            );
             const createdPost = res.data;
 
             // Notify other parts of the app (Posts page) about the new post
             try {
-                window.dispatchEvent(new CustomEvent("postCreated", { detail: createdPost }));
+                window.dispatchEvent(
+                    new CustomEvent("postCreated", { detail: createdPost }),
+                );
             } catch {
                 // ignore dispatch errors
             }
 
             toast.success("Post created successfully.");
-            setFormData(getInitialForm());
+            reset(initialFormFactory());
         } catch {
             toast.error("Unable to create post. Please check json-server.");
-        } finally {
-            setIsSubmitting(false);
         }
     };
 
@@ -58,7 +126,8 @@ const CreatePostForm = () => {
         <form
             className="create-post-form w-100 p-4 rounded mx-auto"
             style={{ maxWidth: 650 }}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
         >
             <h3 className="form-title mb-4">Create New Post</h3>
             <fieldset className="create-post-fieldset" disabled={isSubmitting}>
@@ -68,13 +137,17 @@ const CreatePostForm = () => {
                     </label>
                     <input
                         type="text"
-                        className="form-control app-form-control"
+                        className={`form-control app-form-control ${errors.title ? "is-invalid" : ""}`}
                         id="title"
                         placeholder="Enter post title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
+                        minLength={TITLE_MIN_LENGTH}
+                        {...register("title")}
                     />
+                    {errors.title ? (
+                        <div className="app-field-error">
+                            {errors.title.message}
+                        </div>
+                    ) : null}
                 </div>
 
                 <div className="author-category-row mb-3">
@@ -87,13 +160,16 @@ const CreatePostForm = () => {
                         </label>
                         <input
                             type="text"
-                            className="form-control app-form-control"
+                            className={`form-control app-form-control ${errors.author ? "is-invalid" : ""}`}
                             id="author"
                             placeholder="Author name"
-                            value={formData.author}
-                            onChange={handleChange}
-                            required
+                            {...register("author")}
                         />
+                        {errors.author ? (
+                            <div className="app-field-error">
+                                {errors.author.message}
+                            </div>
+                        ) : null}
                     </div>
 
                     <div className="author-category-field">
@@ -105,13 +181,17 @@ const CreatePostForm = () => {
                         </label>
                         <input
                             type="text"
-                            className="form-control app-form-control"
+                            className={`form-control app-form-control ${errors.category ? "is-invalid" : ""}`}
                             id="category"
                             placeholder="e.g. React, AI"
-                            value={formData.category}
-                            onChange={handleChange}
-                            required
+                            minLength={CATEGORY_MIN_LENGTH}
+                            {...register("category")}
                         />
+                        {errors.category ? (
+                            <div className="app-field-error">
+                                {errors.category.message}
+                            </div>
+                        ) : null}
                     </div>
                 </div>
 
@@ -120,14 +200,17 @@ const CreatePostForm = () => {
                         Image URL <span className="text-danger">*</span>
                     </label>
                     <input
-                        type="url"
-                        className="form-control app-form-control"
+                        type="text"
+                        className={`form-control app-form-control ${errors.image ? "is-invalid" : ""}`}
                         id="image"
-                        placeholder="/react-hooks.jpg or https://..."
-                        value={formData.image}
-                        onChange={handleChange}
-                        required
+                        placeholder="https://example.com/image.jpg"
+                        {...register("image")}
                     />
+                    {errors.image ? (
+                        <div className="app-field-error">
+                            {errors.image.message}
+                        </div>
+                    ) : null}
                 </div>
 
                 <div className="mb-3">
@@ -138,14 +221,22 @@ const CreatePostForm = () => {
                         Description <span className="text-danger">*</span>
                     </label>
                     <textarea
-                        className="form-control app-form-control"
+                        className={`form-control app-form-control ${errors.description ? "is-invalid" : ""}`}
                         id="description"
                         rows={3}
                         placeholder="Short post summary..."
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
+                        minLength={DESCRIPTION_MIN_LENGTH}
+                        maxLength={DESCRIPTION_MAX_LENGTH}
+                        {...register("description")}
                     ></textarea>
+                    <div className="app-field-counter">
+                        {descriptionValue.length}/{DESCRIPTION_MAX_LENGTH}
+                    </div>
+                    {errors.description ? (
+                        <div className="app-field-error">
+                            {errors.description.message}
+                        </div>
+                    ) : null}
                 </div>
 
                 <div className="mb-3">
@@ -153,14 +244,18 @@ const CreatePostForm = () => {
                         Content <span className="text-danger">*</span>
                     </label>
                     <textarea
-                        className="form-control app-form-control"
+                        className={`form-control app-form-control ${errors.content ? "is-invalid" : ""}`}
                         id="content"
                         rows={5}
                         placeholder="Full post content..."
-                        value={formData.content}
-                        onChange={handleChange}
-                        required
+                        minLength={CONTENT_MIN_LENGTH}
+                        {...register("content")}
                     ></textarea>
+                    {errors.content ? (
+                        <div className="app-field-error">
+                            {errors.content.message}
+                        </div>
+                    ) : null}
                 </div>
 
                 <MainButton
