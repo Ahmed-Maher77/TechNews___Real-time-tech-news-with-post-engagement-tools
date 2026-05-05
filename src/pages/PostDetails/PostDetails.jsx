@@ -373,7 +373,7 @@ function PostDetails() {
                                             <p className="mb-0">
                                                 {comment.text}
                                             </p>
-                                            <div className="comment-votes mt-2">
+                                            <div className="comment-votes mt-3">
                                                 <button
                                                     type="button"
                                                     className={`comment-vote-btn ${comment.reaction === "upvote" ? "active" : ""}`}
