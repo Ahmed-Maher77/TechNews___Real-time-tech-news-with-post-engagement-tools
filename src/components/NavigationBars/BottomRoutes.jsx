@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { clearStoredAuth } from "../../utils/authStorage";
 import { toast } from "react-toastify";
 
-const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn, role }) => {
+const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn, role, onNavigate }) => {
     const navigate = useNavigate();
     const handleLogout = () => {
+        onNavigate?.();
         clearStoredAuth();
         toast.success("Logged out successfully.");
         setTimeout(() => {
@@ -21,11 +22,12 @@ const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn, role }) => {
                 <>
                     {role !== "admin" ? (
                         <ListItem
-                            href="/my-posts"
+                            href="/profile"
                             label="Profile"
                             justifyBetween={true}
                             isCollapsed={isCollapsed}
                             itemClassName="profile-item"
+                            onClick={onNavigate}
                         >
                             <figure className="mb-0 d-flex align-items-center gap-2 justify-content-between">
                                 {userPic ? (
@@ -55,7 +57,10 @@ const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn, role }) => {
                     type="button"
                     className={`login-main-btn${isCollapsed ? " is-collapsed" : ""}`}
                     fullWidth={!isCollapsed}
-                    onClick={() => navigate("/login")}
+                    onClick={() => {
+                        onNavigate?.();
+                        navigate("/login");
+                    }}
                 >
                     {isCollapsed ? (
                         <i className="fa-solid fa-right-to-bracket"></i>

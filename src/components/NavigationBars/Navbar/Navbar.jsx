@@ -36,7 +36,12 @@ function Navbar({ isLoggedIn, role }) {
             />
 
             <div className={"mobile-menu " + (isSidebarOpen ? "open" : "")}>
-                <Sidebar isMobile isLoggedIn={isLoggedIn} role={role} />
+                <Sidebar
+                    isMobile
+                    isLoggedIn={isLoggedIn}
+                    role={role}
+                    onNavigate={handleCloseSidebar}
+                />
             </div>
         </nav>
     );

@@ -5,7 +5,7 @@ import Logo from "../Logo";
 import ListItem from "../ListItem";
 import BottomRoutes from "../BottomRoutes";
 
-function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role }) {
+function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role, onNavigate }) {
     const isAdmin = role === "admin";
     const userData = {
         username: "Ahmed Maher",
@@ -52,6 +52,7 @@ function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role }) 
                             icon={route.icon}
                             label={route.name}
                             isCollapsed={isCollapsed}
+                            onClick={onNavigate}
                         />
                     ))}
                 </div>
@@ -62,6 +63,7 @@ function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role }) 
                     role={role}
                     isCollapsed={isCollapsed}
                     isLoggedIn={isLoggedIn}
+                    onNavigate={onNavigate}
                 />
             </ul>
         </aside>
