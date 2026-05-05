@@ -271,11 +271,16 @@ function PostDetails() {
                             </p>
                         </div>
                         <div className="post-details-banner-actions">
-                            <TooltipText text="Add to favorites" className="post-details-banner-tooltip">
+                            <TooltipText
+                                text="Add to favorites"
+                                className="post-details-banner-tooltip"
+                            >
                                 <button
                                     type="button"
                                     className={`post-details-action-btn post-details-banner-btn ${isFavorite ? "active" : ""}`}
-                                    onClick={() => setIsFavorite((prev) => !prev)}
+                                    onClick={() =>
+                                        setIsFavorite((prev) => !prev)
+                                    }
                                     aria-label="Toggle favorite"
                                 >
                                     <i
@@ -283,7 +288,10 @@ function PostDetails() {
                                     ></i>
                                 </button>
                             </TooltipText>
-                            <TooltipText text="Share this post" className="post-details-banner-tooltip">
+                            <TooltipText
+                                text="Share this post"
+                                className="post-details-banner-tooltip"
+                            >
                                 <button
                                     type="button"
                                     className="post-details-action-btn post-details-banner-btn"
@@ -293,7 +301,10 @@ function PostDetails() {
                                     <i className="fa-solid fa-arrow-up-right-from-square"></i>
                                 </button>
                             </TooltipText>
-                            <TooltipText text="Jump to discussion" className="post-details-banner-tooltip">
+                            <TooltipText
+                                text="Jump to discussion"
+                                className="post-details-banner-tooltip"
+                            >
                                 <button
                                     type="button"
                                     className="post-details-action-btn post-details-banner-btn comments-btn"
@@ -351,8 +362,21 @@ function PostDetails() {
 
                     <p className="post-details-body">{post.content}</p>
 
-                    <div className="post-details-comments" ref={commentsSectionRef}>
-                        <h2 className="h5 mb-3">Discussion Center</h2>
+                    <div
+                        className="post-details-comments"
+                        ref={commentsSectionRef}
+                    >
+                        <div className="post-details-discussion-head mb-3">
+                            <h2 className="post-details-discussion-title">
+                                Discussion Center
+                            </h2>
+                            <p className="post-details-discussion-subtitle mb-0">
+                                Share your thoughts, ask questions, and react to this post.
+                            </p>
+                            <span className="post-details-discussion-dots" aria-hidden>
+                                ...
+                            </span>
+                        </div>
                         <form
                             onSubmit={handleAddComment}
                             className="post-details-comment-form"
