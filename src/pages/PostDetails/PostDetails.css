@@ -48,8 +48,7 @@
 
 .post-details-banner-copy {
     position: absolute;
-    left: clamp(0.9rem, 2vw, 1.4rem);
-    right: clamp(0.9rem, 2vw, 1.4rem);
+    inset-inline: clamp(0.9rem, 2vw, 1.4rem);
     bottom: clamp(0.9rem, 2vw, 1.2rem);
     z-index: 2;
     color: #f8fafc;
@@ -58,7 +57,7 @@
 .post-details-banner-actions {
     position: absolute;
     top: 1.2rem;
-    right: 0.85rem;
+    inset-inline-end: 0.85rem;
     display: flex;
     gap: 0.55rem;
     z-index: 2;
@@ -109,7 +108,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    margin-right: 0.25rem;
+    margin-inline-end: 0.25rem;
 }
 
 .post-details-title {
@@ -345,9 +344,15 @@
 @media (min-width: 1350px) {
     .post-details-banner-actions {
         top: 50%;
-        right: auto;
-        left: 0;
+        inset-inline-start: 0;
+        inset-inline-end: auto;
         transform: translate(-135%, -50%);
         flex-direction: column;
+    }
+
+    [dir="rtl"] .post-details-banner-actions {
+        inset-inline-start: auto;
+        inset-inline-end: 0;
+        transform: translate(135%, -50%);
     }
 }

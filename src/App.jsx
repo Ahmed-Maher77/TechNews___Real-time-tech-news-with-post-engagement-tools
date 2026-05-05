@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import AppLayout from "./components/layout/AppLayout";
 import LazyPage from "./components/routing/LazyPage";
 import NotFoundPage from "./components/routing/NotFoundPage";
@@ -16,6 +17,7 @@ function App() {
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const role = useSelector(selectRole);
     const theme = useSelector(selectTheme);
+    const { i18n } = useTranslation();
     const homePath = role === "admin" ? "/admin/dashboard" : "/home";
 
     const handleResize = useCallback(() => {
@@ -58,6 +60,12 @@ function App() {
         document.documentElement.setAttribute("data-theme", theme);
         window.localStorage.setItem(themeStorageKey, theme);
     }, [theme]);
+
+    useEffect(() => {
+        const isArabic = i18n.language === "ar";
+        document.documentElement.lang = isArabic ? "ar" : "en";
+        document.documentElement.dir = isArabic ? "rtl" : "ltr";
+    }, [i18n.language]);
 
     return (
         <Routes>

@@ -1,9 +1,14 @@
 import MainButton from "../../../components/common/MainButton/MainButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginDefaultValues, loginSchema } from "../../../validations/loginValidation";
+import { useTranslation } from "react-i18next";
+import {
+    loginDefaultValues,
+    loginSchema,
+} from "../../../validations/loginValidation";
 
 function LoginForm({ onSubmit }) {
+    const { t } = useTranslation();
     const {
         register,
         handleSubmit,
@@ -28,10 +33,10 @@ function LoginForm({ onSubmit }) {
             autoComplete="off"
             noValidate
         >
-            <h1 className="h4 mb-3 text-center">Welcome back</h1>
+            <h1 className="h4 mb-3 text-center">{t("auth.welcomeBack")}</h1>
             <div className="mb-3">
                 <label htmlFor="login-email" className="form-label">
-                    Email
+                    {t("auth.email")}
                 </label>
                 <input
                     type="email"
@@ -39,16 +44,18 @@ function LoginForm({ onSubmit }) {
                     id="login-email"
                     name="login_email"
                     autoComplete="off"
-                    placeholder="Enter your email"
+                    placeholder={t("auth.enterEmail")}
                     {...register("email")}
                 />
                 {errors.email ? (
-                    <div className="auth-field-error">{errors.email.message}</div>
+                    <div className="auth-field-error">
+                        {t(errors.email.message)}
+                    </div>
                 ) : null}
             </div>
             <div className="mb-3">
                 <label htmlFor="login-password" className="form-label">
-                    Password
+                    {t("auth.password")}
                 </label>
                 <input
                     type="password"
@@ -56,11 +63,13 @@ function LoginForm({ onSubmit }) {
                     id="login-password"
                     name="login_password"
                     autoComplete="new-password"
-                    placeholder="Enter your password"
+                    placeholder={t("auth.enterPassword")}
                     {...register("password")}
                 />
                 {errors.password ? (
-                    <div className="auth-field-error">{errors.password.message}</div>
+                    <div className="auth-field-error">
+                        {t(errors.password.message)}
+                    </div>
                 ) : null}
             </div>
             <MainButton
@@ -69,7 +78,9 @@ function LoginForm({ onSubmit }) {
                 fullWidth
                 disabled={isSubmitting}
             >
-                {isSubmitting ? "Logging in..." : "Login"}
+                {isSubmitting
+                    ? t("auth.loginSubmitting")
+                    : t("auth.loginSubmit")}
             </MainButton>
         </form>
     );

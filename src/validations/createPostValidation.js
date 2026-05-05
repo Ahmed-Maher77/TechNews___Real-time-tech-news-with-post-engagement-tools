@@ -26,49 +26,31 @@ export const createPostSchema = z.object({
     title: z
         .string()
         .trim()
-        .min(1, "Title is required.")
-        .min(
-            TITLE_MIN_LENGTH,
-            `Title must be at least ${TITLE_MIN_LENGTH} characters.`,
-        ),
-    author: z.string().trim().min(1, "Author is required."),
+        .min(1, "validation.titleRequired")
+        .min(TITLE_MIN_LENGTH, "validation.titleMin"),
+    author: z.string().trim().min(1, "validation.authorRequired"),
     category: z
         .string()
         .trim()
-        .min(1, "Category is required.")
-        .min(
-            CATEGORY_MIN_LENGTH,
-            `Category must be at least ${CATEGORY_MIN_LENGTH} characters.`,
-        ),
+        .min(1, "validation.categoryRequired")
+        .min(CATEGORY_MIN_LENGTH, "validation.categoryMin"),
     date: z.string().min(1),
     image: z
         .string()
         .trim()
-        .min(1, "Image URL is required.")
-        .regex(
-            HTTP_IMAGE_URL_REGEX,
-            "Image URL must start with http:// or https://",
-        ),
+        .min(1, "validation.imageRequired")
+        .regex(HTTP_IMAGE_URL_REGEX, "validation.imageHttp"),
     description: z
         .string()
         .trim()
-        .min(1, "Description is required.")
-        .min(
-            DESCRIPTION_MIN_LENGTH,
-            `Description must be at least ${DESCRIPTION_MIN_LENGTH} characters.`,
-        )
-        .max(
-            DESCRIPTION_MAX_LENGTH,
-            `Description must be at most ${DESCRIPTION_MAX_LENGTH} characters.`,
-        ),
+        .min(1, "validation.descriptionRequired")
+        .min(DESCRIPTION_MIN_LENGTH, "validation.descriptionMin")
+        .max(DESCRIPTION_MAX_LENGTH, "validation.descriptionMax"),
     content: z
         .string()
         .trim()
-        .min(1, "Content is required.")
-        .min(
-            CONTENT_MIN_LENGTH,
-            `Content must be at least ${CONTENT_MIN_LENGTH} characters.`,
-        ),
+        .min(1, "validation.contentRequired")
+        .min(CONTENT_MIN_LENGTH, "validation.contentMin"),
     views: z.number(),
     likes: z.number(),
     dislikes: z.number(),

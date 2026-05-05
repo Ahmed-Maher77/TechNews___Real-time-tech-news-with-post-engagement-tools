@@ -14,6 +14,10 @@
     --theme-text-primary: #101828;
     --theme-text-secondary: #60656d;
     --theme-focus-ring: rgb(120 130 145 / 24%);
+    --theme-tabs-track: #eef2f6;
+    --theme-tabs-thumb: #ffffff;
+    --theme-tabs-thumb-shadow: 0 1px 2px rgb(16 24 40 / 8%);
+    --theme-sort-toggle-shadow: 0 1px 2px rgb(16 24 40 / 10%);
     --footer-bg: linear-gradient(180deg, #111827 0%, #0f172a 100%);
     --footer-border: #1f2a3d;
     --footer-text: #cbd5e1;
@@ -40,6 +44,10 @@
     --theme-text-primary: #f3f3f3;
     --theme-text-secondary: #b0b0b0;
     --theme-focus-ring: rgb(185 185 185 / 24%);
+    --theme-tabs-track: #252525;
+    --theme-tabs-thumb: #343434;
+    --theme-tabs-thumb-shadow: 0 1px 3px rgb(0 0 0 / 45%);
+    --theme-sort-toggle-shadow: 0 1px 3px rgb(0 0 0 / 40%);
     --footer-bg: linear-gradient(180deg, #171717 0%, #131313 100%);
     --footer-border: #2b2b2b;
     --footer-text: #d6d6d6;
@@ -66,9 +74,9 @@ a {
     color: inherit;
 }
 
-/* Pages */
+/* Pages — margin-inline-start reserves space beside fixed sidebar (LTR: left, RTL: right) */
 .pages {
-    margin-left: 230px;
+    margin-inline-start: 230px;
     transition: var(--trans-3);
     padding-inline: clamp(2rem, 5vw, 3rem);
 }
@@ -78,26 +86,26 @@ a {
 }
 
 .pages.sidebar-collapsed {
-    margin-left: 88px;
+    margin-inline-start: 88px;
 }
 
 .footer-offset {
-    margin-left: 230px;
+    margin-inline-start: 230px;
     /* padding-inline: clamp(2rem, 5vw, 3rem); */
     transition: var(--trans-3);
 }
 
 .footer-offset.sidebar-collapsed {
-    margin-left: 88px;
+    margin-inline-start: 88px;
 }
 
 @media (max-width: 991.98px) {
     .pages {
-        margin-left: 0;
+        margin-inline-start: 0;
     }
 
     .footer-offset {
-        margin-left: 0;
+        margin-inline-start: 0;
     }
 }
 

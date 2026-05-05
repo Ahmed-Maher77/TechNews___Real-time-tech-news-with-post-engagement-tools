@@ -2,41 +2,45 @@ const navLinks = [
     {
         adminRoutes: [
             {
-                name: "Dashboard",
+                labelKey: "nav.dashboard",
                 target: "/admin/dashboard",
                 icon: "fa-regular fa-house",
                 top: true,
             },
             {
-                name: "User Management",
+                labelKey: "nav.userManagement",
                 target: "/admin/user-management",
                 icon: "fa-regular fa-user",
             },
             {
-                name: "Post Management",
+                labelKey: "nav.postManagement",
                 target: "/admin/post-management",
                 icon: "fa-regular fa-newspaper",
             },
             {
-                name: "Moderation Queue",
+                labelKey: "nav.moderationQueue",
                 target: "/admin/moderation-queue",
                 icon: "fa-regular fa-flag",
             },
         ],
         userRoutes: [
-            { name: "Home Feed", target: "/home", icon: "fa-regular fa-house" },
             {
-                name: "Explore",
+                labelKey: "nav.homeFeed",
+                target: "/home",
+                icon: "fa-regular fa-house",
+            },
+            {
+                labelKey: "nav.explore",
                 target: "/explore",
                 icon: "fa-regular fa-compass",
             },
             {
-                name: "My Posts",
+                labelKey: "nav.myPosts",
                 target: "/my-posts",
                 icon: "fa-regular fa-file-lines",
             },
             {
-                name: "Create Post",
+                labelKey: "nav.createPost",
                 target: "/create-post",
                 icon: "fa-solid fa-plus",
             },

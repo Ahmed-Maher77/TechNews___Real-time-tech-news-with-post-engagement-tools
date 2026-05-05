@@ -4,11 +4,20 @@ aside.Sidebar {
     height: 100vh;
     position: fixed;
     top: 0;
-    left: 0;
-    border-right: 2px solid #bbbbbb30;
+    inset-inline-start: 0;
+    border-inline-end: 2px solid #bbbbbb30;
     z-index: 1040;
-    box-shadow: 0 0px 4px 0 rgb(174 174 174 / 8%);
+    box-shadow: 2px 0 4px 0 rgb(174 174 174 / 8%);
     transition: var(--trans-3);
+}
+
+[dir="rtl"] aside.Sidebar {
+    box-shadow: -2px 0 4px 0 rgb(174 174 174 / 8%);
+}
+
+/* .list-unstyled only clears padding-left; RTL list indent uses padding-inline-start */
+aside.Sidebar > ul.list-unstyled {
+    padding-inline: 0;
 }
 
 aside.Sidebar.is-mobile {
@@ -34,7 +43,7 @@ aside.Sidebar .sidebar-toggle-btn:hover {
 }
 
 aside.Sidebar .sidebar-header .logo {
-    padding-left: 0 !important;
+    padding-inline-start: 0 !important;
 }
 
 aside.Sidebar .sidebar-header .logo h1,
@@ -119,6 +128,15 @@ aside.Sidebar.is-collapsed .navlink-item .fa-arrow-right-from-bracket {
     pointer-events: none;
 }
 
+[dir="rtl"] aside.Sidebar.is-collapsed .navlink-item span,
+[dir="rtl"] aside.Sidebar.is-collapsed .navlink-item figure,
+[dir="rtl"]
+    aside.Sidebar.is-collapsed
+    .navlink-item
+    .fa-arrow-right-from-bracket {
+    transform: translateX(6px);
+}
+
 aside.Sidebar.is-collapsed
     .navlink-item.logout-item
     .fa-arrow-right-from-bracket {
@@ -126,6 +144,13 @@ aside.Sidebar.is-collapsed
     max-width: 24px;
     transform: none;
     pointer-events: auto;
+}
+
+[dir="rtl"]
+    aside.Sidebar.is-collapsed
+    .navlink-item.logout-item
+    .fa-arrow-right-from-bracket {
+    transform: scaleX(-1);
 }
 
 aside.Sidebar.is-collapsed .navlink-item.logout-item > button {
@@ -161,6 +186,16 @@ aside.Sidebar.is-collapsed .sidebar-header .logo h1 {
     opacity: 0;
     max-width: 0;
     transform: translateX(-6px);
+}
+
+[dir="rtl"] aside.Sidebar.is-collapsed .sidebar-header .logo h1 {
+    transform: translateX(6px);
+}
+
+/* Directional icons: point “out” of sidebar in RTL */
+[dir="rtl"] aside.Sidebar .logout-item .fa-arrow-right-from-bracket,
+[dir="rtl"] aside.Sidebar .login-main-btn .fa-right-to-bracket {
+    transform: scaleX(-1);
 }
 
 .navlink-item {

@@ -1,9 +1,11 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./FeaturedPost.css";
 import formatDate from "../../../utils/functions/formatDate";
 
 function FeaturedPost({ posts = [] }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [activeIndex, setActiveIndex] = useState(0);
     const sliderPosts = useMemo(() => posts.slice(0, 3), [posts]);
@@ -40,7 +42,7 @@ function FeaturedPost({ posts = [] }) {
                         <button
                             type="button"
                             className="featured-link-btn"
-                            aria-label="Open featured post"
+                            aria-label={t("featured.openFeaturedAria")}
                             onClick={() => navigate(`/posts/${post.id}`)}
                         >
                             <i className="fa-solid fa-arrow-up-right-from-square"></i>
@@ -48,18 +50,20 @@ function FeaturedPost({ posts = [] }) {
 
                         <img
                             src={post.image}
-                            alt={post.title || "Featured post"}
+                            alt={post.title || t("featured.featuredPostAlt")}
                             loading="eager"
                         />
                         <div className="featured-overlay"></div>
 
                         <div className="featured-content">
-                            <p className="featured-label mb-3">
-                                <i className="fa-solid fa-arrow-trend-up me-2"></i>
-                                FEATURED TODAY
+                            <p className="featured-label mb-3 d-inline-flex align-items-center gap-2">
+                                <i className="fa-solid fa-arrow-trend-up"></i>
+                                {t("featured.label")}
                             </p>
 
-                            <h2 className="featured-title mb-2">{post.title}</h2>
+                            <h2 className="featured-title mb-2">
+                                {post.title}
+                            </h2>
                             <p className="featured-description mb-0">
                                 {post.description}
                             </p>
@@ -67,13 +71,17 @@ function FeaturedPost({ posts = [] }) {
 
                         <div className="featured-meta">
                             <span className="featured-author">
-                                <i className="fa-regular fa-user me-2"></i>
+                                <i className="fa-regular fa-user"></i>
                                 {post.author}
                             </span>
                             <span>
                                 {formatDate(post.date)} -{" "}
-                                {Math.max(4, Math.ceil((post.views || 800) / 250))} mins
-                                read
+                                {t("featured.minsRead", {
+                                    count: Math.max(
+                                        4,
+                                        Math.ceil((post.views || 800) / 250),
+                                    ),
+                                })}
                             </span>
                         </div>
                     </div>
@@ -85,7 +93,9 @@ function FeaturedPost({ posts = [] }) {
                             key={post.id}
                             type="button"
                             className={`featured-dot ${index === normalizedActiveIndex ? "active" : ""}`}
-                            aria-label={`Show featured post ${index + 1}`}
+                            aria-label={t("featured.showSlideAria", {
+                                count: index + 1,
+                            })}
                             onClick={() => handleSetActiveIndex(index)}
                         ></button>
                     ))}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFoundMessage";
 import FeaturedPost from "../../components/Posts_Components/FeaturedPost/FeaturedPost";
 import PostsLoading from "../../components/Posts_Components/PostsLoading/PostsLoading";
@@ -9,6 +10,7 @@ import useDebounce from "../../hooks/useDebounce";
 import "./Posts.css";
 
 function Posts() {
+    const { t } = useTranslation();
     const [posts, setPosts] = useState([]);
     const [featuredPosts, setFeaturedPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -135,9 +137,9 @@ function Posts() {
                     ) : (
                         hasNoMatchingPosts && (
                             <NoPostsFoundMessage
-                                title="No matching posts"
-                                subtitle="Try a different title or category to find posts in the feed."
-                                buttonLabel="Clear the search"
+                                title={t("emptyState.noMatchTitle")}
+                                subtitle={t("emptyState.noMatchSubtitle")}
+                                buttonLabel={t("emptyState.clearSearch")}
                                 onButtonClick={handleClearSearch}
                             />
                         )

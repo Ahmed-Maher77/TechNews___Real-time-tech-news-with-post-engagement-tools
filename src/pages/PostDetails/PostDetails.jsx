@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Avatar from "../../components/common/Avatar/Avatar";
 import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFoundMessage";
 import formatDate from "../../utils/functions/formatDate";
@@ -10,6 +11,7 @@ import { toast } from "react-toastify";
 import TooltipText from "../../components/common/TooltipText/TooltipText";
 
 function PostDetails() {
+    const { t } = useTranslation();
     const { postId } = useParams();
     const [post, setPost] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -49,7 +51,7 @@ function PostDetails() {
     ]);
 
     const auth = getStoredAuth();
-    const commenterName = auth?.name || "Guest User";
+    const commenterName = auth?.name || t("postDetails.guestUser");
     const commenterPic = auth?.userPic || "";
     const commentsSectionRef = useRef(null);
 
@@ -103,10 +105,10 @@ function PostDetails() {
                     dislikes: nextDislikes,
                 });
             } catch {
-                toast.error("Unable to save reactions. Please try again.");
+                toast.error(t("postDetails.reactionSaveError"));
             }
         },
-        [postId],
+        [postId, t],
     );
 
     const handleLike = useCallback(() => {
@@ -151,11 +153,11 @@ function PostDetails() {
         persistReactions(nextLikes, nextDislikes);
     }, [dislikes, likes, persistReactions, reaction]);
 
-    const handleShare = async () => {
+    const handleShare = useCallback(async () => {
         try {
             if (navigator.share) {
                 await navigator.share({
-                    title: post?.title || "TechNews Post",
+                    title: post?.title || t("postDetails.shareTitleFallback"),
                     text: post?.description || "",
                     url: postUrl,
                 });
@@ -165,7 +167,7 @@ function PostDetails() {
         } catch {
             // no-op fallback for unsupported clipboard
         }
-    };
+    }, [post, postUrl, t]);
 
     const scrollToComments = useCallback(() => {
         commentsSectionRef.current?.scrollIntoView({
@@ -241,13 +243,18 @@ function PostDetails() {
     }, []);
 
     if (isLoading)
-        return <section className="PostDetails">Loading post...</section>;
+        return (
+            <section className="PostDetails">
+                {t("postDetails.loading")}
+            </section>
+        );
     if (!post) {
         return (
             <section className="PostDetails">
                 <NoPostsFoundMessage
-                    title="Post not found"
-                    subtitle="This post may have been removed or the link is invalid."
+                    title={t("emptyState.postNotFoundTitle")}
+                    subtitle={t("emptyState.postNotFoundSubtitle")}
+                    showCallToAction={false}
                 />
             </section>
         );
@@ -261,7 +268,7 @@ function PostDetails() {
                         <img
                             className="post-details-image"
                             src={post.image}
-                            alt={post.title || "Post cover"}
+                            alt={post.title || t("postDetails.postCoverAlt")}
                         />
                         <div className="post-details-banner-overlay"></div>
                         <div className="post-details-banner-copy">
@@ -272,7 +279,7 @@ function PostDetails() {
                         </div>
                         <div className="post-details-banner-actions">
                             <TooltipText
-                                text="Add to favorites"
+                                text={t("postDetails.favoriteTooltip")}
                                 className="post-details-banner-tooltip"
                             >
                                 <button
@@ -281,7 +288,9 @@ function PostDetails() {
                                     onClick={() =>
                                         setIsFavorite((prev) => !prev)
                                     }
-                                    aria-label="Toggle favorite"
+                                    aria-label={t(
+                                        "postDetails.toggleFavoriteAria",
+                                    )}
                                 >
                                     <i
                                         className={`${isFavorite ? "fa-solid" : "fa-regular"} fa-bookmark`}
@@ -289,27 +298,29 @@ function PostDetails() {
                                 </button>
                             </TooltipText>
                             <TooltipText
-                                text="Share this post"
+                                text={t("postDetails.shareTooltip")}
                                 className="post-details-banner-tooltip"
                             >
                                 <button
                                     type="button"
                                     className="post-details-action-btn post-details-banner-btn"
                                     onClick={handleShare}
-                                    aria-label="Share post"
+                                    aria-label={t("postDetails.sharePostAria")}
                                 >
                                     <i className="fa-solid fa-share"></i>
                                 </button>
                             </TooltipText>
                             <TooltipText
-                                text="Jump to discussion"
+                                text={t("postDetails.jumpDiscussionTooltip")}
                                 className="post-details-banner-tooltip"
                             >
                                 <button
                                     type="button"
                                     className="post-details-action-btn post-details-banner-btn comments-btn"
                                     onClick={scrollToComments}
-                                    aria-label="Go to comments"
+                                    aria-label={t(
+                                        "postDetails.goToCommentsAria",
+                                    )}
                                 >
                                     <i className="fa-regular fa-comments"></i>
                                 </button>
@@ -326,17 +337,19 @@ function PostDetails() {
                                 <span>{post.author}</span>
                             </div>
                             <div className="post-details-meta">
-                                <span>
-                                    <i className="fa-regular fa-calendar me-2"></i>
+                                <span className="d-inline-flex align-items-center gap-2">
+                                    <i className="fa-regular fa-calendar"></i>
                                     {formatDate(post.date)}
                                 </span>
-                                <span className="text-capitalize">
-                                    <i className="fa-solid fa-tag me-2"></i>
+                                <span className="text-capitalize d-inline-flex align-items-center gap-2">
+                                    <i className="fa-solid fa-tag"></i>
                                     {post.category}
                                 </span>
-                                <span>
-                                    <i className="fa-regular fa-clock me-2"></i>
-                                    {readMins} mins read
+                                <span className="d-inline-flex align-items-center gap-2">
+                                    <i className="fa-regular fa-clock"></i>
+                                    {t("postDetails.minsRead", {
+                                        count: readMins,
+                                    })}
                                 </span>
                             </div>
                         </div>
@@ -368,12 +381,15 @@ function PostDetails() {
                     >
                         <div className="post-details-discussion-head mb-3">
                             <h2 className="post-details-discussion-title">
-                                Discussion Center
+                                {t("postDetails.discussionTitle")}
                             </h2>
                             <p className="post-details-discussion-subtitle mb-0">
-                                Share your thoughts, ask questions, and react to this post.
+                                {t("postDetails.discussionSubtitle")}
                             </p>
-                            <span className="post-details-discussion-dots" aria-hidden>
+                            <span
+                                className="post-details-discussion-dots"
+                                aria-hidden
+                            >
                                 ...
                             </span>
                         </div>
@@ -396,10 +412,12 @@ function PostDetails() {
                                 }
                                 className="form-control"
                                 rows={3}
-                                placeholder="Write your comment..."
+                                placeholder={t(
+                                    "postDetails.commentPlaceholder",
+                                )}
                             />
                             <button type="submit" className="btn btn-dark">
-                                Add comment
+                                {t("postDetails.addComment")}
                             </button>
                         </form>
 
@@ -459,7 +477,7 @@ function PostDetails() {
                                 <div className="post-details-empty-comments">
                                     <i className="fa-regular fa-comments"></i>
                                     <p className="mb-0">
-                                        No comments yet. Start the discussion.
+                                        {t("postDetails.noCommentsYet")}
                                     </p>
                                 </div>
                             )}

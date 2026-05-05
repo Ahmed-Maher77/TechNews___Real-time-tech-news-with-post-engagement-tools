@@ -1,9 +1,11 @@
 import { memo, useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Logo from "../Logo";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Navbar.css";
 
 function Navbar() {
+    const { t } = useTranslation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const handleToggleSidebar = useCallback(() => {
@@ -24,7 +26,7 @@ function Navbar() {
                 type="button"
                 className="menu-toggler border-0 bg-transparent fs-4"
                 onClick={handleToggleSidebar}
-                aria-label="Toggle sidebar menu"
+                aria-label={t("common.toggleSidebar")}
             >
                 <i className="fa-solid fa-bars fs-5"></i>
             </button>

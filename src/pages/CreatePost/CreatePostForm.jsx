@@ -1,6 +1,7 @@
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import "./CreatePostForm.css";
 import MainButton from "../../components/common/MainButton/MainButton";
@@ -14,7 +15,22 @@ import {
     TITLE_MIN_LENGTH,
 } from "../../validations/createPostValidation";
 
+function translateCreatePostFieldError(t, error) {
+    if (!error?.message) return "";
+    const key = error.message;
+    const countByKey = {
+        "validation.titleMin": TITLE_MIN_LENGTH,
+        "validation.categoryMin": CATEGORY_MIN_LENGTH,
+        "validation.contentMin": CONTENT_MIN_LENGTH,
+        "validation.descriptionMin": DESCRIPTION_MIN_LENGTH,
+        "validation.descriptionMax": DESCRIPTION_MAX_LENGTH,
+    };
+    const count = countByKey[key];
+    return count !== undefined ? t(key, { count }) : t(key);
+}
+
 const CreatePostForm = () => {
+    const { t } = useTranslation();
     const {
         register,
         handleSubmit,
@@ -41,7 +57,6 @@ const CreatePostForm = () => {
             );
             const createdPost = res.data;
 
-            // Notify other parts of the app (Posts page) about the new post
             try {
                 window.dispatchEvent(
                     new CustomEvent("postCreated", { detail: createdPost }),
@@ -50,12 +65,14 @@ const CreatePostForm = () => {
                 // ignore dispatch errors
             }
 
-            toast.success("Post created successfully.");
+            toast.success(t("createPost.success"));
             reset(createPostDefaultValues());
         } catch {
-            toast.error("Unable to create post. Please check json-server.");
+            toast.error(t("createPost.error"));
         }
     };
+
+    const requiredMark = <span className="text-danger">*</span>;
 
     return (
         <form
@@ -64,23 +81,23 @@ const CreatePostForm = () => {
             onSubmit={handleSubmit(onSubmit)}
             noValidate
         >
-            <h3 className="form-title mb-4">Create New Post</h3>
+            <h3 className="form-title mb-4">{t("createPost.title")}</h3>
             <fieldset className="create-post-fieldset" disabled={isSubmitting}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label fw-semibold">
-                        Title <span className="text-danger">*</span>
+                        {t("createPost.fieldTitle")} {requiredMark}
                     </label>
                     <input
                         type="text"
                         className={`form-control app-form-control ${errors.title ? "is-invalid" : ""}`}
                         id="title"
-                        placeholder="Enter post title"
+                        placeholder={t("createPost.placeholderTitle")}
                         minLength={TITLE_MIN_LENGTH}
                         {...register("title")}
                     />
                     {errors.title ? (
                         <div className="app-field-error">
-                            {errors.title.message}
+                            {translateCreatePostFieldError(t, errors.title)}
                         </div>
                     ) : null}
                 </div>
@@ -91,18 +108,21 @@ const CreatePostForm = () => {
                             htmlFor="author"
                             className="form-label fw-semibold"
                         >
-                            Author <span className="text-danger">*</span>
+                            {t("createPost.fieldAuthor")} {requiredMark}
                         </label>
                         <input
                             type="text"
                             className={`form-control app-form-control ${errors.author ? "is-invalid" : ""}`}
                             id="author"
-                            placeholder="Author name"
+                            placeholder={t("createPost.placeholderAuthor")}
                             {...register("author")}
                         />
                         {errors.author ? (
                             <div className="app-field-error">
-                                {errors.author.message}
+                                {translateCreatePostFieldError(
+                                    t,
+                                    errors.author,
+                                )}
                             </div>
                         ) : null}
                     </div>
@@ -112,19 +132,22 @@ const CreatePostForm = () => {
                             htmlFor="category"
                             className="form-label fw-semibold"
                         >
-                            Category <span className="text-danger">*</span>
+                            {t("createPost.fieldCategory")} {requiredMark}
                         </label>
                         <input
                             type="text"
                             className={`form-control app-form-control ${errors.category ? "is-invalid" : ""}`}
                             id="category"
-                            placeholder="e.g. React, AI"
+                            placeholder={t("createPost.placeholderCategory")}
                             minLength={CATEGORY_MIN_LENGTH}
                             {...register("category")}
                         />
                         {errors.category ? (
                             <div className="app-field-error">
-                                {errors.category.message}
+                                {translateCreatePostFieldError(
+                                    t,
+                                    errors.category,
+                                )}
                             </div>
                         ) : null}
                     </div>
@@ -132,18 +155,18 @@ const CreatePostForm = () => {
 
                 <div className="mb-3">
                     <label htmlFor="image" className="form-label fw-semibold">
-                        Image URL <span className="text-danger">*</span>
+                        {t("createPost.fieldImage")} {requiredMark}
                     </label>
                     <input
                         type="text"
                         className={`form-control app-form-control ${errors.image ? "is-invalid" : ""}`}
                         id="image"
-                        placeholder="https://example.com/image.jpg"
+                        placeholder={t("createPost.placeholderImage")}
                         {...register("image")}
                     />
                     {errors.image ? (
                         <div className="app-field-error">
-                            {errors.image.message}
+                            {translateCreatePostFieldError(t, errors.image)}
                         </div>
                     ) : null}
                 </div>
@@ -153,13 +176,13 @@ const CreatePostForm = () => {
                         htmlFor="description"
                         className="form-label fw-semibold"
                     >
-                        Description <span className="text-danger">*</span>
+                        {t("createPost.fieldDescription")} {requiredMark}
                     </label>
                     <textarea
                         className={`form-control app-form-control ${errors.description ? "is-invalid" : ""}`}
                         id="description"
                         rows={3}
-                        placeholder="Short post summary..."
+                        placeholder={t("createPost.placeholderDescription")}
                         minLength={DESCRIPTION_MIN_LENGTH}
                         maxLength={DESCRIPTION_MAX_LENGTH}
                         {...register("description")}
@@ -169,26 +192,29 @@ const CreatePostForm = () => {
                     </div>
                     {errors.description ? (
                         <div className="app-field-error">
-                            {errors.description.message}
+                            {translateCreatePostFieldError(
+                                t,
+                                errors.description,
+                            )}
                         </div>
                     ) : null}
                 </div>
 
                 <div className="mb-3">
                     <label htmlFor="content" className="form-label fw-semibold">
-                        Content <span className="text-danger">*</span>
+                        {t("createPost.fieldContent")} {requiredMark}
                     </label>
                     <textarea
                         className={`form-control app-form-control ${errors.content ? "is-invalid" : ""}`}
                         id="content"
                         rows={5}
-                        placeholder="Full post content..."
+                        placeholder={t("createPost.placeholderContent")}
                         minLength={CONTENT_MIN_LENGTH}
                         {...register("content")}
                     ></textarea>
                     {errors.content ? (
                         <div className="app-field-error">
-                            {errors.content.message}
+                            {translateCreatePostFieldError(t, errors.content)}
                         </div>
                     ) : null}
                 </div>
@@ -199,7 +225,9 @@ const CreatePostForm = () => {
                     fullWidth
                     disabled={isSubmitting}
                 >
-                    {isSubmitting ? "Creating..." : "Create Post"}
+                    {isSubmitting
+                        ? t("createPost.submitting")
+                        : t("createPost.submit")}
                 </MainButton>
             </fieldset>
         </form>

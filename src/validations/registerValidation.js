@@ -13,28 +13,31 @@ export const registerSchema = z
         name: z
             .string()
             .trim()
-            .min(1, "Full name is required.")
-            .min(3, "Full name must be at least 3 characters."),
+            .min(1, "validation.fullNameRequired")
+            .min(3, "validation.fullNameMin"),
         email: z
             .string()
             .trim()
-            .min(1, "Email is required.")
-            .email("Please enter a valid email."),
+            .min(1, "validation.emailRequired")
+            .email("validation.emailInvalid"),
         password: z
             .string()
-            .min(1, "Password is required.")
-            .refine((value) => value.trim().length > 0, "Password is required.")
-            .min(6, "Password must be at least 6 characters."),
-        confirmPassword: z
-            .string()
-            .min(1, "Please confirm your password.")
+            .min(1, "validation.passwordRequired")
             .refine(
                 (value) => value.trim().length > 0,
-                "Please confirm your password.",
+                "validation.passwordRequired",
+            )
+            .min(6, "validation.passwordMin"),
+        confirmPassword: z
+            .string()
+            .min(1, "validation.confirmPasswordRequired")
+            .refine(
+                (value) => value.trim().length > 0,
+                "validation.confirmPasswordRequired",
             ),
         role: z.enum(["user", "admin"]),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords do not match.",
+        message: "validation.passwordsMismatch",
         path: ["confirmPassword"],
     });

@@ -1,5 +1,6 @@
 import { memo, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./PostCard.css";
 import TooltipText from "../../common/TooltipText/TooltipText";
 import formatDate from "../../../utils/functions/formatDate";
@@ -18,6 +19,7 @@ function PostCard({
     likes: initialLikes = 0,
     dislikes: initialDislikes = 0,
 }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [likes, setLikes] = useState(initialLikes);
     const [dislikes, setDislikes] = useState(initialDislikes);
@@ -64,7 +66,7 @@ function PostCard({
         try {
             if (navigator.share) {
                 await navigator.share({
-                    title: title || "TechNews Post",
+                    title: title || t("postCard.shareTitleFallback"),
                     text: description || "",
                     url: shareUrl,
                 });
@@ -72,9 +74,9 @@ function PostCard({
             }
             await navigator.clipboard.writeText(shareUrl);
         } catch {
-            toast.error("Unable to share post. Please try again.");
+            toast.error(t("postCard.shareError"));
         }
-    }, [description, id, title]);
+    }, [description, id, t, title]);
 
     return (
         <article className="PostCard">
@@ -82,14 +84,14 @@ function PostCard({
                 <button
                     type="button"
                     className="post-action-btn"
-                    aria-label="Add to favourites"
+                    aria-label={t("postCard.favoriteAria")}
                 >
                     <i className="fa-regular fa-bookmark"></i>
                 </button>
                 <button
                     type="button"
                     className="post-action-btn"
-                    aria-label="Share post"
+                    aria-label={t("postCard.shareAria")}
                     onClick={handleShare}
                 >
                     <i className="fa-solid fa-share-nodes"></i>
@@ -100,20 +102,20 @@ function PostCard({
                 <figure className="post-image mb-0">
                     <img
                         src={image}
-                        alt={title || "Post cover"}
+                        alt={title || t("postCard.postCoverAlt")}
                         loading="lazy"
                         onError={handleImageError}
                     />
                     {category && (
                         <span className="post-image-category">
-                            <i className="fa-solid fa-tag me-2"></i>
+                            <i className="fa-solid fa-tag"></i>
                             {category}
                         </span>
                     )}
                     <button
                         type="button"
                         className="post-action-btn post-link-btn"
-                        aria-label="Open post link"
+                        aria-label={t("postCard.openPostAria")}
                         onClick={() => navigate(`/posts/${id}`)}
                     >
                         <i className="fa-solid fa-arrow-up-right-from-square"></i>
@@ -131,12 +133,12 @@ function PostCard({
 
                 <footer className="post-footer mt-4">
                     <div className="post-meta d-flex align-items-center gap-3 flex-wrap">
-                        <span className="meta-item">
-                            <i className="fa-regular fa-user me-2"></i>
+                        <span className="meta-item gap-2">
+                            <i className="fa-regular fa-user"></i>
                             <span className="meta-author-name">{author}</span>
                         </span>
-                        <span className="meta-item">
-                            <i className="fa-regular fa-calendar me-2"></i>
+                        <span className="meta-item gap-2">
+                            <i className="fa-regular fa-calendar"></i>
                             {formatDate(date)}
                         </span>
                     </div>
@@ -151,7 +153,7 @@ function PostCard({
                         />
                         <span
                             className="post-comments-stat"
-                            aria-label="Comments count"
+                            aria-label={t("postCard.commentsCountAria")}
                         >
                             <i className="fa-regular fa-comment"></i>
                             {comments}

@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import navLinks from "./navLinks";
 import "./Sidebar.css";
 import Logo from "../Logo";
@@ -12,6 +13,8 @@ import {
 } from "../../../store/uiSlice";
 
 function Sidebar({ isMobile, onNavigate }) {
+    const { t, i18n } = useTranslation();
+    const isRTL = i18n.dir() === "rtl";
     const dispatch = useDispatch();
     const role = useSelector(selectRole);
     const isCollapsed = useSelector(selectIsSidebarCollapsed);
@@ -38,14 +41,20 @@ function Sidebar({ isMobile, onNavigate }) {
                         className="sidebar-toggle-btn border-0 bg-transparent"
                         onClick={() => dispatch(toggleSidebarCollapsed())}
                         aria-label={
-                            isCollapsed ? "Expand sidebar" : "Collapse sidebar"
+                            isCollapsed
+                                ? t("common.expandSidebar")
+                                : t("common.collapseSidebar")
                         }
                     >
                         <i
                             className={`fa-solid ${
                                 isCollapsed
-                                    ? "fa-angles-right"
-                                    : "fa-angles-left"
+                                    ? isRTL
+                                        ? "fa-angles-left"
+                                        : "fa-angles-right"
+                                    : isRTL
+                                      ? "fa-angles-right"
+                                      : "fa-angles-left"
                             }`}
                         ></i>
                     </button>
@@ -61,7 +70,7 @@ function Sidebar({ isMobile, onNavigate }) {
                             key={index}
                             href={route.target}
                             icon={route.icon}
-                            label={route.name}
+                            label={t(route.labelKey)}
                             isCollapsed={isCollapsed}
                             onClick={onNavigate}
                         />

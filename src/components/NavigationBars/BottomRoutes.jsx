@@ -4,6 +4,7 @@ import MainButton from "../common/MainButton/MainButton";
 import ThemeToggleButton from "../common/ThemeToggleButton/ThemeToggleButton";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { clearStoredAuth } from "../../utils/authStorage";
 import { toast } from "react-toastify";
 import {
@@ -12,20 +13,22 @@ import {
     selectRole,
 } from "../../store/authSlice";
 import { selectIsSidebarCollapsed } from "../../store/uiSlice";
+import LanguageSwitcher from "../common/LanguageSwitcher/LanguageSwitcher";
 
 const BottomRoutes = ({ onNavigate }) => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const auth = useSelector(selectAuth);
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const role = useSelector(selectRole);
     const isCollapsed = useSelector(selectIsSidebarCollapsed);
-    const username = auth?.name || "User";
+    const username = auth?.name || t("profile.fallbackUser");
     const userPic = auth?.userPic || null;
 
     const handleLogout = () => {
         onNavigate?.();
         clearStoredAuth();
-        toast.success("Logged out successfully.");
+        toast.success(t("auth.loggedOutSuccess"));
         setTimeout(() => {
             navigate("/login", { replace: true });
         }, 700);
@@ -42,12 +45,17 @@ const BottomRoutes = ({ onNavigate }) => {
                     label=""
                 />
             </div>
+            <div
+                className={`theme-sidebar-row ${isCollapsed ? "is-collapsed" : ""}`}
+            >
+                <LanguageSwitcher compact={isCollapsed} />
+            </div>
             {isLoggedIn ? (
                 <>
                     {role !== "admin" ? (
                         <ListItem
                             href="/profile"
-                            label="Profile"
+                            label={t("nav.profile")}
                             justifyBetween={true}
                             isCollapsed={isCollapsed}
                             itemClassName="profile-item"
@@ -67,7 +75,7 @@ const BottomRoutes = ({ onNavigate }) => {
                         </ListItem>
                     ) : null}
                     <ListItem
-                        label="Logout"
+                        label={t("nav.logout")}
                         justifyBetween={true}
                         itemClassName="logout-item"
                         isCollapsed={isCollapsed}
@@ -90,7 +98,7 @@ const BottomRoutes = ({ onNavigate }) => {
                         <i className="fa-solid fa-right-to-bracket"></i>
                     ) : (
                         <div className="d-flex align-items-center gap-2 justify-content-center">
-                            <span>Login</span>
+                            <span>{t("nav.login")}</span>
                             <i className="fa-solid fa-right-to-bracket"></i>
                         </div>
                     )}

@@ -10,7 +10,7 @@ const ListItem = ({
     isCollapsed = false,
     onClick,
 }) => {
-    const commonClassName = `d-flex gap-35 align-items-center w-100${justifyBetween ? " justify-content-between" : ""}`;
+    const commonClassName = `d-flex gap-35 align-items-center w-100 text-start${justifyBetween ? " justify-content-between" : ""}`;
 
     return (
         <li
@@ -35,7 +35,7 @@ const ListItem = ({
                 <button
                     type="button"
                     onClick={onClick}
-                    className={`${commonClassName} border-0 bg-transparent p-0 text-start`}
+                    className={`${commonClassName} border-0 bg-transparent p-0`}
                     title={label}
                 >
                     {icon && <i className={icon}></i>}

@@ -49,7 +49,7 @@ export function registerUser({
     const users = getStoredUsers();
     const exists = users.some((user) => user.email === normalizedEmail);
     if (exists) {
-        return { ok: false, message: "Email already registered." };
+        return { ok: false, message: "auth.emailExists" };
     }
 
     const newUser = {
@@ -73,7 +73,7 @@ export function loginUser({ email, password }) {
             candidate.password === password,
     );
     if (!user) {
-        return { ok: false, message: "Invalid email or password." };
+        return { ok: false, message: "auth.invalidCredentials" };
     }
     return { ok: true, user };
 }

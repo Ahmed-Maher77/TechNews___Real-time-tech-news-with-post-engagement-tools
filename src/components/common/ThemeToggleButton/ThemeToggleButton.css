@@ -40,8 +40,8 @@
     align-items: center;
     gap: 0.2rem;
     height: 50px;
-    background: var(--theme-surface-soft);
-    border: none;
+    background: var(--theme-tabs-track);
+    border: 1px solid var(--theme-border-soft);
     border-radius: 5px;
     padding: 0.4rem;
 }
@@ -65,8 +65,9 @@
 }
 
 .theme-tab.active {
-    background: var(--theme-surface);
+    background: var(--theme-tabs-thumb);
     color: var(--theme-text-primary);
+    box-shadow: var(--theme-tabs-thumb-shadow);
 }
 
 .theme-tab i {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -11,6 +12,7 @@ import RegisterForm from "./components/RegisterForm";
 import "./Login.css";
 
 function Login() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [mode, setMode] = useState("login");
     const [error, setError] = useState("");
@@ -31,7 +33,7 @@ function Login() {
             userPic: result.user.userPic || "",
         };
         saveStoredAuth(authPayload);
-        toast.success("Logged in successfully.");
+        toast.success(t("auth.loggedInSuccess"));
         setTimeout(() => {
             navigate(
                 authPayload.role === "admin" ? "/admin/dashboard" : "/home",
@@ -67,7 +69,7 @@ function Login() {
             userPic: result.user.userPic || "",
         };
         saveStoredAuth(authPayload);
-        toast.success("Account created successfully.");
+        toast.success(t("auth.accountCreatedSuccess"));
         setTimeout(() => {
             navigate(
                 authPayload.role === "admin" ? "/admin/dashboard" : "/home",
@@ -83,9 +85,9 @@ function Login() {
         <section className="LoginPage gray-bg d-flex min-vh-100 align-items-center justify-content-center p-4">
             <div className="auth-stack w-100">
                 <div className="auth-header mb-3">
-                    <p className="auth-kicker mb-1">Tech News Platform</p>
+                    <p className="auth-kicker mb-1">{t("auth.headerKicker")}</p>
                     <h2 className="auth-system-title mb-0 lobster-font">
-                        TechNews
+                        {t("common.brandName")}
                     </h2>
                 </div>
                 <div className="auth-card w-100">
@@ -98,7 +100,7 @@ function Login() {
                                 setMode("login");
                             }}
                         >
-                            Login
+                            {t("auth.loginTab")}
                         </button>
                         <button
                             type="button"
@@ -108,13 +110,13 @@ function Login() {
                                 setMode("register");
                             }}
                         >
-                            Register
+                            {t("auth.registerTab")}
                         </button>
                     </div>
 
                     {error ? (
                         <div className="alert alert-danger py-2" role="alert">
-                            {error}
+                            {t(error, { defaultValue: error })}
                         </div>
                     ) : null}
 

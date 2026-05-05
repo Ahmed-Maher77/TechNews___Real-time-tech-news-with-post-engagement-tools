@@ -2,12 +2,14 @@ import MainButton from "../../../components/common/MainButton/MainButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import {
     registerDefaultValues,
     registerSchema,
 } from "../../../validations/registerValidation";
 
 function RegisterForm({ onSubmit }) {
+    const { t } = useTranslation();
     const [userPic, setUserPic] = useState("");
     const [imageError, setImageError] = useState("");
     const {
@@ -31,7 +33,7 @@ function RegisterForm({ onSubmit }) {
         }
 
         if (!selectedFile.type.startsWith("image/")) {
-            setImageError("Please upload a valid image file.");
+            setImageError("auth.imageInvalid");
             return;
         }
 
@@ -62,7 +64,7 @@ function RegisterForm({ onSubmit }) {
             autoComplete="off"
             noValidate
         >
-            <h1 className="h4 mb-3 text-center">Create account</h1>
+            <h1 className="h4 mb-3 text-center">{t("auth.createAccount")}</h1>
             <div className="auth-avatar-field mb-4">
                 <input
                     type="file"
@@ -84,16 +86,18 @@ function RegisterForm({ onSubmit }) {
                     )}
                 </label>
                 <p className="auth-avatar-caption mb-0">
-                    <strong>Profile photo</strong> — optional. Tap the circle to
-                    upload your picture
+                    <strong>{t("auth.profilePhoto")}</strong> —{" "}
+                    {t("auth.profilePhotoHint")}
                 </p>
                 {imageError ? (
-                    <div className="auth-field-error text-center">{imageError}</div>
+                    <div className="auth-field-error text-center">
+                        {t(imageError)}
+                    </div>
                 ) : null}
             </div>
             <div className="mb-3">
                 <label htmlFor="register-name" className="form-label">
-                    Full Name
+                    {t("auth.fullName")}
                 </label>
                 <input
                     type="text"
@@ -101,16 +105,18 @@ function RegisterForm({ onSubmit }) {
                     id="register-name"
                     name="register_name"
                     autoComplete="off"
-                    placeholder="Enter your full name"
+                    placeholder={t("auth.enterFullName")}
                     {...register("name")}
                 />
                 {errors.name ? (
-                    <div className="auth-field-error">{errors.name.message}</div>
+                    <div className="auth-field-error">
+                        {t(errors.name.message)}
+                    </div>
                 ) : null}
             </div>
             <div className="mb-3">
                 <label htmlFor="register-email" className="form-label">
-                    Email
+                    {t("auth.email")}
                 </label>
                 <input
                     type="email"
@@ -118,16 +124,18 @@ function RegisterForm({ onSubmit }) {
                     id="register-email"
                     name="register_email"
                     autoComplete="off"
-                    placeholder="Enter your email"
+                    placeholder={t("auth.enterEmail")}
                     {...register("email")}
                 />
                 {errors.email ? (
-                    <div className="auth-field-error">{errors.email.message}</div>
+                    <div className="auth-field-error">
+                        {t(errors.email.message)}
+                    </div>
                 ) : null}
             </div>
             <div className="mb-3">
                 <label htmlFor="register-password" className="form-label">
-                    Password
+                    {t("auth.password")}
                 </label>
                 <input
                     type="password"
@@ -135,11 +143,13 @@ function RegisterForm({ onSubmit }) {
                     id="register-password"
                     name="register_password"
                     autoComplete="new-password"
-                    placeholder="Create a password"
+                    placeholder={t("auth.createPassword")}
                     {...register("password")}
                 />
                 {errors.password ? (
-                    <div className="auth-field-error">{errors.password.message}</div>
+                    <div className="auth-field-error">
+                        {t(errors.password.message)}
+                    </div>
                 ) : null}
             </div>
             <div className="mb-3">
@@ -147,7 +157,7 @@ function RegisterForm({ onSubmit }) {
                     htmlFor="register-confirm-password"
                     className="form-label"
                 >
-                    Confirm Password
+                    {t("auth.confirmPassword")}
                 </label>
                 <input
                     type="password"
@@ -155,24 +165,26 @@ function RegisterForm({ onSubmit }) {
                     id="register-confirm-password"
                     name="register_confirm_password"
                     autoComplete="new-password"
-                    placeholder="Confirm your password"
+                    placeholder={t("auth.confirmPasswordPlaceholder")}
                     {...register("confirmPassword")}
                 />
                 {errors.confirmPassword ? (
-                    <div className="auth-field-error">{errors.confirmPassword.message}</div>
+                    <div className="auth-field-error">
+                        {t(errors.confirmPassword.message)}
+                    </div>
                 ) : null}
             </div>
             <div className="mb-3">
                 <label htmlFor="register-role" className="form-label">
-                    Role
+                    {t("auth.role")}
                 </label>
                 <select
                     id="register-role"
                     className="form-select app-form-control"
                     {...register("role")}
                 >
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
+                    <option value="user">{t("auth.userRole")}</option>
+                    <option value="admin">{t("auth.adminRole")}</option>
                 </select>
             </div>
             <MainButton
@@ -181,7 +193,9 @@ function RegisterForm({ onSubmit }) {
                 fullWidth
                 disabled={isSubmitting}
             >
-                {isSubmitting ? "Creating..." : "Create account"}
+                {isSubmitting
+                    ? t("auth.registerSubmitting")
+                    : t("auth.registerSubmit")}
             </MainButton>
         </form>
     );
