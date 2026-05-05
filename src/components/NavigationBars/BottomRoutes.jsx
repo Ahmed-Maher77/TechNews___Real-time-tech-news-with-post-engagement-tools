@@ -11,7 +11,7 @@ import {
     selectIsLoggedIn,
     selectRole,
 } from "../../store/authSlice";
-import { selectIsSidebarCollapsed, selectTheme } from "../../store/uiSlice";
+import { selectIsSidebarCollapsed } from "../../store/uiSlice";
 
 const BottomRoutes = ({ onNavigate }) => {
     const navigate = useNavigate();
@@ -19,7 +19,6 @@ const BottomRoutes = ({ onNavigate }) => {
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const role = useSelector(selectRole);
     const isCollapsed = useSelector(selectIsSidebarCollapsed);
-    const theme = useSelector(selectTheme);
     const username = auth?.name || "User";
     const userPic = auth?.userPic || null;
 
@@ -39,11 +38,8 @@ const BottomRoutes = ({ onNavigate }) => {
             >
                 <ThemeToggleButton
                     variant="switch"
-                    label={
-                        isCollapsed
-                            ? ""
-                            : `${theme === "dark" ? "Dark" : "Light"} mode`
-                    }
+                    compact={isCollapsed}
+                    label=""
                 />
             </div>
             {isLoggedIn ? (

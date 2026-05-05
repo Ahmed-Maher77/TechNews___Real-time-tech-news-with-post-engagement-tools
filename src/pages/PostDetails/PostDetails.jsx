@@ -298,7 +298,7 @@ function PostDetails() {
                                     onClick={handleShare}
                                     aria-label="Share post"
                                 >
-                                    <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                                    <i className="fa-solid fa-share"></i>
                                 </button>
                             </TooltipText>
                             <TooltipText

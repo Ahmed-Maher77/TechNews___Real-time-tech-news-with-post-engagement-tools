@@ -22,7 +22,9 @@ const ListItem = ({
                 <NavLink
                     to={href}
                     onClick={onClick}
-                    className={commonClassName}
+                    className={({ isActive }) =>
+                        `${commonClassName}${isActive ? " active" : ""}`
+                    }
                     title={label}
                 >
                     {icon && <i className={icon}></i>}

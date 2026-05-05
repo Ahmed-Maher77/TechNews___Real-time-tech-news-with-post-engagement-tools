@@ -44,6 +44,37 @@
     color: var(--btn-text-color);
 }
 
+:root[data-theme="dark"] .main-app-button--default {
+    background: #2a2a2a;
+    --btn-text-color: #f3f3f3;
+    --btn-text-hover-color: #131313;
+}
+
+:root[data-theme="dark"] .main-app-button--default::after {
+    background: #f3f3f3;
+}
+
+:root[data-theme="dark"] .main-app-button--accent {
+    background: #f0b90b;
+    --btn-text-color: #111111;
+    --btn-text-hover-color: #111111;
+}
+
+:root[data-theme="dark"] .main-app-button--accent::after {
+    background: #ffd54f;
+}
+
+:root[data-theme="dark"] .main-app-button--light {
+    background: #242424;
+    --btn-text-color: #f3f3f3;
+    --btn-text-hover-color: #131313;
+    border: 1px solid #3a3a3a;
+}
+
+:root[data-theme="dark"] .main-app-button--light::after {
+    background: #f3f3f3;
+}
+
 .main-app-button.is-full-width {
     width: 100%;
 }
