@@ -17,7 +17,35 @@ function PostDetails() {
     const [dislikes, setDislikes] = useState(0);
     const [isFavorite, setIsFavorite] = useState(false);
     const [commentText, setCommentText] = useState("");
-    const [comments, setComments] = useState([]);
+    const [comments, setComments] = useState([
+        {
+            id: "dummy-comment-1",
+            name: "Sarah Johnson",
+            userPic: "",
+            text: "Great breakdown. The examples made this post easy to follow.",
+            upvotes: 6,
+            downvotes: 1,
+            reaction: null,
+        },
+        {
+            id: "dummy-comment-2",
+            name: "Omar Khaled",
+            userPic: "",
+            text: "I like how this explains the idea in a practical way. Thanks for sharing.",
+            upvotes: 3,
+            downvotes: 0,
+            reaction: null,
+        },
+        {
+            id: "dummy-comment-3",
+            name: "Mariam Adel",
+            userPic: "",
+            text: "Helpful read. Would love a quick follow-up post with advanced tips.",
+            upvotes: 4,
+            downvotes: 0,
+            reaction: null,
+        },
+    ]);
 
     const auth = getStoredAuth();
     const commenterName = auth?.name || "Guest User";
@@ -55,6 +83,15 @@ function PostDetails() {
 
     const persistReactions = useCallback(
         async (nextLikes, nextDislikes) => {
+            setPost((prevPost) =>
+                prevPost
+                    ? {
+                          ...prevPost,
+                          likes: nextLikes,
+                          dislikes: nextDislikes,
+                      }
+                    : prevPost,
+            );
             try {
                 await axios.patch(`http://localhost:3000/posts/${postId}`, {
                     likes: nextLikes,
@@ -137,6 +174,9 @@ function PostDetails() {
                     name: commenterName,
                     userPic: commenterPic,
                     text: nextComment,
+                    upvotes: 0,
+                    downvotes: 0,
+                    reaction: null,
                 },
                 ...prev,
             ]);
@@ -144,6 +184,49 @@ function PostDetails() {
         },
         [commentText, commenterName, commenterPic],
     );
+
+    const handleCommentVote = useCallback((commentId, voteType) => {
+        setComments((prevComments) =>
+            prevComments.map((comment) => {
+                if (comment.id !== commentId) return comment;
+
+                let nextUpvotes = comment.upvotes;
+                let nextDownvotes = comment.downvotes;
+                let nextReaction;
+
+                if (voteType === "upvote") {
+                    if (comment.reaction === "upvote") {
+                        nextUpvotes = Math.max(0, comment.upvotes - 1);
+                        nextReaction = null;
+                    } else {
+                        if (comment.reaction === "downvote") {
+                            nextDownvotes = Math.max(0, comment.downvotes - 1);
+                        }
+                        nextUpvotes = comment.upvotes + 1;
+                        nextReaction = "upvote";
+                    }
+                } else {
+                    if (comment.reaction === "downvote") {
+                        nextDownvotes = Math.max(0, comment.downvotes - 1);
+                        nextReaction = null;
+                    } else {
+                        if (comment.reaction === "upvote") {
+                            nextUpvotes = Math.max(0, comment.upvotes - 1);
+                        }
+                        nextDownvotes = comment.downvotes + 1;
+                        nextReaction = "downvote";
+                    }
+                }
+
+                return {
+                    ...comment,
+                    upvotes: nextUpvotes,
+                    downvotes: nextDownvotes,
+                    reaction: nextReaction ?? comment.reaction,
+                };
+            }),
+        );
+    }, []);
 
     if (isLoading) return <section className="PostDetails">Loading post...</section>;
     if (!post) {
@@ -216,7 +299,6 @@ function PostDetails() {
                     </header>
 
                     <p className="post-details-description">{post.description}</p>
-                    <p className="post-details-body">{post.content}</p>
 
                     <div className="post-details-actions">
                         <button
@@ -228,12 +310,14 @@ function PostDetails() {
                         </button>
                         <button
                             type="button"
-                            className={`post-details-action-btn ${reaction === "dislike" ? "active" : ""}`}
+                            className={`post-details-action-btn ${reaction === "dislike" ? "active dislike" : ""}`}
                             onClick={handleDislike}
                         >
                             <i className="fa-regular fa-thumbs-down"></i> {dislikes}
                         </button>
                     </div>
+
+                    <p className="post-details-body">{post.content}</p>
 
                     <div className="post-details-comments">
                         <h2 className="h5 mb-3">Comments</h2>
@@ -266,6 +350,28 @@ function PostDetails() {
                                         <div>
                                             <strong>{comment.name}</strong>
                                             <p className="mb-0">{comment.text}</p>
+                                            <div className="comment-votes mt-2">
+                                                <button
+                                                    type="button"
+                                                    className={`comment-vote-btn ${comment.reaction === "upvote" ? "active" : ""}`}
+                                                    onClick={() =>
+                                                        handleCommentVote(comment.id, "upvote")
+                                                    }
+                                                >
+                                                    <i className="fa-regular fa-thumbs-up"></i>
+                                                    <span>{comment.upvotes}</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className={`comment-vote-btn ${comment.reaction === "downvote" ? "active dislike" : ""}`}
+                                                    onClick={() =>
+                                                        handleCommentVote(comment.id, "downvote")
+                                                    }
+                                                >
+                                                    <i className="fa-regular fa-thumbs-down"></i>
+                                                    <span>{comment.downvotes}</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </article>
                                 ))

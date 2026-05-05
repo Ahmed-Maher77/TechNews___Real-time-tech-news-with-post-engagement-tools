@@ -4,7 +4,7 @@
       "id": "1",
       "title": "Understanding React Hooks",
       "views": 1500,
-      "likes": 300,
+      "likes": 301,
       "dislikes": 14,
       "comments": 45,
       "author": "John Doe",
@@ -168,5 +168,6 @@
       "comments": 0,
       "id": "R1r477MBWy4"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
