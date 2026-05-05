@@ -1,6 +1,6 @@
 import MainButton from "../../../components/common/MainButton/MainButton";
 
-function RegisterForm({ registerData, setRegisterData, onSubmit }) {
+function RegisterForm({ registerData, setRegisterData, onSubmit, onImageChange }) {
     return (
         <form
             key="register-form"
@@ -9,6 +9,28 @@ function RegisterForm({ registerData, setRegisterData, onSubmit }) {
             autoComplete="off"
         >
             <h1 className="h4 mb-3 text-center">Create account</h1>
+            <div className="auth-avatar-field mb-4">
+                <input
+                    type="file"
+                    className="auth-avatar-file-input"
+                    id="register-user-pic"
+                    accept="image/*"
+                    onChange={onImageChange}
+                />
+                <label htmlFor="register-user-pic" className="auth-avatar-label">
+                    {registerData.userPic ? (
+                        <img src={registerData.userPic} alt="" />
+                    ) : (
+                        <span className="auth-avatar-placeholder" aria-hidden>
+                            <i className="fa-regular fa-user" />
+                        </span>
+                    )}
+                </label>
+                <p className="auth-avatar-caption mb-0">
+                    <strong>Profile photo</strong> — optional. Tap the circle to upload your
+                    picture
+                </p>
+            </div>
             <div className="mb-3">
                 <label htmlFor="register-name" className="form-label">Full Name</label>
                 <input

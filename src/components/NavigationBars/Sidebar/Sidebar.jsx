@@ -57,13 +57,12 @@ function Sidebar({ isMobile, isCollapsed, onToggleCollapse, isLoggedIn, role }) 
                 </div>
 
                 {/* ======== Bottom Routes ======== */}
-                {!isAdmin && (
-                    <BottomRoutes
-                        {...userData}
-                        isCollapsed={isCollapsed}
-                        isLoggedIn={isLoggedIn}
-                    />
-                )}
+                <BottomRoutes
+                    {...userData}
+                    role={role}
+                    isCollapsed={isCollapsed}
+                    isLoggedIn={isLoggedIn}
+                />
             </ul>
         </aside>
     );

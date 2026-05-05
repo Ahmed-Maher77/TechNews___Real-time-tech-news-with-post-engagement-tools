@@ -5,37 +5,41 @@ import { useNavigate } from "react-router-dom";
 import { clearStoredAuth } from "../../utils/authStorage";
 import { toast } from "react-toastify";
 
-const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn }) => {
+const BottomRoutes = ({ username, userPic, isCollapsed, isLoggedIn, role }) => {
     const navigate = useNavigate();
     const handleLogout = () => {
         clearStoredAuth();
         toast.success("Logged out successfully.");
-        navigate("/login", { replace: true });
+        setTimeout(() => {
+            navigate("/login", { replace: true });
+        }, 700);
     };
 
     return (
         <div className="bottom d-flex flex-column gap-2">
             {isLoggedIn ? (
                 <>
-                    <ListItem
-                        href="/profile"
-                        label="Profile"
-                        justifyBetween={true}
-                        isCollapsed={isCollapsed}
-                        itemClassName="profile-item"
-                    >
-                        <figure className="mb-0 d-flex align-items-center gap-2 justify-content-between">
-                            {userPic ? (
-                                <Avatar
-                                    src={userPic}
-                                    size={35}
-                                    alt={`${username}'s picture`}
-                                />
-                            ) : (
-                                <Avatar username={username} size={35} />
-                            )}
-                        </figure>
-                    </ListItem>
+                    {role !== "admin" ? (
+                        <ListItem
+                            href="/my-posts"
+                            label="Profile"
+                            justifyBetween={true}
+                            isCollapsed={isCollapsed}
+                            itemClassName="profile-item"
+                        >
+                            <figure className="mb-0 d-flex align-items-center gap-2 justify-content-between">
+                                {userPic ? (
+                                    <Avatar
+                                        src={userPic}
+                                        size={35}
+                                        alt={`${username}'s picture`}
+                                    />
+                                ) : (
+                                    <Avatar username={username} size={35} />
+                                )}
+                            </figure>
+                        </ListItem>
+                    ) : null}
                     <ListItem
                         label="Logout"
                         justifyBetween={true}

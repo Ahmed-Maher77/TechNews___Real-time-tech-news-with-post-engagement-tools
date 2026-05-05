@@ -38,7 +38,13 @@ export function clearStoredAuth() {
     window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
 }
 
-export function registerUser({ name, email, password, role = "user" }) {
+export function registerUser({
+    name,
+    email,
+    password,
+    role = "user",
+    userPic = "",
+}) {
     const normalizedEmail = email.trim().toLowerCase();
     const users = getStoredUsers();
     const exists = users.some((user) => user.email === normalizedEmail);
@@ -52,6 +58,7 @@ export function registerUser({ name, email, password, role = "user" }) {
         email: normalizedEmail,
         password,
         role,
+        userPic,
     };
     saveStoredUsers([...users, newUser]);
     return { ok: true, user: newUser };

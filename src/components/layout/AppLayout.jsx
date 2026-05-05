@@ -1,11 +1,9 @@
 import { Suspense, useMemo } from "react";
 import { Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import Footer from "../Footer/Footer";
 import Navbar from "../NavigationBars/Navbar/Navbar";
 import Sidebar from "../NavigationBars/Sidebar/Sidebar";
 import RouteLoader from "../routing/RouteLoader";
-import "react-toastify/dist/ReactToastify.css";
 
 function AppLayout({
     isSmallScreen,
@@ -40,7 +38,6 @@ function AppLayout({
                 </Suspense>
                 <Footer />
             </div>
-            <ToastContainer position="top-right" autoClose={2500} />
         </div>
     );
 }

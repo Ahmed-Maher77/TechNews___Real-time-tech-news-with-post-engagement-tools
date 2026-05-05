@@ -23,9 +23,32 @@ function Login() {
         password: "",
         confirmPassword: "",
         role: "user",
+        userPic: "",
     });
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+
+    const handleRegisterImageChange = (event) => {
+        const selectedFile = event.target.files?.[0];
+        if (!selectedFile) {
+            setRegisterData((prev) => ({ ...prev, userPic: "" }));
+            return;
+        }
+
+        if (!selectedFile.type.startsWith("image/")) {
+            setError("Please upload a valid image file.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            setRegisterData((prev) => ({
+                ...prev,
+                userPic: typeof reader.result === "string" ? reader.result : "",
+            }));
+        };
+        reader.readAsDataURL(selectedFile);
+    };
 
     const handleLoginSubmit = (e) => {
         e.preventDefault();
@@ -42,12 +65,15 @@ function Login() {
             email: result.user.email,
             name: result.user.name,
             role: result.user.role,
+            userPic: result.user.userPic || "",
         };
         saveStoredAuth(authPayload);
         toast.success("Logged in successfully.");
-        navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
-            replace: true,
-        });
+        setTimeout(() => {
+            navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
+                replace: true,
+            });
+        }, 700);
     };
 
     const handleRegisterSubmit = (event) => {
@@ -65,6 +91,7 @@ function Login() {
             email: registerData.email,
             password: registerData.password,
             role: registerData.role,
+            userPic: registerData.userPic,
         });
 
         if (!result.ok) {
@@ -77,6 +104,7 @@ function Login() {
             email: result.user.email,
             name: result.user.name,
             role: result.user.role,
+            userPic: result.user.userPic || "",
         };
         saveStoredAuth(authPayload);
         toast.success("Account created successfully.");
@@ -91,66 +119,76 @@ function Login() {
             password: "",
             confirmPassword: "",
             role: "user",
+            userPic: "",
         });
         setSuccessMessage("");
-        navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
-            replace: true,
-        });
+        setTimeout(() => {
+            navigate(authPayload.role === "admin" ? "/admin/dashboard" : "/home", {
+                replace: true,
+            });
+        }, 700);
     };
 
     return (
         <section className="LoginPage gray-bg d-flex min-vh-100 align-items-center justify-content-center p-4">
-            <div className="auth-card w-100">
-                <div className="auth-toggle mb-3">
-                    <button
-                        type="button"
-                        className={`auth-toggle-btn ${mode === "login" ? "active" : ""}`}
-                        onClick={() => {
-                            setError("");
-                            setSuccessMessage("");
-                            setMode("login");
-                        }}
-                    >
-                        Login
-                    </button>
-                    <button
-                        type="button"
-                        className={`auth-toggle-btn ${mode === "register" ? "active" : ""}`}
-                        onClick={() => {
-                            setError("");
-                            setSuccessMessage("");
-                            setMode("register");
-                        }}
-                    >
-                        Register
-                    </button>
+            <div className="auth-stack w-100">
+                <div className="auth-header mb-3">
+                    <p className="auth-kicker mb-1">Tech News Platform</p>
+                    <h2 className="auth-system-title mb-0 lobster-font">TechNews</h2>
                 </div>
-
-                {error ? (
-                    <div className="alert alert-danger py-2" role="alert">
-                        {error}
+                <div className="auth-card w-100">
+                    <div className="auth-toggle mb-3">
+                        <button
+                            type="button"
+                            className={`auth-toggle-btn ${mode === "login" ? "active" : ""}`}
+                            onClick={() => {
+                                setError("");
+                                setSuccessMessage("");
+                                setMode("login");
+                            }}
+                        >
+                            Login
+                        </button>
+                        <button
+                            type="button"
+                            className={`auth-toggle-btn ${mode === "register" ? "active" : ""}`}
+                            onClick={() => {
+                                setError("");
+                                setSuccessMessage("");
+                                setMode("register");
+                            }}
+                        >
+                            Register
+                        </button>
                     </div>
-                ) : null}
-                {successMessage ? (
-                    <div className="alert alert-success py-2" role="alert">
-                        {successMessage}
-                    </div>
-                ) : null}
 
-                <div className="auth-forms-slider">
-                    {mode === "login" ? (
-                        <LoginForm
-                            loginData={loginData}
-                            setLoginData={setLoginData}
-                            onSubmit={handleLoginSubmit}
-                        />
-                    ) : (
-                        <RegisterForm
-                            registerData={registerData}
-                            setRegisterData={setRegisterData}
-                            onSubmit={handleRegisterSubmit}
-                        />
-                    )}
+                    {error ? (
+                        <div className="alert alert-danger py-2" role="alert">
+                            {error}
+                        </div>
+                    ) : null}
+                    {successMessage ? (
+                        <div className="alert alert-success py-2" role="alert">
+                            {successMessage}
+                        </div>
+                    ) : null}
+
+                    <div className="auth-forms-slider">
+                        {mode === "login" ? (
+                            <LoginForm
+                                loginData={loginData}
+                                setLoginData={setLoginData}
+                                onSubmit={handleLoginSubmit}
+                            />
+                        ) : (
+                            <RegisterForm
+                                registerData={registerData}
+                                setRegisterData={setRegisterData}
+                                onImageChange={handleRegisterImageChange}
+                                onSubmit={handleRegisterSubmit}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </section>

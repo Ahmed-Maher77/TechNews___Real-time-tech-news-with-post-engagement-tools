@@ -1,5 +1,11 @@
+import "./RouteLoader.css";
+
 function RouteLoader() {
-    return <div className="p-4">Loading...</div>;
+    return (
+        <div className="route-loader-wrap">
+            <div className="loader"></div>
+        </div>
+    );
 }
 
 export default RouteLoader;
