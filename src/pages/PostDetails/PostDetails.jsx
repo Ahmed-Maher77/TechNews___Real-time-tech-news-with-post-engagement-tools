@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Avatar from "../../components/common/Avatar/Avatar";
 import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFoundMessage";
@@ -7,6 +7,7 @@ import formatDate from "../../utils/functions/formatDate";
 import { getStoredAuth } from "../../utils/authStorage";
 import "./PostDetails.css";
 import { toast } from "react-toastify";
+import TooltipText from "../../components/common/TooltipText/TooltipText";
 
 function PostDetails() {
     const { postId } = useParams();
@@ -50,6 +51,7 @@ function PostDetails() {
     const auth = getStoredAuth();
     const commenterName = auth?.name || "Guest User";
     const commenterPic = auth?.userPic || "";
+    const commentsSectionRef = useRef(null);
 
     useEffect(() => {
         const fetchPostById = async () => {
@@ -165,6 +167,13 @@ function PostDetails() {
         }
     };
 
+    const scrollToComments = useCallback(() => {
+        commentsSectionRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }, []);
+
     const handleAddComment = useCallback(
         (event) => {
             event.preventDefault();
@@ -262,24 +271,38 @@ function PostDetails() {
                             </p>
                         </div>
                         <div className="post-details-banner-actions">
-                            <button
-                                type="button"
-                                className={`post-details-action-btn post-details-banner-btn ${isFavorite ? "active" : ""}`}
-                                onClick={() => setIsFavorite((prev) => !prev)}
-                                aria-label="Toggle favorite"
-                            >
-                                <i
-                                    className={`${isFavorite ? "fa-solid" : "fa-regular"} fa-bookmark`}
-                                ></i>
-                            </button>
-                            <button
-                                type="button"
-                                className="post-details-action-btn post-details-banner-btn"
-                                onClick={handleShare}
-                                aria-label="Share post"
-                            >
-                                <i className="fa-solid fa-share-nodes"></i>
-                            </button>
+                            <TooltipText text="Add to favorites" className="post-details-banner-tooltip">
+                                <button
+                                    type="button"
+                                    className={`post-details-action-btn post-details-banner-btn ${isFavorite ? "active" : ""}`}
+                                    onClick={() => setIsFavorite((prev) => !prev)}
+                                    aria-label="Toggle favorite"
+                                >
+                                    <i
+                                        className={`${isFavorite ? "fa-solid" : "fa-regular"} fa-bookmark`}
+                                    ></i>
+                                </button>
+                            </TooltipText>
+                            <TooltipText text="Share this post" className="post-details-banner-tooltip">
+                                <button
+                                    type="button"
+                                    className="post-details-action-btn post-details-banner-btn"
+                                    onClick={handleShare}
+                                    aria-label="Share post"
+                                >
+                                    <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                                </button>
+                            </TooltipText>
+                            <TooltipText text="Jump to discussion" className="post-details-banner-tooltip">
+                                <button
+                                    type="button"
+                                    className="post-details-action-btn post-details-banner-btn comments-btn"
+                                    onClick={scrollToComments}
+                                    aria-label="Go to comments"
+                                >
+                                    <i className="fa-regular fa-comments"></i>
+                                </button>
+                            </TooltipText>
                         </div>
                     </div>
                 ) : null}
@@ -328,8 +351,8 @@ function PostDetails() {
 
                     <p className="post-details-body">{post.content}</p>
 
-                    <div className="post-details-comments">
-                        <h2 className="h5 mb-3">Comments</h2>
+                    <div className="post-details-comments" ref={commentsSectionRef}>
+                        <h2 className="h5 mb-3">Discussion Center</h2>
                         <form
                             onSubmit={handleAddComment}
                             className="post-details-comment-form"

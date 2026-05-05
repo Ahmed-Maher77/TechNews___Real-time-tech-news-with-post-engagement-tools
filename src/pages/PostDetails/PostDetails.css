@@ -25,6 +25,13 @@
     position: relative;
 }
 
+.comments-btn {
+    display: none !important;
+    @media (min-width: 1350px) {
+        display: block !important;
+    }
+}
+
 .post-details-banner-overlay {
     position: absolute;
     inset: 0;
@@ -55,6 +62,22 @@
     display: flex;
     gap: 0.55rem;
     z-index: 2;
+}
+
+.post-details-banner-tooltip {
+    display: inline-flex !important;
+    width: auto !important;
+}
+
+.post-details-banner-tooltip .tooltip-text-bubble {
+    left: 50%;
+    transform: translate(-50%, 4px);
+}
+
+.post-details-banner-tooltip:hover .tooltip-text-bubble,
+.post-details-banner-tooltip:focus-visible .tooltip-text-bubble,
+.post-details-banner-tooltip:focus-within .tooltip-text-bubble {
+    transform: translate(-50%, 0);
 }
 
 .post-details-content {
@@ -130,6 +153,18 @@
     border-color: rgba(255, 255, 255, 0.55);
     background: rgb(255 255 255 / 79%);
     backdrop-filter: blur(1px);
+    @media (min-width: 1350px) {
+        border-color: transparent;
+        background: transparent;
+        font-size: 1.1rem;
+        transition: var(--trans-3);
+        &:hover, &:focus-visible, &:focus-within {
+            color: #101828 !important;
+            background: transparent !important;
+            border-color: transparent !important;
+            scale: 1.1;
+        }
+    }
 }
 
 .post-details-action-btn:hover {
@@ -171,9 +206,17 @@
 .post-details-comment-form {
     display: grid;
     gap: 0.65rem;
-    textarea {
-        padding: 1rem 1rem;
-    }
+}
+
+.post-details-comment-form textarea {
+    padding: 1rem 1rem;
+    border-color: #d8dee6;
+    background-color: #fff;
+}
+
+.post-details-comment-form textarea:focus {
+    border-color: #98a2b3;
+    box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.08);
 }
 
 .post-details-comment-author {
@@ -241,8 +284,19 @@
     gap: 0.8rem;
     color: #475467;
     margin-top: 1.2rem;
-    .fa-comments {
-        font-size: 1.8rem;
-        color: #667085;
+}
+
+.post-details-empty-comments .fa-comments {
+    font-size: 1.8rem;
+    color: #667085;
+}
+
+@media (min-width: 1350px) {
+    .post-details-banner-actions {
+        top: 50%;
+        right: auto;
+        left: 0;
+        transform: translate(-135%, -50%);
+        flex-direction: column;
     }
 }
