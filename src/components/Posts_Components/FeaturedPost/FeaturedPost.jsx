@@ -1,8 +1,10 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./FeaturedPost.css";
 import formatDate from "../../../utils/functions/formatDate";
 
 function FeaturedPost({ posts = [] }) {
+    const navigate = useNavigate();
     const [activeIndex, setActiveIndex] = useState(0);
     const sliderPosts = useMemo(() => posts.slice(0, 3), [posts]);
     const totalPosts = sliderPosts.length;
@@ -38,8 +40,8 @@ function FeaturedPost({ posts = [] }) {
                         <button
                             type="button"
                             className="featured-link-btn"
-                            aria-label="Log featured post id"
-                            onClick={() => console.log(post.id)}
+                            aria-label="Open featured post"
+                            onClick={() => navigate(`/posts/${post.id}`)}
                         >
                             <i className="fa-solid fa-arrow-up-right-from-square"></i>
                         </button>

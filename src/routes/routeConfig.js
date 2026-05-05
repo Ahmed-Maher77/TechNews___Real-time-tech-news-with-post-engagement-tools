@@ -7,6 +7,7 @@ export const CreatePostPage = lazy(
 );
 export const MyPostsPage = lazy(() => import("../pages/MyPosts/MyPosts"));
 export const ProfilePage = lazy(() => import("../pages/Profile/Profile"));
+export const PostDetailsPage = lazy(() => import("../pages/PostDetails/PostDetails"));
 export const ExplorePage = lazy(() => import("../pages/Explore/Explore"));
 export const DashboardPage = lazy(() => import("../pages/Admin/Dashboard"));
 export const UserManagementPage = lazy(
@@ -24,6 +25,7 @@ export const USER_ROUTES = [
     { path: "/create-post", Component: CreatePostPage },
     { path: "/my-posts", Component: MyPostsPage },
     { path: "/profile", Component: ProfilePage },
+    { path: "/posts/:postId", Component: PostDetailsPage },
     { path: "/explore", Component: ExplorePage },
 ];
 

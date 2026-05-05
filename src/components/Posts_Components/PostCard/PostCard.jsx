@@ -1,4 +1,5 @@
 import { memo, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PostCard.css";
 import TooltipText from "../../common/TooltipText/TooltipText";
 import formatDate from "../../../utils/functions/formatDate";
@@ -16,6 +17,7 @@ function PostCard({
     likes: initialLikes = 0,
     dislikes: initialDislikes = 0,
 }) {
+    const navigate = useNavigate();
     const [likes, setLikes] = useState(initialLikes);
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [reaction, setReaction] = useState(null);
@@ -93,7 +95,7 @@ function PostCard({
                         type="button"
                         className="post-action-btn post-link-btn"
                         aria-label="Open post link"
-                        onClick={() => console.log(id)}
+                        onClick={() => navigate(`/posts/${id}`)}
                     >
                         <i className="fa-solid fa-arrow-up-right-from-square"></i>
                     </button>
