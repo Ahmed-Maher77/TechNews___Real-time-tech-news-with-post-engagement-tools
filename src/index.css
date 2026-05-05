@@ -73,6 +73,10 @@ a {
     padding-inline: clamp(2rem, 5vw, 3rem);
 }
 
+.pages > * {
+    min-height: calc(100svh - 100px);
+}
+
 .pages.sidebar-collapsed {
     margin-left: 88px;
 }
