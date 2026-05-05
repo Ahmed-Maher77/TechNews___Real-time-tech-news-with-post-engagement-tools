@@ -133,7 +133,7 @@ function PostCard({
                     <div className="post-meta d-flex align-items-center gap-3 flex-wrap">
                         <span className="meta-item">
                             <i className="fa-regular fa-user me-2"></i>
-                            {author}
+                            <span className="meta-author-name">{author}</span>
                         </span>
                         <span className="meta-item">
                             <i className="fa-regular fa-calendar me-2"></i>

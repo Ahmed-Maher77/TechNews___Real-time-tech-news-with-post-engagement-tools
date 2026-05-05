@@ -25,6 +25,29 @@
     position: relative;
 }
 
+.post-details-banner-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 0.7rem;
+    background: linear-gradient(
+        180deg,
+        rgba(2, 6, 23, 0.08) 0%,
+        rgba(2, 6, 23, 0.42) 52%,
+        rgba(2, 6, 23, 0.78) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+.post-details-banner-copy {
+    position: absolute;
+    left: clamp(0.9rem, 2vw, 1.4rem);
+    right: clamp(0.9rem, 2vw, 1.4rem);
+    bottom: clamp(0.9rem, 2vw, 1.2rem);
+    z-index: 2;
+    color: #f8fafc;
+}
+
 .post-details-banner-actions {
     position: absolute;
     top: 0.85rem;
@@ -64,14 +87,14 @@
 
 .post-details-title {
     width: 100%;
-    margin: 1.4rem 0 0;
+    margin: 0;
     font-size: clamp(1.3rem, 3vw, 2rem);
-    color: var(--black-color);
+    color: inherit;
 }
 
 .post-details-description {
-    margin: 0.45rem 0 0.3rem;
-    color: #475467;
+    margin: 0.4rem 0 0;
+    color: rgba(248, 250, 252, 0.9);
     font-size: 1.02rem;
 }
 

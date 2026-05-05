@@ -254,6 +254,13 @@ function PostDetails() {
                             src={post.image}
                             alt={post.title || "Post cover"}
                         />
+                        <div className="post-details-banner-overlay"></div>
+                        <div className="post-details-banner-copy">
+                            <h1 className="post-details-title">{post.title}</h1>
+                            <p className="post-details-description mb-0">
+                                {post.description}
+                            </p>
+                        </div>
                         <div className="post-details-banner-actions">
                             <button
                                 type="button"
@@ -299,12 +306,7 @@ function PostDetails() {
                                 </span>
                             </div>
                         </div>
-                        <h1 className="post-details-title">{post.title}</h1>
                     </header>
-
-                    <p className="post-details-description">
-                        {post.description}
-                    </p>
 
                     <div className="post-details-actions">
                         <button

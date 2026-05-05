@@ -140,6 +140,21 @@
     font-size: 0.85rem;
 }
 
+.PostCard .post-meta .meta-item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.PostCard .meta-author-name {
+    display: inline-block;
+    max-width: 135px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+}
+
 .PostCard .post-comments-stat {
     margin-left: auto;
     display: inline-flex;
