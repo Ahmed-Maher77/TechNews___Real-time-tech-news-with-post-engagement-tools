@@ -4,6 +4,7 @@ import "./PostCard.css";
 import TooltipText from "../../common/TooltipText/TooltipText";
 import formatDate from "../../../utils/functions/formatDate";
 import LikeDislikeCounter from "../LikeDislikeCounter/LikeDislikeCounter";
+import { toast } from "react-toastify";
 
 function PostCard({
     id,
@@ -58,6 +59,23 @@ function PostCard({
         setReaction("dislike");
     }, [reaction]);
 
+    const handleShare = useCallback(async () => {
+        const shareUrl = `${window.location.origin}/posts/${id}`;
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: title || "TechNews Post",
+                    text: description || "",
+                    url: shareUrl,
+                });
+                return;
+            }
+            await navigator.clipboard.writeText(shareUrl);
+        } catch {
+            toast.error("Unable to share post. Please try again.");
+        }
+    }, [description, id, title]);
+
     return (
         <article className="PostCard">
             <div className="post-actions">
@@ -72,6 +90,7 @@ function PostCard({
                     type="button"
                     className="post-action-btn"
                     aria-label="Share post"
+                    onClick={handleShare}
                 >
                     <i className="fa-solid fa-share-nodes"></i>
                 </button>

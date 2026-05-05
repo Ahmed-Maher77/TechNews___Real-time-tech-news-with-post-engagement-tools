@@ -6,6 +6,7 @@ import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFou
 import formatDate from "../../utils/functions/formatDate";
 import { getStoredAuth } from "../../utils/authStorage";
 import "./PostDetails.css";
+import { toast } from "react-toastify";
 
 function PostDetails() {
     const { postId } = useParams();
@@ -30,7 +31,7 @@ function PostDetails() {
                 setPost(fetchedPost);
                 setLikes(fetchedPost?.likes || 0);
                 setDislikes(fetchedPost?.dislikes || 0);
-            } catch (error) {
+            } catch {
                 setPost(null);
             } finally {
                 setIsLoading(false);
@@ -47,43 +48,82 @@ function PostDetails() {
         return Math.max(1, Math.ceil(words / 220));
     }, [post]);
 
+    const postUrl = useMemo(
+        () => `${window.location.origin}/posts/${postId}`,
+        [postId],
+    );
+
+    const persistReactions = useCallback(
+        async (nextLikes, nextDislikes) => {
+            try {
+                await axios.patch(`http://localhost:3000/posts/${postId}`, {
+                    likes: nextLikes,
+                    dislikes: nextDislikes,
+                });
+            } catch {
+                toast.error("Unable to save reactions. Please try again.");
+            }
+        },
+        [postId],
+    );
+
     const handleLike = useCallback(() => {
         if (reaction === "like") {
+            const nextLikes = Math.max(0, likes - 1);
             setReaction(null);
-            setLikes((prev) => Math.max(0, prev - 1));
+            setLikes(nextLikes);
+            persistReactions(nextLikes, dislikes);
             return;
         }
 
+        let nextDislikes = dislikes;
         if (reaction === "dislike") {
-            setDislikes((prev) => Math.max(0, prev - 1));
+            nextDislikes = Math.max(0, dislikes - 1);
+            setDislikes(nextDislikes);
         }
 
+        const nextLikes = likes + 1;
         setReaction("like");
-        setLikes((prev) => prev + 1);
-    }, [reaction]);
+        setLikes(nextLikes);
+        persistReactions(nextLikes, nextDislikes);
+    }, [dislikes, likes, persistReactions, reaction]);
 
     const handleDislike = useCallback(() => {
         if (reaction === "dislike") {
+            const nextDislikes = Math.max(0, dislikes - 1);
             setReaction(null);
-            setDislikes((prev) => Math.max(0, prev - 1));
+            setDislikes(nextDislikes);
+            persistReactions(likes, nextDislikes);
             return;
         }
 
+        let nextLikes = likes;
         if (reaction === "like") {
-            setLikes((prev) => Math.max(0, prev - 1));
+            nextLikes = Math.max(0, likes - 1);
+            setLikes(nextLikes);
         }
 
+        const nextDislikes = dislikes + 1;
         setReaction("dislike");
-        setDislikes((prev) => prev + 1);
-    }, [reaction]);
+        setDislikes(nextDislikes);
+        persistReactions(nextLikes, nextDislikes);
+    }, [dislikes, likes, persistReactions, reaction]);
 
-    const handleShare = useCallback(async () => {
+    const handleShare = async () => {
         try {
-            await navigator.clipboard.writeText(window.location.href);
+            if (navigator.share) {
+                await navigator.share({
+                    title: post?.title || "TechNews Post",
+                    text: post?.description || "",
+                    url: postUrl,
+                });
+                return;
+            }
+            await navigator.clipboard.writeText(postUrl);
         } catch {
             // no-op fallback for unsupported clipboard
         }
-    }, []);
+    };
 
     const handleAddComment = useCallback(
         (event) => {
@@ -121,7 +161,33 @@ function PostDetails() {
         <section className="PostDetails">
             <article className="post-details-card">
                 {post.image ? (
-                    <img className="post-details-image" src={post.image} alt={post.title || "Post cover"} />
+                    <div className="post-details-banner">
+                        <img
+                            className="post-details-image"
+                            src={post.image}
+                            alt={post.title || "Post cover"}
+                        />
+                        <div className="post-details-banner-actions">
+                            <button
+                                type="button"
+                                className={`post-details-action-btn post-details-banner-btn ${isFavorite ? "active" : ""}`}
+                                onClick={() => setIsFavorite((prev) => !prev)}
+                                aria-label="Toggle favorite"
+                            >
+                                <i
+                                    className={`${isFavorite ? "fa-solid" : "fa-regular"} fa-bookmark`}
+                                ></i>
+                            </button>
+                            <button
+                                type="button"
+                                className="post-details-action-btn post-details-banner-btn"
+                                onClick={handleShare}
+                                aria-label="Share post"
+                            >
+                                <i className="fa-solid fa-share-nodes"></i>
+                            </button>
+                        </div>
+                    </div>
                 ) : null}
 
                 <div className="post-details-content">
@@ -132,9 +198,18 @@ function PostDetails() {
                                 <span>{post.author}</span>
                             </div>
                             <div className="post-details-meta">
-                                <span>{formatDate(post.date)}</span>
-                                <span className="text-capitalize">{post.category}</span>
-                                <span>{readMins} mins read</span>
+                                <span>
+                                    <i className="fa-regular fa-calendar me-2"></i>
+                                    {formatDate(post.date)}
+                                </span>
+                                <span className="text-capitalize">
+                                    <i className="fa-solid fa-tag me-2"></i>
+                                    {post.category}
+                                </span>
+                                <span>
+                                    <i className="fa-regular fa-clock me-2"></i>
+                                    {readMins} mins read
+                                </span>
                             </div>
                         </div>
                         <h1 className="post-details-title">{post.title}</h1>
@@ -157,17 +232,6 @@ function PostDetails() {
                             onClick={handleDislike}
                         >
                             <i className="fa-regular fa-thumbs-down"></i> {dislikes}
-                        </button>
-                        <button
-                            type="button"
-                            className={`post-details-action-btn ${isFavorite ? "active" : ""}`}
-                            onClick={() => setIsFavorite((prev) => !prev)}
-                        >
-                            <i className={`${isFavorite ? "fa-solid" : "fa-regular"} fa-bookmark`}></i>
-                            {isFavorite ? " Favorited" : " Favorite"}
-                        </button>
-                        <button type="button" className="post-details-action-btn" onClick={handleShare}>
-                            <i className="fa-solid fa-share-nodes"></i> Share
                         </button>
                     </div>
 
@@ -206,7 +270,10 @@ function PostDetails() {
                                     </article>
                                 ))
                             ) : (
-                                <p className="mb-0 text-secondary">No comments yet. Be the first one.</p>
+                                <div className="post-details-empty-comments">
+                                    <i className="fa-regular fa-comments"></i>
+                                    <p className="mb-0">No comments yet. Start the discussion.</p>
+                                </div>
                             )}
                         </div>
                     </div>

@@ -84,6 +84,7 @@
     color: #667085;
     line-height: 1.6;
     font-size: 0.9rem;
+    min-height: 2.9rem;
     display: -webkit-box;
     line-clamp: 2;
     -webkit-line-clamp: 2;
