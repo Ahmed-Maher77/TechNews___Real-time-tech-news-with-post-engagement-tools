@@ -1,20 +1,7 @@
 import MainButton from "../../../components/common/MainButton/MainButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const loginSchema = z.object({
-    email: z
-        .string()
-        .trim()
-        .min(1, "Email is required.")
-        .email("Please enter a valid email."),
-    password: z
-        .string()
-        .trim()
-        .min(1, "Password is required.")
-        .min(6, "Password must be at least 6 characters."),
-});
+import { loginDefaultValues, loginSchema } from "../../../validations/loginValidation";
 
 function LoginForm({ onSubmit }) {
     const {
@@ -26,10 +13,7 @@ function LoginForm({ onSubmit }) {
         resolver: zodResolver(loginSchema),
         mode: "onChange",
         reValidateMode: "onChange",
-        defaultValues: {
-            email: "",
-            password: "",
-        },
+        defaultValues: loginDefaultValues,
     });
 
     const submitHandler = (values) => {

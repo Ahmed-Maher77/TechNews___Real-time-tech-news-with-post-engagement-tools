@@ -96,7 +96,7 @@ function App() {
                                 allowedRole="user"
                                 redirectTo={homePath}
                             >
-                                <Component />
+                                <LazyPage Component={Component} />
                             </ProtectedRoute>
                         }
                     />
@@ -113,7 +113,7 @@ function App() {
                                 allowedRole="admin"
                                 redirectTo={homePath}
                             >
-                                <Component />
+                                <LazyPage Component={Component} />
                             </ProtectedRoute>
                         }
                     />
