@@ -3,3 +3,8 @@ client/dist
 .env
 server/uploads
 *.local
+.mongodb-data
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
