@@ -32,23 +32,15 @@ function ProtectedRoute({
 
         (async () => {
             try {
-                console.info("[protected-route] validating /auth/session");
                 const { data } = await api.get("/auth/session");
                 if (cancelled) return;
                 const authenticated = Boolean(data?.authenticated);
-                console.info("[protected-route] /auth/session result", {
-                    authenticated,
-                    allowedRole,
-                    role,
-                });
                 setHasValidSession(authenticated);
                 if (!authenticated) {
-                    console.warn("[protected-route] invalid session, clearing auth");
                     dispatch(clearAuth());
                 }
             } catch {
                 if (cancelled) return;
-                console.error("[protected-route] /auth/session request failed");
                 // If session check request itself fails (temporary backend/network issue),
                 // keep current auth state to avoid forcing a logout while token still exists.
                 setHasValidSession(true);

@@ -50,13 +50,10 @@ function App() {
         let cancelled = false;
         (async () => {
             try {
-                console.info("[auth-bootstrap] checking /auth/session");
                 const { data: sessionData } = await api.get("/auth/session");
                 if (cancelled) return;
-                console.info("[auth-bootstrap] /auth/session response", sessionData);
 
                 if (!sessionData?.authenticated) {
-                    console.warn("[auth-bootstrap] unauthenticated session");
                     dispatch(setAuth(null));
                     dispatch(setBootstrapped(true));
                     return;
@@ -69,21 +66,16 @@ function App() {
                     }),
                 );
                 dispatch(setBootstrapped(true));
-                console.info("[auth-bootstrap] bootstrapped from token session");
 
                 try {
-                    console.info("[auth-bootstrap] fetching full user via /auth/me");
                     const { data } = await api.get("/auth/me");
                     if (!cancelled && data?.user) {
-                        console.info("[auth-bootstrap] /auth/me success", data.user);
                         dispatch(setAuth(data.user));
                     }
                 } catch {
-                    console.error("[auth-bootstrap] /auth/me failed, keeping token session");
                     // Keep token-based session state if profile fetch fails.
                 }
             } catch {
-                console.error("[auth-bootstrap] /auth/session request failed");
                 if (!cancelled) {
                     dispatch(setAuth(null));
                     dispatch(setBootstrapped(true));
@@ -104,15 +96,12 @@ function App() {
 
         const loadProfile = async () => {
             try {
-                console.info("[auth-profile-retry] retrying /auth/me");
                 const { data } = await api.get("/auth/me");
                 if (!cancelled && data?.user) {
-                    console.info("[auth-profile-retry] profile recovered", data.user);
                     dispatch(setAuth(data.user));
                     return;
                 }
             } catch {
-                console.error("[auth-profile-retry] /auth/me failed, scheduling next retry");
                 // Retry while token-authenticated but profile is unavailable.
             }
             if (!cancelled) {
