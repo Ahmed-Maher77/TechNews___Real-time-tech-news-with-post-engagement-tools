@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
+import AdminListToolbar from "../../components/admin/AdminListToolbar";
+import AdminPagination from "../../components/admin/AdminPagination";
+import AdminTableSkeleton from "../../components/admin/AdminTableSkeleton";
 import MainButton from "../../components/common/MainButton/MainButton";
 import DeletePostModal from "../../components/Posts_Components/DeletePostModal/DeletePostModal";
 import formatDate from "../../utils/functions/formatDate";
@@ -32,6 +35,14 @@ function UserManagement() {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [deletingUser, setDeletingUser] = useState(null);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
+    const usersSortOptions = [
+        { value: "newest", label: t("admin.sortNewest") },
+        { value: "oldest", label: t("admin.sortOldest") },
+        { value: "name_asc", label: t("admin.sortNameAsc") },
+        { value: "name_desc", label: t("admin.sortNameDesc") },
+        { value: "email_asc", label: t("admin.sortEmailAsc") },
+        { value: "email_desc", label: t("admin.sortEmailDesc") },
+    ];
 
     const loadUsers = useCallback(async () => {
         setUsersLoading(true);
@@ -201,29 +212,14 @@ function UserManagement() {
 
             <div className="mt-4">
                 <h2 className="h5 mb-3">{t("admin.usersTableTitle")}</h2>
-                <div className="d-flex flex-wrap gap-2 mb-3">
-                    <input
-                        type="search"
-                        className="form-control app-form-control"
-                        style={{ maxWidth: 320 }}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder={t("admin.searchUsersPlaceholder")}
-                    />
-                    <select
-                        className="form-select app-form-control"
-                        style={{ maxWidth: 220 }}
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                    >
-                        <option value="newest">{t("admin.sortNewest")}</option>
-                        <option value="oldest">{t("admin.sortOldest")}</option>
-                        <option value="name_asc">{t("admin.sortNameAsc")}</option>
-                        <option value="name_desc">{t("admin.sortNameDesc")}</option>
-                        <option value="email_asc">{t("admin.sortEmailAsc")}</option>
-                        <option value="email_desc">{t("admin.sortEmailDesc")}</option>
-                    </select>
-                </div>
+                <AdminListToolbar
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    searchPlaceholder={t("admin.searchUsersPlaceholder")}
+                    sortBy={sortBy}
+                    onSortChange={setSortBy}
+                    sortOptions={usersSortOptions}
+                />
                 {usersLoading ? (
                     <div
                         className="admin-page-loader"
@@ -239,28 +235,11 @@ function UserManagement() {
                                 {t("common.loading")}
                             </p>
                         </div>
-                        <div
-                            className="admin-table-skeleton admin-table-skeleton--users"
-                            aria-hidden="true"
-                        >
-                            <div className="admin-table-skeleton-head">
-                                <span className="admin-skeleton-line medium"></span>
-                                <span className="admin-skeleton-line medium"></span>
-                                <span className="admin-skeleton-line short"></span>
-                                <span className="admin-skeleton-line short"></span>
-                            </div>
-                            {Array.from({ length: 5 }).map((_, idx) => (
-                                <div
-                                    key={`user-management-skeleton-${idx}`}
-                                    className="admin-table-skeleton-row"
-                                >
-                                    <span className="admin-skeleton-line medium"></span>
-                                    <span className="admin-skeleton-line long"></span>
-                                    <span className="admin-skeleton-line short"></span>
-                                    <span className="admin-skeleton-line short"></span>
-                                </div>
-                            ))}
-                        </div>
+                        <AdminTableSkeleton
+                            columns={4}
+                            rows={5}
+                            className="admin-table-skeleton--users"
+                        />
                     </div>
                 ) : usersError ? (
                     <p className="text-muted mb-0">{t("admin.usersTableError")}</p>
@@ -353,32 +332,11 @@ function UserManagement() {
                             </table>
                         </div>
 
-                        {pages > 1 ? (
-                            <div className="d-flex justify-content-center gap-2 mt-3">
-                                <button
-                                    type="button"
-                                    className="btn btn-outline-secondary btn-sm"
-                                    disabled={page <= 1}
-                                    onClick={() => setPage((p) => p - 1)}
-                                >
-                                    {t("postsToolbar.prev")}
-                                </button>
-                                <span className="align-self-center small text-muted">
-                                    {t("postsToolbar.pageStatus", {
-                                        current: page,
-                                        total: pages,
-                                    })}
-                                </span>
-                                <button
-                                    type="button"
-                                    className="btn btn-outline-secondary btn-sm"
-                                    disabled={page >= pages}
-                                    onClick={() => setPage((p) => p + 1)}
-                                >
-                                    {t("postsToolbar.next")}
-                                </button>
-                            </div>
-                        ) : null}
+                        <AdminPagination
+                            page={page}
+                            pages={pages}
+                            onPageChange={setPage}
+                        />
                     </>
                 )}
             </div>

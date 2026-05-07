@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import AdminListToolbar from "../../components/admin/AdminListToolbar";
+import AdminPagination from "../../components/admin/AdminPagination";
+import AdminTableSkeleton from "../../components/admin/AdminTableSkeleton";
 import api from "../../utils/api";
 import formatDate from "../../utils/functions/formatDate";
 import "./AdminTables.css";
@@ -20,6 +23,12 @@ function ModerationQueue() {
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
     const [busyPostId, setBusyPostId] = useState("");
+    const moderationSortOptions = [
+        { value: "newest", label: t("admin.sortNewest") },
+        { value: "oldest", label: t("admin.sortOldest") },
+        { value: "title_asc", label: t("admin.sortTitleAsc") },
+        { value: "title_desc", label: t("admin.sortTitleDesc") },
+    ];
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -100,27 +109,14 @@ function ModerationQueue() {
                     </button>
                 ))}
             </div>
-            <div className="d-flex flex-wrap gap-2 mb-3">
-                <input
-                    type="search"
-                    className="form-control app-form-control"
-                    style={{ maxWidth: 320 }}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder={t("admin.searchModerationPlaceholder")}
-                />
-                <select
-                    className="form-select app-form-control"
-                    style={{ maxWidth: 220 }}
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                >
-                    <option value="newest">{t("admin.sortNewest")}</option>
-                    <option value="oldest">{t("admin.sortOldest")}</option>
-                    <option value="title_asc">{t("admin.sortTitleAsc")}</option>
-                    <option value="title_desc">{t("admin.sortTitleDesc")}</option>
-                </select>
-            </div>
+            <AdminListToolbar
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                searchPlaceholder={t("admin.searchModerationPlaceholder")}
+                sortBy={sortBy}
+                onSortChange={setSortBy}
+                sortOptions={moderationSortOptions}
+            />
 
             {loading ? (
                 <div className="admin-page-loader" role="status" aria-live="polite">
@@ -133,27 +129,7 @@ function ModerationQueue() {
                             {t("common.loading")}
                         </p>
                     </div>
-                    <div className="admin-table-skeleton" aria-hidden="true">
-                        <div className="admin-table-skeleton-head">
-                            <span className="admin-skeleton-line medium"></span>
-                            <span className="admin-skeleton-line short"></span>
-                            <span className="admin-skeleton-line short"></span>
-                            <span className="admin-skeleton-line short"></span>
-                            <span className="admin-skeleton-line short"></span>
-                        </div>
-                        {Array.from({ length: 5 }).map((_, idx) => (
-                            <div
-                                key={`moderation-queue-skeleton-${idx}`}
-                                className="admin-table-skeleton-row"
-                            >
-                                <span className="admin-skeleton-line long"></span>
-                                <span className="admin-skeleton-line medium"></span>
-                                <span className="admin-skeleton-line short"></span>
-                                <span className="admin-skeleton-line short"></span>
-                                <span className="admin-skeleton-line medium"></span>
-                            </div>
-                        ))}
-                    </div>
+                    <AdminTableSkeleton columns={5} rows={5} />
                 </div>
             ) : posts.length === 0 ? (
                 <p className="text-muted mb-0">{t("admin.moderationEmpty")}</p>
@@ -249,32 +225,11 @@ function ModerationQueue() {
                             </tbody>
                         </table>
                     </div>
-                    {pages > 1 ? (
-                        <div className="d-flex justify-content-center gap-2 mt-3">
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary btn-sm"
-                                disabled={page <= 1}
-                                onClick={() => setPage((p) => p - 1)}
-                            >
-                                {t("postsToolbar.prev")}
-                            </button>
-                            <span className="align-self-center small text-muted">
-                                {t("postsToolbar.pageStatus", {
-                                    current: page,
-                                    total: pages,
-                                })}
-                            </span>
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary btn-sm"
-                                disabled={page >= pages}
-                                onClick={() => setPage((p) => p + 1)}
-                            >
-                                {t("postsToolbar.next")}
-                            </button>
-                        </div>
-                    ) : null}
+                    <AdminPagination
+                        page={page}
+                        pages={pages}
+                        onPageChange={setPage}
+                    />
                 </>
             )}
             <p className="text-muted mt-3 mb-0">
