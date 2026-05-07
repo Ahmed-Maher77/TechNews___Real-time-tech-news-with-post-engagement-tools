@@ -1,0 +1,17 @@
+{
+    "routeReady": "Admin {{section}} route is ready.",
+    "createAdminBlurb": "Create another administrator account. They can sign in with the email and password you set.",
+    "createAdminSubmit": "Create admin",
+    "creatingAdmin": "Creating...",
+    "adminCreated": "Administrator account created.",
+    "adminCreateError": "Could not create administrator.",
+    "postManagementBlurb": "Mark posts to appear in the featured carousel on the home feed.",
+    "featuredCol": "Featured",
+    "dateCol": "Date",
+    "featuredYes": "Yes",
+    "featuredNo": "No",
+    "feature": "Feature",
+    "unfeature": "Unfeature",
+    "featuredUpdated": "Featured status updated.",
+    "featuredError": "Could not update featured status."
+}

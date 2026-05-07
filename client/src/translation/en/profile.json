@@ -1,0 +1,11 @@
+{
+    "fallbackUser": "User",
+    "roleLabels": {
+        "user": "User",
+        "admin": "Admin"
+    },
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "updateSuccess": "Profile updated.",
+    "updateError": "Could not update profile."
+}
