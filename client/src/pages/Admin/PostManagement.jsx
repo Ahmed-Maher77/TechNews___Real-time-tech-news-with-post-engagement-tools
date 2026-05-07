@@ -60,6 +60,7 @@ function PostManagement() {
                                     <th>{t("createPost.fieldTitle")}</th>
                                     <th>{t("createPost.fieldAuthor")}</th>
                                     <th>{t("admin.featuredCol")}</th>
+                                    <th>{t("admin.statusCol")}</th>
                                     <th>{t("admin.dateCol")}</th>
                                     <th></th>
                                 </tr>
@@ -80,11 +81,22 @@ function PostManagement() {
                                                 </span>
                                             )}
                                         </td>
+                                        <td>
+                                            <span className="badge text-bg-secondary text-capitalize">
+                                                {t(
+                                                    `admin.moderationStatus_${post.moderationStatus || "approved"}`,
+                                                )}
+                                            </span>
+                                        </td>
                                         <td>{formatDate(post.date)}</td>
                                         <td className="text-end">
                                             <button
                                                 type="button"
                                                 className="btn btn-sm btn-outline-dark"
+                                                disabled={
+                                                    post.moderationStatus ===
+                                                    "rejected"
+                                                }
                                                 onClick={() =>
                                                     toggleFeatured(post)
                                                 }

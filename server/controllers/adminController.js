@@ -1,6 +1,9 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import Post from "../models/Post.js";
 import { toPublicUser } from "../utils/serializers.js";
+import { toPublicPost } from "../utils/serializers.js";
+import { emitSocket } from "../realtime/socket.js";
 
 export async function createAdmin(req, res) {
     const name = String(req.body.name || "").trim();
@@ -26,4 +29,60 @@ export async function createAdmin(req, res) {
     });
 
     res.status(201).json({ user: toPublicUser(user) });
+}
+
+function parseIntParam(value, fallback) {
+    const n = Number.parseInt(String(value), 10);
+    return Number.isFinite(n) && n > 0 ? n : fallback;
+}
+
+export async function listModerationPosts(req, res) {
+    const page = parseIntParam(req.query.page, 1);
+    const limit = Math.min(parseIntParam(req.query.limit, 20), 100);
+    const status = String(req.query.status || "pending");
+    const allowed = new Set(["pending", "approved", "rejected", "all"]);
+    const normalizedStatus = allowed.has(status) ? status : "pending";
+    const filter =
+        normalizedStatus === "all"
+            ? {}
+            : { moderationStatus: normalizedStatus };
+    const skip = (page - 1) * limit;
+
+    const [total, docs] = await Promise.all([
+        Post.countDocuments(filter),
+        Post.find(filter)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate({ path: "author", select: "name userPic" })
+            .exec(),
+    ]);
+
+    res.json({
+        posts: docs.map((d) => toPublicPost(d)),
+        page,
+        pages: Math.max(1, Math.ceil(total / limit)),
+        total,
+        limit,
+        status: normalizedStatus,
+    });
+}
+
+export async function moderatePost(req, res) {
+    const post = await Post.findById(req.params.id).populate({
+        path: "author",
+        select: "name userPic",
+    });
+    if (!post) return res.status(404).json({ message: "Not found" });
+
+    const nextStatus = String(req.body?.status || "").trim();
+    if (nextStatus !== "approved" && nextStatus !== "rejected") {
+        return res.status(400).json({ message: "Invalid status" });
+    }
+
+    post.moderationStatus = nextStatus;
+    await post.save();
+    const updated = toPublicPost(post);
+    emitSocket("post:updated", { post: updated, actorId: req.user?.id || "" });
+    res.json(updated);
 }

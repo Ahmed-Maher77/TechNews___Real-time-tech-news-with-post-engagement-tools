@@ -92,6 +92,8 @@ function Posts() {
         const onPostCreated = ({ post, actorId }) => {
             if (actorId && actorId === auth?.id) return;
             if (!post) return;
+            if (post.moderationStatus && post.moderationStatus !== "approved")
+                return;
             setPosts((prev) => {
                 if (prev.some((p) => p.id === post.id)) return prev;
                 return [post, ...prev];
@@ -101,6 +103,11 @@ function Posts() {
         const onPostUpdated = ({ post, actorId }) => {
             if (actorId && actorId === auth?.id) return;
             if (!post) return;
+            if (post.moderationStatus && post.moderationStatus !== "approved") {
+                setPosts((prev) => prev.filter((p) => p.id !== post.id));
+                setFeaturedPosts((prev) => prev.filter((p) => p.id !== post.id));
+                return;
+            }
             setPosts((prev) => prev.map((p) => (p.id === post.id ? { ...p, ...post } : p)));
             setFeaturedPosts((prev) =>
                 prev.map((p) => (p.id === post.id ? { ...p, ...post } : p)),

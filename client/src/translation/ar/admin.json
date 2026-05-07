@@ -13,5 +13,21 @@
     "feature": "تمييز",
     "unfeature": "إلغاء التمييز",
     "featuredUpdated": "تم تحديث حالة التمييز.",
-    "featuredError": "تعذر تحديث حالة التمييز."
+    "featuredError": "تعذر تحديث حالة التمييز.",
+    "moderationBlurb": "راجع المنشورات الواردة وحدد ما إذا كانت ستُقبل أو تُرفض.",
+    "moderationEmpty": "لا توجد منشورات لهذا الفلتر.",
+    "moderationHint": "المنشورات المرفوضة تُخفى من التغذية العامة، والمقبولة تظهر للمستخدمين.",
+    "statusCol": "الحالة",
+    "approve": "قبول",
+    "reject": "رفض",
+    "moderationApproved": "تم قبول المنشور.",
+    "moderationRejected": "تم رفض المنشور.",
+    "moderationError": "تعذر تحديث حالة الإشراف.",
+    "moderationFilter_pending": "قيد المراجعة",
+    "moderationFilter_approved": "مقبول",
+    "moderationFilter_rejected": "مرفوض",
+    "moderationFilter_all": "الكل",
+    "moderationStatus_pending": "قيد المراجعة",
+    "moderationStatus_approved": "مقبول",
+    "moderationStatus_rejected": "مرفوض"
 }

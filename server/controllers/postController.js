@@ -16,7 +16,9 @@ export async function listPosts(req, res) {
     const search = String(req.query.search || "").trim();
     const sortOrder = req.query.sort === "oldest" ? 1 : -1;
 
-    const filter = {};
+    const filter = {
+        moderationStatus: "approved",
+    };
     if (search) {
         filter.$text = { $search: search };
     }
@@ -48,7 +50,7 @@ export async function listPosts(req, res) {
 export async function featuredPosts(req, res) {
     const viewerUserId = req.user?.id || "";
     const limit = Math.min(parseIntParam(req.query.limit, 3), 10);
-    const docs = await Post.find({ featured: true })
+    const docs = await Post.find({ featured: true, moderationStatus: "approved" })
         .sort({ date: -1 })
         .limit(limit)
         .populate(populateAuthor)
@@ -57,7 +59,7 @@ export async function featuredPosts(req, res) {
     const posts = docs.length
         ? docs.map((d) => toPublicPost(d, "", viewerUserId))
         : (
-              await Post.find({})
+              await Post.find({ moderationStatus: "approved" })
                   .sort({ date: -1 })
                   .limit(limit)
                   .populate(populateAuthor)
@@ -99,6 +101,13 @@ export async function getPost(req, res) {
     if (!post) {
         return res.status(404).json({ message: "Not found" });
     }
+    const isAdmin = req.user?.role === "admin";
+    const isOwner = req.user?.id && post.author?._id?.toString?.() === req.user.id;
+    const moderationStatus = post.moderationStatus || "approved";
+    const canRead = moderationStatus === "approved" || isAdmin || isOwner;
+    if (!canRead) {
+        return res.status(404).json({ message: "Not found" });
+    }
     post.views = (post.views || 0) + 1;
     await post.save();
     res.json(toPublicPost(post, "", viewerUserId));
@@ -127,11 +136,14 @@ export async function createPost(req, res) {
         content,
         image,
         date: new Date(),
+        moderationStatus: req.user?.role === "admin" ? "approved" : "pending",
     });
 
     const populated = await Post.findById(post._id).populate(populateAuthor);
     const created = toPublicPost(populated);
-    emitSocket("post:created", { post: created, actorId: req.user?.id || "" });
+    if (created.moderationStatus === "approved") {
+        emitSocket("post:created", { post: created, actorId: req.user?.id || "" });
+    }
     res.status(201).json(created);
 }
 

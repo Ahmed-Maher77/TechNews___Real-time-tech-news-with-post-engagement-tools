@@ -32,6 +32,12 @@ const postSchema = new mongoose.Schema(
         ],
         commentCount: { type: Number, default: 0 },
         featured: { type: Boolean, default: false },
+        moderationStatus: {
+            type: String,
+            enum: ["pending", "approved", "rejected"],
+            default: "pending",
+            index: true,
+        },
     },
     { timestamps: true },
 );

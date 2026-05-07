@@ -13,5 +13,21 @@
     "feature": "Feature",
     "unfeature": "Unfeature",
     "featuredUpdated": "Featured status updated.",
-    "featuredError": "Could not update featured status."
+    "featuredError": "Could not update featured status.",
+    "moderationBlurb": "Review incoming posts and decide whether to approve or reject them.",
+    "moderationEmpty": "No posts found for this moderation filter.",
+    "moderationHint": "Rejected posts are hidden from public feeds. Approved posts are visible.",
+    "statusCol": "Status",
+    "approve": "Approve",
+    "reject": "Reject",
+    "moderationApproved": "Post approved.",
+    "moderationRejected": "Post rejected.",
+    "moderationError": "Could not update moderation status.",
+    "moderationFilter_pending": "Pending",
+    "moderationFilter_approved": "Approved",
+    "moderationFilter_rejected": "Rejected",
+    "moderationFilter_all": "All",
+    "moderationStatus_pending": "Pending",
+    "moderationStatus_approved": "Approved",
+    "moderationStatus_rejected": "Rejected"
 }

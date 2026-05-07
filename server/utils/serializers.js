@@ -54,6 +54,7 @@ export function toPublicPost(postDoc, authorFallback = "", viewerUserId = "") {
         comments: p.commentCount ?? 0,
         reaction,
         featured: Boolean(p.featured),
+        moderationStatus: p.moderationStatus || "approved",
     };
 }
 
