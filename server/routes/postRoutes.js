@@ -1,12 +1,15 @@
 import { Router } from "express";
 import {
     createPost,
+    deletePost,
     featuredPosts,
     getPost,
     listAllForAdmin,
     listPosts,
+    listPostReactionUsers,
     myPosts,
     patchPost,
+    reactToPost,
     setFeatured,
 } from "../controllers/postController.js";
 import {
@@ -25,7 +28,10 @@ router.get("/mine", authRequired, myPosts);
 router.get("/admin/all", authRequired, adminOnly, listAllForAdmin);
 router.post("/", authRequired, uploadPostImage.single("imageFile"), createPost);
 router.get("/:id", getPost);
+router.get("/:id/reactions/users", authRequired, listPostReactionUsers);
+router.post("/:id/reactions", authRequired, reactToPost);
 router.patch("/:id", optionalAuth, patchPost);
+router.delete("/:id", authRequired, deletePost);
 router.patch("/:id/featured", authRequired, adminOnly, setFeatured);
 
 router.get("/:id/comments", listComments);

@@ -1,5 +1,5 @@
 import Post from "../models/Post.js";
-import { toPublicPost } from "../utils/serializers.js";
+import { toPublicPost, toPublicUser } from "../utils/serializers.js";
 
 const populateAuthor = { path: "author", select: "name userPic" };
 
@@ -168,6 +168,99 @@ export async function patchPost(req, res) {
     await post.save();
     const populated = await Post.findById(post._id).populate(populateAuthor);
     res.json(toPublicPost(populated));
+}
+
+function upsertReactionUser(post, userId, type) {
+    const likedSet = new Set((post.likedBy || []).map((u) => u.toString()));
+    const dislikedSet = new Set((post.dislikedBy || []).map((u) => u.toString()));
+
+    const wantsLike = type === "like";
+    const wantsDislike = type === "dislike";
+    if (!wantsLike && !wantsDislike) return { reaction: null, likedDelta: 0, dislikedDelta: 0 };
+
+    let likesDelta = 0;
+    let dislikesDelta = 0;
+
+    const isLiked = likedSet.has(userId);
+    const isDisliked = dislikedSet.has(userId);
+
+    if (wantsLike) {
+        // Toggle off if already liked
+        if (isLiked) {
+            likedSet.delete(userId);
+            likesDelta -= 1;
+        } else {
+            // Switch from dislike -> like
+            if (isDisliked) {
+                dislikedSet.delete(userId);
+                dislikesDelta -= 1;
+            }
+            likedSet.add(userId);
+            likesDelta += 1;
+        }
+    }
+
+    if (wantsDislike) {
+        // Toggle off if already disliked
+        if (isDisliked) {
+            dislikedSet.delete(userId);
+            dislikesDelta -= 1;
+        } else {
+            // Switch from like -> dislike
+            if (isLiked) {
+                likedSet.delete(userId);
+                likesDelta -= 1;
+            }
+            dislikedSet.add(userId);
+            dislikesDelta += 1;
+        }
+    }
+
+    return {
+        reaction: likedSet.has(userId) ? "like" : dislikedSet.has(userId) ? "dislike" : null,
+        likedIds: [...likedSet],
+        dislikedIds: [...dislikedSet],
+        likesDelta,
+        dislikesDelta,
+    };
+}
+
+export async function reactToPost(req, res) {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Not found" });
+
+    const type = String(req.body?.type || "").trim();
+    if (type !== "like" && type !== "dislike") {
+        return res.status(400).json({ message: "Invalid reaction type" });
+    }
+
+    const userId = req.user.id;
+    const result = upsertReactionUser(post, userId, type);
+
+    // Keep likes/dislikes numbers stable even if likedBy/dislikedBy arrays were empty historically.
+    post.likes = Math.max(0, Number(post.likes || 0) + result.likesDelta);
+    post.dislikes = Math.max(0, Number(post.dislikes || 0) + result.dislikesDelta);
+
+    post.likedBy = result.likedIds;
+    post.dislikedBy = result.dislikedIds;
+
+    await post.save();
+    res.json({ likes: post.likes, dislikes: post.dislikes, reaction: result.reaction });
+}
+
+export async function listPostReactionUsers(req, res) {
+    const post = await Post.findById(req.params.id).populate([
+        { path: "likedBy", select: "name userPic" },
+        { path: "dislikedBy", select: "name userPic" },
+    ]);
+    if (!post) return res.status(404).json({ message: "Not found" });
+
+    res.json({
+        likes: post.likes ?? post.likedBy?.length ?? 0,
+        dislikes: post.dislikes ?? post.dislikedBy?.length ?? 0,
+        likedBy: (post.likedBy || []).map((u) => toPublicUser(u)),
+        dislikedBy: (post.dislikedBy || []).map((u) => toPublicUser(u)),
+    });
 }
 
 export async function setFeatured(req, res) {
