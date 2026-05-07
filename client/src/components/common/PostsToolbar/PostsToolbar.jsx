@@ -6,6 +6,7 @@ function PostsToolbar({
     onSearchChange,
     sortOrder,
     onSortChange,
+    busy = false,
 }) {
     const { t } = useTranslation();
     return (
@@ -39,11 +40,13 @@ function PostsToolbar({
                         className="posts-sort__toggle"
                         role="group"
                         aria-label={t("postsToolbar.sortAria")}
+                        aria-busy={busy}
                     >
                         <button
                             type="button"
                             className={`posts-sort__btn ${sortOrder === "newest" ? "active" : ""}`}
                             onClick={() => onSortChange("newest")}
+                            disabled={busy}
                         >
                             {t("postsToolbar.newest")}
                         </button>
@@ -51,6 +54,7 @@ function PostsToolbar({
                             type="button"
                             className={`posts-sort__btn ${sortOrder === "oldest" ? "active" : ""}`}
                             onClick={() => onSortChange("oldest")}
+                            disabled={busy}
                         >
                             {t("postsToolbar.oldest")}
                         </button>

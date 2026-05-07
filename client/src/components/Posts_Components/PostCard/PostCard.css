@@ -69,6 +69,32 @@
     font-size: 0.78rem;
     font-weight: 600;
     backdrop-filter: blur(1.2px);
+    max-width: min(70%, 230px);
+    min-width: 0;
+}
+
+.PostCard .post-image-category-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.PostCard .post-owner-badge {
+    position: absolute;
+    inset-inline-end: 0.8rem;
+    bottom: 0.8rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.36rem 0.72rem;
+    border-radius: 999px;
+    background-color: color-mix(in srgb, #12b76a 32%, rgb(16 24 40 / 52%));
+    color: #f8fafc;
+    font-size: 0.78rem;
+    font-weight: 700;
+    backdrop-filter: blur(1.2px);
 }
 
 .PostCard .post-title {
@@ -81,6 +107,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     white-space: normal;
     text-overflow: ellipsis;
 }
@@ -210,6 +237,26 @@
     vertical-align: bottom;
 }
 
+.PostCard .meta-author-name__trunc {
+    display: none;
+}
+
+@media (min-width: 1200px) {
+    .PostCard .meta-author-name__full {
+        display: none;
+    }
+
+    .PostCard .meta-author-name__trunc {
+        display: inline;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .PostCard .meta-author-name {
+        max-width: 95px;
+    }
+}
+
 .PostCard .post-comments-stat {
     margin-inline-start: auto;
     display: inline-flex;
@@ -254,6 +301,9 @@
     overflow: hidden;
     min-height: 148px;
     max-height: 176px;
+    @media (max-width: 767.98px) {
+        max-height: 400px !important;
+    }
 }
 
 .PostCard.PostCard--record .post-actions {
@@ -282,6 +332,7 @@
 .PostCard.PostCard--record .post-description {
     min-height: 0;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     font-size: 0.86rem;
     max-height: 1.65rem;
 }
@@ -369,9 +420,13 @@
 @media (max-width: 575.98px) {
     .PostCard .post-title {
         padding-inline-end: 0;
-        overflow: visible;
-        text-overflow: unset;
-        line-height: 1.45;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
     }
 }
 
@@ -383,4 +438,5 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
 }

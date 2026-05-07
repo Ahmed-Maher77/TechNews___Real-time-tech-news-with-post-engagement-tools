@@ -8,6 +8,13 @@ import LikeDislikeCounter from "../LikeDislikeCounter/LikeDislikeCounter";
 import { toast } from "react-toastify";
 import PostDetailsModal from "../PostDetailsModal/PostDetailsModal";
 
+function truncateText(value, maxLen) {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    if (!Number.isFinite(maxLen) || maxLen <= 0) return text;
+    return text.length > maxLen ? `${text.slice(0, maxLen - 1)}…` : text;
+}
+
 function PostCard({
     id,
     title,
@@ -124,9 +131,19 @@ function PostCard({
                     {category && (
                         <span className="post-image-category">
                             <i className="fa-solid fa-tag"></i>
-                            {category}
+                            <span className="post-image-category-text">
+                                <span title={category}>
+                                    {truncateText(category, 20)}
+                                </span>
+                            </span>
                         </span>
                     )}
+                    {isOwnPost && !recordView ? (
+                        <span className="post-owner-badge">
+                            <i className="fa-solid fa-circle-user"></i>
+                            {t("postCard.ownerPostBadge")}
+                        </span>
+                    ) : null}
                     {recordView ? (
                         <button
                             type="button"
@@ -232,7 +249,14 @@ function PostCard({
                             <div className="post-meta d-flex align-items-center gap-3 flex-wrap">
                                 <span className="meta-item gap-2">
                                     <i className="fa-regular fa-user"></i>
-                                    <span className="meta-author-name">{author}</span>
+                                    <span className="meta-author-name" title={author}>
+                                        <span className="meta-author-name__full">
+                                            {author}
+                                        </span>
+                                        <span className="meta-author-name__trunc">
+                                            {truncateText(author, 9)}
+                                        </span>
+                                    </span>
                                 </span>
                                 <span className="meta-item gap-2">
                                     <i className="fa-regular fa-calendar"></i>
@@ -249,11 +273,6 @@ function PostCard({
                                     onDislike={handleDislike}
                                     disabled={isOwnPost}
                                 />
-                                {isOwnPost ? (
-                                    <span className="post-owner-note">
-                                        {t("postCard.ownerReactionHint")}
-                                    </span>
-                                ) : null}
                                 <span
                                     className="post-comments-stat"
                                     aria-label={t("postCard.commentsCountAria")}

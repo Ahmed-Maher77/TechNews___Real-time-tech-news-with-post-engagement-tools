@@ -72,7 +72,9 @@ function FeaturedPost({ posts = [] }) {
                         <div className="featured-meta">
                             <span className="featured-author">
                                 <i className="fa-regular fa-user"></i>
-                                {post.author}
+                                <span className="featured-author-name">
+                                    {post.author}
+                                </span>
                             </span>
                             <span>
                                 {formatDate(post.date)} -{" "}

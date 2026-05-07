@@ -93,6 +93,11 @@
     font-size: clamp(1.55rem, 3.7vw, 3rem);
     line-height: 1.14;
     font-weight: 700;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
 }
 
 .featured-description {
@@ -100,6 +105,11 @@
     font-size: 1rem;
     line-height: 1.6;
     max-width: 560px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
 }
 
 .featured-meta {
@@ -118,6 +128,15 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    min-width: 0;
+    max-width: 220px;
+}
+
+.featured-author-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .featured-pagination {

@@ -8,8 +8,8 @@
     "commentsCountAria": "Comments count",
     "likeAria": "Like post",
     "dislikeAria": "Dislike post",
-    "ownerReactionHint": "You cannot react to your own post.",
     "editAction": "Edit",
     "deleteAction": "Delete",
-    "detailsAction": "Details"
+    "detailsAction": "Details",
+    "ownerPostBadge": "Your post"
 }

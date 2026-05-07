@@ -19,6 +19,7 @@ function Posts() {
     const [posts, setPosts] = useState([]);
     const [featuredPosts, setFeaturedPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState("newest");
     const [page, setPage] = useState(1);
@@ -30,7 +31,9 @@ function Posts() {
     }, [debouncedSearchQuery, sortOrder]);
 
     const fetchLists = useCallback(async () => {
-        setIsLoading(true);
+        const hasData = featuredPosts.length > 0 || posts.length > 0;
+        setIsLoading(!hasData);
+        setIsRefreshing(hasData);
         try {
             const [featRes, postsRes] = await Promise.all([
                 api.get("/posts/featured", { params: { limit: 3 } }),
@@ -53,8 +56,9 @@ function Posts() {
             setPages(1);
         } finally {
             setIsLoading(false);
+            setIsRefreshing(false);
         }
-    }, [page, debouncedSearchQuery, sortOrder]);
+    }, [debouncedSearchQuery, featuredPosts.length, page, posts.length, sortOrder]);
 
     useEffect(() => {
         fetchLists();
@@ -114,6 +118,7 @@ function Posts() {
                         onSearchChange={handleSearchChange}
                         sortOrder={sortOrder}
                         onSortChange={handleSortChange}
+                        busy={isRefreshing}
                     />
 
                     {posts.length > 0 ? (
