@@ -34,3 +34,8 @@
     background: color-mix(in srgb, #f04438 16%, var(--theme-surface));
     color: #ff8d85;
 }
+
+.reaction-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

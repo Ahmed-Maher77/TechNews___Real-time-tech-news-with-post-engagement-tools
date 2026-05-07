@@ -5,6 +5,12 @@
     margin-top: 3rem;
 }
 
+.PostsContainer.PostsContainer--records {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    margin-top: 1.1rem;
+}
+
 @media (max-width: 1199.98px) {
     .PostsContainer {
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

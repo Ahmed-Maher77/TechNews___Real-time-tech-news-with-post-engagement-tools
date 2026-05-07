@@ -80,22 +80,24 @@ function PostDetails() {
         [postId],
     );
 
-    const persistReactions = useCallback(
-        async (nextLikes, nextDislikes) => {
-            setPost((prevPost) =>
-                prevPost
-                    ? {
-                          ...prevPost,
-                          likes: nextLikes,
-                          dislikes: nextDislikes,
-                      }
-                    : prevPost,
-            );
+    const setServerReaction = useCallback(
+        async (type) => {
             try {
-                await api.patch(`/posts/${postId}`, {
-                    likes: nextLikes,
-                    dislikes: nextDislikes,
+                const { data } = await api.post(`/posts/${postId}/reactions`, {
+                    type,
                 });
+                setLikes(data.likes || 0);
+                setDislikes(data.dislikes || 0);
+                setReaction(data.reaction || null);
+                setPost((prevPost) =>
+                    prevPost
+                        ? {
+                              ...prevPost,
+                              likes: data.likes || 0,
+                              dislikes: data.dislikes || 0,
+                          }
+                        : prevPost,
+                );
             } catch {
                 toast.error(t("postDetails.reactionSaveError"));
             }
@@ -103,47 +105,13 @@ function PostDetails() {
         [postId, t],
     );
 
-    const handleLike = useCallback(() => {
-        if (reaction === "like") {
-            const nextLikes = Math.max(0, likes - 1);
-            setReaction(null);
-            setLikes(nextLikes);
-            persistReactions(nextLikes, dislikes);
-            return;
-        }
+    const handleLike = useCallback(() => setServerReaction("like"), [
+        setServerReaction,
+    ]);
 
-        let nextDislikes = dislikes;
-        if (reaction === "dislike") {
-            nextDislikes = Math.max(0, dislikes - 1);
-            setDislikes(nextDislikes);
-        }
-
-        const nextLikes = likes + 1;
-        setReaction("like");
-        setLikes(nextLikes);
-        persistReactions(nextLikes, nextDislikes);
-    }, [dislikes, likes, persistReactions, reaction]);
-
-    const handleDislike = useCallback(() => {
-        if (reaction === "dislike") {
-            const nextDislikes = Math.max(0, dislikes - 1);
-            setReaction(null);
-            setDislikes(nextDislikes);
-            persistReactions(likes, nextDislikes);
-            return;
-        }
-
-        let nextLikes = likes;
-        if (reaction === "like") {
-            nextLikes = Math.max(0, likes - 1);
-            setLikes(nextLikes);
-        }
-
-        const nextDislikes = dislikes + 1;
-        setReaction("dislike");
-        setDislikes(nextDislikes);
-        persistReactions(nextLikes, nextDislikes);
-    }, [dislikes, likes, persistReactions, reaction]);
+    const handleDislike = useCallback(() => setServerReaction("dislike"), [
+        setServerReaction,
+    ]);
 
     const handleShare = useCallback(async () => {
         try {

@@ -7,6 +7,7 @@ const LikeDislikeCounter = ({
     reaction,
     onLike,
     onDislike,
+    disabled = false,
 }) => {
     const { t } = useTranslation();
     return (
@@ -16,6 +17,7 @@ const LikeDislikeCounter = ({
                 className={`reaction-btn ${reaction === "like" ? "active" : ""}`}
                 aria-label={t("postCard.likeAria")}
                 onClick={onLike}
+                disabled={disabled}
             >
                 <i className="fa-regular fa-thumbs-up"></i>
                 <span>{likes}</span>
@@ -26,6 +28,7 @@ const LikeDislikeCounter = ({
                 className={`reaction-btn ${reaction === "dislike" ? "active dislike" : ""}`}
                 aria-label={t("postCard.dislikeAria")}
                 onClick={onDislike}
+                disabled={disabled}
             >
                 <i className="fa-regular fa-thumbs-down"></i>
                 <span>{dislikes}</span>

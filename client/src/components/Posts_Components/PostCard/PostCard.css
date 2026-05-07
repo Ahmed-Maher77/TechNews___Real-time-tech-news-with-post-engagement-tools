@@ -77,8 +77,11 @@
     color: var(--theme-text-primary);
     font-weight: 600;
     padding-inline-end: 4.5rem;
-    white-space: nowrap;
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    white-space: normal;
     text-overflow: ellipsis;
 }
 
@@ -142,6 +145,56 @@
     font-size: 0.85rem;
 }
 
+.PostCard .post-manage-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+}
+
+.PostCard .post-manage-btn {
+    border: 1px solid var(--theme-border);
+    background-color: var(--theme-surface);
+    color: var(--theme-text-primary);
+    border-radius: 999px;
+    padding: 0.35rem 0.72rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--trans-3);
+}
+
+.PostCard .post-manage-btn.icon-only {
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 0.9rem;
+}
+
+.PostCard .post-manage-btn:hover:not(:disabled) {
+    background-color: var(--theme-surface-hover);
+    border-color: var(--theme-border-soft);
+}
+
+.PostCard .post-manage-btn.danger {
+    color: #dc3545;
+    border-color: rgb(220 53 69 / 35%);
+}
+
+.PostCard .post-manage-btn.danger:hover:not(:disabled) {
+    background-color: rgb(220 53 69 / 10%);
+    border-color: rgb(220 53 69 / 45%);
+}
+
+.PostCard .post-manage-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
 .PostCard .post-meta .meta-item {
     display: inline-flex;
     align-items: center;
@@ -171,12 +224,163 @@
     cursor: default;
 }
 
+.PostCard .post-reaction-counts {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.PostCard .reaction-count-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--theme-text-secondary);
+    font-weight: 600;
+    font-size: 0.84rem;
+}
+
+.PostCard .reaction-count-item.dislike {
+    color: color-mix(in srgb, #f04438 70%, var(--theme-text-secondary));
+}
+
+.PostCard .post-owner-note {
+    font-size: 0.78rem;
+    color: var(--theme-text-muted);
+}
+
+.PostCard.PostCard--record {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) 1fr;
+    overflow: hidden;
+    min-height: 148px;
+    max-height: 176px;
+}
+
+.PostCard.PostCard--record .post-actions {
+    top: 0.7rem;
+}
+
+.PostCard.PostCard--record .post-share-btn {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-end: 0.75rem;
+    z-index: 3;
+}
+
+.PostCard.PostCard--record .post-image {
+    /* Fixed thumbnail height to keep the record row compact. */
+    aspect-ratio: auto;
+    height: 118px;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: calc(0.9rem - 2.5px);
+}
+
+.PostCard.PostCard--record .post-content {
+    padding: 0.9rem 1rem !important;
+}
+
+.PostCard.PostCard--record .post-description {
+    min-height: 0;
+    -webkit-line-clamp: 1;
+    font-size: 0.86rem;
+    max-height: 1.65rem;
+}
+
+.PostCard.PostCard--record .post-footer {
+    margin-top: 0.6rem !important; /* override mt-4 */
+}
+
+.PostCard.PostCard--record .post-stats {
+    margin-top: 0.5rem !important; /* override mt-3 */
+}
+
+.PostCard.PostCard--record .post-manage-actions {
+    margin-bottom: 0.9rem !important; /* override mb-3 */
+}
+
+.PostCard.PostCard--record .post-record-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--theme-border-soft);
+}
+
+.PostCard.PostCard--record .post-record-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--theme-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.PostCard.PostCard--record .post-record-metrics {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.PostCard.PostCard--record .post-record-metric {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--theme-text-secondary);
+    font-weight: 700;
+    font-size: 0.84rem;
+    white-space: nowrap;
+}
+
+.PostCard.PostCard--record .post-record-metric.dislike {
+    color: color-mix(in srgb, #f04438 70%, var(--theme-text-secondary));
+}
+
+@media (max-width: 767.98px) {
+    .PostCard.PostCard--record {
+        grid-template-columns: 1fr;
+        min-height: 0;
+    }
+
+    .PostCard.PostCard--record .post-image {
+        border-top-right-radius: calc(0.9rem - 2.5px);
+        border-bottom-left-radius: 0;
+        height: 160px;
+    }
+
+    .PostCard.PostCard--record .post-content {
+        padding: 1rem 1.1rem !important;
+    }
+
+    .PostCard.PostCard--record .post-record-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.55rem;
+    }
+
+    .PostCard.PostCard--record .post-record-metrics {
+        justify-content: flex-start;
+    }
+}
+
 @media (max-width: 575.98px) {
     .PostCard .post-title {
         padding-inline-end: 0;
-        white-space: normal;
         overflow: visible;
         text-overflow: unset;
         line-height: 1.45;
     }
+}
+
+/* Keep My Posts record titles to a single line on mobile too. */
+.PostCard.PostCard--record .post-title {
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 }
