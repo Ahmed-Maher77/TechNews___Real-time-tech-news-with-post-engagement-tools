@@ -10,6 +10,8 @@
     "toggleFavoriteAria": "تبديل المفضلة",
     "sharePostAria": "مشاركة المنشور",
     "goToCommentsAria": "الذهاب إلى التعليقات",
+    "breadcrumbAria": "مسار التنقل",
+    "breadcrumbCurrent": "تفاصيل المنشور",
     "minsRead": "{{count}} دقيقة للقراءة",
     "discussionTitle": "مركز النقاش",
     "discussionSubtitle": "شارك رأيك، اطرح أسئلة، وتفاعل مع هذا المنشور.",

@@ -2,6 +2,7 @@ import api from "../../utils/api";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Avatar from "../../components/common/Avatar/Avatar";
 import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFoundMessage";
@@ -285,6 +286,8 @@ function PostDetails() {
     );
 
     const isOwnPost = Boolean(auth?.id) && auth.id === post?.authorId;
+    const isAdmin = auth?.role === "admin";
+    const breadcrumbHomePath = isAdmin ? "/admin/dashboard" : "/home";
 
     if (isLoading)
         return (
@@ -314,6 +317,20 @@ function PostDetails() {
 
     return (
         <section className="PostDetails">
+            <nav
+                className="post-details-breadcrumb"
+                aria-label={t("postDetails.breadcrumbAria")}
+            >
+                <Link to={breadcrumbHomePath} className="post-details-breadcrumb-link">
+                    {isAdmin ? t("nav.dashboard") : t("nav.home")}
+                </Link>
+                <span className="post-details-breadcrumb-sep" aria-hidden="true">
+                    /
+                </span>
+                <span className="post-details-breadcrumb-current">
+                    {t("postDetails.breadcrumbCurrent")}
+                </span>
+            </nav>
             <article className="post-details-card">
                 {post.image ? (
                     <div className="post-details-banner">

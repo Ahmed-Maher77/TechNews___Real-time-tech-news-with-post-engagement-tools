@@ -10,6 +10,8 @@
     "toggleFavoriteAria": "Toggle favorite",
     "sharePostAria": "Share post",
     "goToCommentsAria": "Go to comments",
+    "breadcrumbAria": "Breadcrumb",
+    "breadcrumbCurrent": "Post details",
     "minsRead": "{{count}} mins read",
     "discussionTitle": "Discussion Center",
     "discussionSubtitle": "Share your thoughts, ask questions, and react to this post.",
