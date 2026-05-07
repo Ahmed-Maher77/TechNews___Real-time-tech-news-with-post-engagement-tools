@@ -7,6 +7,7 @@ import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFou
 import PostsContainer from "../../components/Posts_Components/PostsContainer/PostsContainer";
 import PostsLoading from "../../components/Posts_Components/PostsLoading/PostsLoading";
 import EditPostModal from "../../components/Posts_Components/EditPostModal/EditPostModal";
+import DeletePostModal from "../../components/Posts_Components/DeletePostModal/DeletePostModal";
 import { selectAuth } from "../../store/authSlice";
 import "./MyPosts.css";
 
@@ -19,6 +20,7 @@ function MyPosts() {
     const [actionInProgressId, setActionInProgressId] = useState("");
     const [layoutMode, setLayoutMode] = useState("records");
     const [editingPost, setEditingPost] = useState(null);
+    const [deletingPost, setDeletingPost] = useState(null);
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -41,13 +43,21 @@ function MyPosts() {
     }, [load]);
 
     const handleDeletePost = useCallback(
+        (postId) => {
+            const current = posts.find((post) => post.id === postId);
+            if (!current) return;
+            setDeletingPost(current);
+        },
+        [posts],
+    );
+
+    const handleConfirmDelete = useCallback(
         async (postId) => {
-            const confirmed = window.confirm(t("myPosts.confirmDelete"));
-            if (!confirmed) return;
             setActionInProgressId(postId);
             try {
                 await api.delete(`/posts/${postId}`);
                 setPosts((prev) => prev.filter((post) => post.id !== postId));
+                setDeletingPost(null);
                 toast.success(t("myPosts.deleteSuccess"));
             } catch {
                 toast.error(t("myPosts.deleteError"));
@@ -193,6 +203,18 @@ function MyPosts() {
                     setEditingPost(null);
                 }}
                 onSubmit={handleSubmitEdit}
+            />
+            <DeletePostModal
+                open={Boolean(deletingPost)}
+                post={deletingPost}
+                submitting={
+                    Boolean(deletingPost) && actionInProgressId === deletingPost?.id
+                }
+                onClose={() => {
+                    if (actionInProgressId) return;
+                    setDeletingPost(null);
+                }}
+                onConfirm={handleConfirmDelete}
             />
         </section>
     );

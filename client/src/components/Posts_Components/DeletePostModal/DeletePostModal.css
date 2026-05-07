@@ -1,0 +1,147 @@
+.delete-post-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgb(2 6 23 / 62%);
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    animation: modal-overlay-fade-in 220ms ease-out;
+}
+
+.delete-post-modal {
+    width: min(520px, 100%);
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+    box-shadow: 0 20px 65px rgb(2 6 23 / 35%);
+    overflow: hidden;
+    transform-origin: center top;
+    animation: modal-panel-enter 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.delete-post-modal-header {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    padding: 1rem 1.1rem 0.85rem;
+    border-bottom: 1px solid var(--theme-border-soft);
+}
+
+.delete-post-modal-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgb(220 38 38 / 45%);
+    color: #dc2626;
+    background: rgb(220 38 38 / 10%);
+    flex: 0 0 auto;
+}
+
+.delete-post-modal-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.delete-post-modal-subtitle {
+    color: var(--theme-text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.delete-post-modal-body {
+    padding: 0.9rem 1.1rem;
+}
+
+.delete-post-modal-post-label {
+    color: var(--theme-text-secondary);
+    font-size: 0.82rem;
+}
+
+.delete-post-modal-post-title {
+    font-weight: 700;
+    color: var(--theme-text-primary);
+}
+
+.delete-post-modal-actions {
+    padding: 0.85rem 1.1rem 1rem;
+    border-top: 1px solid var(--theme-border-soft);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.delete-post-action-btn {
+    border-radius: 0.72rem;
+    border: 1px solid var(--theme-border);
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+    padding: 0.58rem 1rem;
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--trans-3);
+}
+
+.delete-post-action-btn:hover:not(:disabled) {
+    background: var(--theme-surface-hover);
+    border-color: var(--theme-text-secondary);
+}
+
+.delete-post-action-btn:disabled {
+    opacity: 0.62;
+    cursor: not-allowed;
+}
+
+.delete-post-action-btn--ghost {
+    background: transparent;
+    color: var(--theme-text-secondary);
+}
+
+.delete-post-action-btn--ghost:hover:not(:disabled) {
+    color: var(--theme-text-primary);
+}
+
+.delete-post-action-btn--danger {
+    border-color: rgb(220 38 38 / 52%);
+    color: #dc2626;
+    background: rgb(220 38 38 / 10%);
+}
+
+.delete-post-action-btn--danger:hover:not(:disabled) {
+    border-color: rgb(220 38 38 / 75%);
+    background: rgb(220 38 38 / 16%);
+}
+
+@keyframes modal-overlay-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-panel-enter {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delete-post-modal-overlay,
+    .delete-post-modal {
+        animation: none;
+    }
+}

@@ -4,7 +4,7 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "node --watch index.js",
+        "dev": "node scripts/devGuard.js",
         "start": "node index.js",
         "seed:admin": "node scripts/seedAdmin.js"
     },

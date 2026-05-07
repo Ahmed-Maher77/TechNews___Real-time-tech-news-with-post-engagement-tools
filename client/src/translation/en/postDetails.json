@@ -19,6 +19,7 @@
     "loginToComment": "Sign in to leave a comment.",
     "commentError": "Could not post your comment.",
     "loginToVote": "Sign in to vote on comments.",
+    "ownPostReactionBlocked": "You cannot like or dislike your own post.",
     "voteError": "Could not record your vote.",
     "loadingComments": "Loading comments..."
 }

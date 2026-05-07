@@ -8,6 +8,7 @@ import truncateText from "../../../utils/functions/truncateText";
 import LikeDislikeCounter from "../LikeDislikeCounter/LikeDislikeCounter";
 import { toast } from "react-toastify";
 import PostDetailsModal from "../PostDetailsModal/PostDetailsModal";
+import api from "../../../utils/api";
 
 function PostCard({
     id,
@@ -32,6 +33,7 @@ function PostCard({
     const [likes, setLikes] = useState(initialLikes);
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [reaction, setReaction] = useState(null);
+    const [isReacting, setIsReacting] = useState(false);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const isManaging = actionInProgressId === id;
     const isOwnPost = Boolean(currentUserId) && currentUserId === authorId;
@@ -44,35 +46,50 @@ function PostCard({
         event.currentTarget.src = fallbackImage;
     }, []);
 
+    const submitReaction = useCallback(
+        async (type) => {
+            if (isReacting || isOwnPost) return;
+            setIsReacting(true);
+            try {
+                let response;
+                for (let attempt = 0; attempt < 2; attempt += 1) {
+                    try {
+                        response = await api.post(`/posts/${id}/reactions`, { type });
+                        break;
+                    } catch (error) {
+                        const status = error?.response?.status;
+                        const transient = status === 502 || status === 503;
+                        if (!transient || attempt === 1) throw error;
+                        await new Promise((resolve) => setTimeout(resolve, 250));
+                    }
+                }
+                const data = response?.data || {};
+                setLikes(Number(data?.likes || 0));
+                setDislikes(Number(data?.dislikes || 0));
+                setReaction(data?.reaction || null);
+            } catch (error) {
+                const message = error?.response?.data?.message;
+                if (message === "Unauthorized") {
+                    toast.error(t("postDetails.loginToVote"));
+                } else if (message === "Forbidden") {
+                    toast.error(t("postDetails.ownPostReactionBlocked"));
+                } else {
+                    toast.error(t("postDetails.reactionSaveError"));
+                }
+            } finally {
+                setIsReacting(false);
+            }
+        },
+        [id, isOwnPost, isReacting, t],
+    );
+
     const handleLike = useCallback(() => {
-        if (reaction === "like") {
-            setLikes((prev) => Math.max(0, prev - 1));
-            setReaction(null);
-            return;
-        }
-
-        if (reaction === "dislike") {
-            setDislikes((prev) => Math.max(0, prev - 1));
-        }
-
-        setLikes((prev) => prev + 1);
-        setReaction("like");
-    }, [reaction]);
+        submitReaction("like");
+    }, [submitReaction]);
 
     const handleDislike = useCallback(() => {
-        if (reaction === "dislike") {
-            setDislikes((prev) => Math.max(0, prev - 1));
-            setReaction(null);
-            return;
-        }
-
-        if (reaction === "like") {
-            setLikes((prev) => Math.max(0, prev - 1));
-        }
-
-        setDislikes((prev) => prev + 1);
-        setReaction("dislike");
-    }, [reaction]);
+        submitReaction("dislike");
+    }, [submitReaction]);
 
     const handleShare = useCallback(async () => {
         const shareUrl = `${window.location.origin}/posts/${id}`;
@@ -265,7 +282,7 @@ function PostCard({
                                     reaction={reaction}
                                     onLike={handleLike}
                                     onDislike={handleDislike}
-                                    disabled={isOwnPost}
+                                    disabled={isOwnPost || isReacting}
                                 />
                                 <span
                                     className="post-comments-stat"

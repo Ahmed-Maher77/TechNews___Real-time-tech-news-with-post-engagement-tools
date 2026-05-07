@@ -19,6 +19,7 @@
     "loginToComment": "سجّل الدخول لترك تعليق.",
     "commentError": "تعذر نشر تعليقك.",
     "loginToVote": "سجّل الدخول للتصويت على التعليقات.",
+    "ownPostReactionBlocked": "لا يمكنك الإعجاب أو عدم الإعجاب بمنشورك.",
     "voteError": "تعذر تسجيل تصويتك.",
     "loadingComments": "جارٍ تحميل التعليقات..."
 }
