@@ -68,6 +68,35 @@ export async function listModerationPosts(req, res) {
     });
 }
 
+export async function listUsers(req, res) {
+    const page = parseIntParam(req.query.page, 1);
+    const limit = Math.min(parseIntParam(req.query.limit, 15), 100);
+    const skip = (page - 1) * limit;
+
+    const [total, docs] = await Promise.all([
+        User.countDocuments({}),
+        User.find({})
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .exec(),
+    ]);
+
+    res.json({
+        users: docs.map((user) => {
+            const publicUser = toPublicUser(user);
+            return {
+                ...publicUser,
+                createdAt: user.createdAt || null,
+            };
+        }),
+        page,
+        pages: Math.max(1, Math.ceil(total / limit)),
+        total,
+        limit,
+    });
+}
+
 export async function moderatePost(req, res) {
     const post = await Post.findById(req.params.id).populate({
         path: "author",

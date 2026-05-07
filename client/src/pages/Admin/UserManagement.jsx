@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import MainButton from "../../components/common/MainButton/MainButton";
+import formatDate from "../../utils/functions/formatDate";
 import "./AdminTables.css";
 
 function UserManagement() {
@@ -11,6 +12,33 @@ function UserManagement() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [usersLoading, setUsersLoading] = useState(true);
+    const [usersError, setUsersError] = useState(false);
+    const [page, setPage] = useState(1);
+    const [pages, setPages] = useState(1);
+
+    const loadUsers = useCallback(async () => {
+        setUsersLoading(true);
+        setUsersError(false);
+        try {
+            const { data } = await api.get("/admin/users", {
+                params: { page, limit: 12 },
+            });
+            setUsers(data?.users || []);
+            setPages(data?.pages || 1);
+        } catch {
+            setUsers([]);
+            setPages(1);
+            setUsersError(true);
+        } finally {
+            setUsersLoading(false);
+        }
+    }, [page]);
+
+    useEffect(() => {
+        loadUsers();
+    }, [loadUsers]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -25,6 +53,11 @@ function UserManagement() {
             setName("");
             setEmail("");
             setPassword("");
+            if (page !== 1) {
+                setPage(1);
+            } else {
+                loadUsers();
+            }
         } catch (err) {
             const msg = err.response?.data?.message || "admin.adminCreateError";
             toast.error(t(msg, { defaultValue: msg }));
@@ -95,6 +128,134 @@ function UserManagement() {
                     )}
                 </MainButton>
             </form>
+
+            <div className="mt-4">
+                <h2 className="h5 mb-3">{t("admin.usersTableTitle")}</h2>
+                {usersLoading ? (
+                    <div
+                        className="admin-page-loader"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        <div className="admin-page-loader-head">
+                            <span
+                                className="admin-page-loader-spinner"
+                                aria-hidden="true"
+                            ></span>
+                            <p className="admin-page-loader-text mb-0">
+                                {t("common.loading")}
+                            </p>
+                        </div>
+                        <div
+                            className="admin-table-skeleton admin-table-skeleton--users"
+                            aria-hidden="true"
+                        >
+                            <div className="admin-table-skeleton-head">
+                                <span className="admin-skeleton-line medium"></span>
+                                <span className="admin-skeleton-line medium"></span>
+                                <span className="admin-skeleton-line short"></span>
+                                <span className="admin-skeleton-line short"></span>
+                            </div>
+                            {Array.from({ length: 5 }).map((_, idx) => (
+                                <div
+                                    key={`user-management-skeleton-${idx}`}
+                                    className="admin-table-skeleton-row"
+                                >
+                                    <span className="admin-skeleton-line medium"></span>
+                                    <span className="admin-skeleton-line long"></span>
+                                    <span className="admin-skeleton-line short"></span>
+                                    <span className="admin-skeleton-line short"></span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : usersError ? (
+                    <p className="text-muted mb-0">{t("admin.usersTableError")}</p>
+                ) : users.length === 0 ? (
+                    <p className="text-muted mb-0">{t("admin.usersTableEmpty")}</p>
+                ) : (
+                    <>
+                        <div className="table-responsive admin-table-wrap">
+                            <table className="table table-striped align-middle admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>{t("auth.fullName")}</th>
+                                        <th>{t("auth.email")}</th>
+                                        <th>{t("admin.roleCol")}</th>
+                                        <th>{t("admin.dateCol")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {users.map((user) => (
+                                        <tr key={user.id}>
+                                            <td
+                                                className="admin-title-cell"
+                                                data-label={t("auth.fullName")}
+                                            >
+                                                {user.name}
+                                            </td>
+                                            <td
+                                                className="admin-author-cell"
+                                                data-label={t("auth.email")}
+                                            >
+                                                {user.email}
+                                            </td>
+                                            <td data-label={t("admin.roleCol")}>
+                                                <span
+                                                    className={`badge admin-user-role ${
+                                                        user.role === "admin"
+                                                            ? "text-bg-dark"
+                                                            : "text-bg-secondary"
+                                                    }`}
+                                                >
+                                                    {user.role === "admin"
+                                                        ? t("admin.userRoleAdmin")
+                                                        : t("admin.userRoleUser")}
+                                                </span>
+                                            </td>
+                                            <td
+                                                className="admin-date-cell"
+                                                data-label={t("admin.dateCol")}
+                                            >
+                                                {user.createdAt
+                                                    ? formatDate(user.createdAt)
+                                                    : "—"}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {pages > 1 ? (
+                            <div className="d-flex justify-content-center gap-2 mt-3">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary btn-sm"
+                                    disabled={page <= 1}
+                                    onClick={() => setPage((p) => p - 1)}
+                                >
+                                    {t("postsToolbar.prev")}
+                                </button>
+                                <span className="align-self-center small text-muted">
+                                    {t("postsToolbar.pageStatus", {
+                                        current: page,
+                                        total: pages,
+                                    })}
+                                </span>
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary btn-sm"
+                                    disabled={page >= pages}
+                                    onClick={() => setPage((p) => p + 1)}
+                                >
+                                    {t("postsToolbar.next")}
+                                </button>
+                            </div>
+                        ) : null}
+                    </>
+                )}
+            </div>
         </section>
     );
 }

@@ -1,5 +1,6 @@
 .PostManagement,
-.ModerationQueue {
+.ModerationQueue,
+.UserManagement {
     --admin-table-border: var(--theme-border, #e5e7eb);
     --admin-table-border-soft: var(--theme-border-soft, #eef1f4);
     --admin-table-head-bg: var(--theme-surface-soft, #f8fafc);
@@ -140,6 +141,12 @@
     color: var(--admin-table-muted);
 }
 
+.admin-user-role {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.34rem 0.5rem;
+}
+
 .admin-page-loader {
     display: grid;
     gap: 0.95rem;
@@ -187,6 +194,11 @@
 
 .admin-table-skeleton-row + .admin-table-skeleton-row {
     border-top: 1px solid var(--admin-table-border-soft);
+}
+
+.admin-table-skeleton.admin-table-skeleton--users .admin-table-skeleton-head,
+.admin-table-skeleton.admin-table-skeleton--users .admin-table-skeleton-row {
+    grid-template-columns: 1.5fr 2fr 1fr 1fr;
 }
 
 .admin-skeleton-line {
