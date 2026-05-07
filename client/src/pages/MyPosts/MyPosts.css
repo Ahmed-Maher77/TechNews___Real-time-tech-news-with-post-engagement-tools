@@ -37,6 +37,20 @@
     height: 100% !important;
 }
 
+.MyPosts .PostCard.PostCard--record .post-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        rgba(2, 6, 23, 0.05) 0%,
+        rgba(2, 6, 23, 0.22) 55%,
+        rgba(2, 6, 23, 0.52) 100%
+    );
+}
+
 .MyPosts .PostCard.PostCard--record .post-manage-actions {
     width: 100%;
     justify-content: flex-end;
@@ -83,5 +97,38 @@
 
     .MyPosts .PostCard.PostCard--record .post-manage-actions {
         justify-content: flex-start;
+    }
+}
+
+/* On small screens, convert record rows into normal cards. */
+@media (max-width: 575.98px) {
+    .MyPosts .PostCard.PostCard--record {
+        display: block;
+        min-height: 0;
+    }
+
+    .MyPosts .PostCard.PostCard--record .post-image {
+        height: 180px !important;
+        max-height: none;
+        aspect-ratio: auto;
+        border-top-right-radius: calc(0.9rem - 2.5px) !important;
+        border-bottom-left-radius: 0 !important;
+    }
+
+    .MyPosts .PostCard.PostCard--record .post-image img {
+        height: 100%;
+    }
+
+    .MyPosts .PostCard.PostCard--record .post-content {
+        padding: 1rem 1.1rem !important;
+    }
+
+    .MyPosts .PostCard.PostCard--record .post-record-footer {
+        flex-direction: row !important;
+        align-items: center !important;
+    }
+
+    .MyPosts .PostCard.PostCard--record .post-record-metrics {
+        justify-content: flex-end !important;
     }
 }
