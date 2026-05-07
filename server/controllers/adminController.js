@@ -169,6 +169,7 @@ export async function getDashboardStats(_req, res) {
             reviewed,
             approvalRate,
         },
+        recentPendingTotal: pending,
         recentPending: recentPendingDocs.map((d) => toPublicPost(d)),
     });
 }

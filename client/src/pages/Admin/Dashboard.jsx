@@ -46,6 +46,9 @@ function Dashboard() {
     const trend = stats?.postsByDay || [];
     const quality = stats?.quality || { reviewed: 0, approvalRate: 0 };
     const recentPending = stats?.recentPending || [];
+    const recentPendingTotal = Number(
+        stats?.recentPendingTotal ?? moderation.pending ?? 0,
+    );
 
     const moderationChartData = useMemo(
         () => [
@@ -230,8 +233,9 @@ function Dashboard() {
                                         ))}
                                     </ul>
                                     <p className="dashboard-pending-total mb-0 mt-3">
-                                        {t("admin.pendingTotalSummary", {
-                                            total: moderation.pending,
+                                        {t("admin.pendingQueueSummary", {
+                                            shown: recentPending.length,
+                                            total: recentPendingTotal,
                                         })}
                                     </p>
                                 </>

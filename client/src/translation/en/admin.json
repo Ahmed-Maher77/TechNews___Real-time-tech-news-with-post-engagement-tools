@@ -43,7 +43,7 @@
     "pendingQuickQueueTitle": "Pending posts (quick queue)",
     "openModerationQueue": "Open moderation queue",
     "byAuthor": "by {{author}}",
-    "pendingTotalSummary": "Total pending posts: {{total}}",
+    "pendingQueueSummary": "Showing {{shown}} of {{total}} pending posts",
     "noPendingPosts": "No pending posts right now.",
     "moderationHealthTitle": "Moderation health",
     "reviewedPosts": "Reviewed posts",
