@@ -15,5 +15,8 @@
     "editDescriptionPrompt": "حدّث وصف المنشور",
     "editContentPrompt": "حدّث محتوى المنشور",
     "editSuccess": "تم تحديث المنشور بنجاح.",
-    "editError": "تعذر تحديث المنشور. حاول مرة أخرى."
+    "editError": "تعذر تحديث المنشور. حاول مرة أخرى.",
+    "layoutToggleAria": "تبديل عرض منشوراتي",
+    "layoutRecords": "عرض السجلات",
+    "layoutCards": "عرض البطاقات"
 }

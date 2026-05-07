@@ -16,6 +16,7 @@ function MyPosts() {
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
     const [actionInProgressId, setActionInProgressId] = useState("");
+    const [layoutMode, setLayoutMode] = useState("records");
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -119,6 +120,30 @@ function MyPosts() {
             <header className="my-posts-header mb-5">
                 <h1 className="my-posts-title mb-2">{t("myPosts.title")}</h1>
                 <p className="my-posts-caption mb-0">{t("myPosts.caption")}</p>
+                <div
+                    className="my-posts-layout-toggle mt-3"
+                    role="group"
+                    aria-label={t("myPosts.layoutToggleAria")}
+                >
+                    <button
+                        type="button"
+                        className={`my-posts-layout-btn ${layoutMode === "records" ? "active" : ""}`}
+                        onClick={() => setLayoutMode("records")}
+                        aria-label={t("myPosts.layoutRecords")}
+                        title={t("myPosts.layoutRecords")}
+                    >
+                        <i className="fa-solid fa-table-list"></i>
+                    </button>
+                    <button
+                        type="button"
+                        className={`my-posts-layout-btn ${layoutMode === "cards" ? "active" : ""}`}
+                        onClick={() => setLayoutMode("cards")}
+                        aria-label={t("myPosts.layoutCards")}
+                        title={t("myPosts.layoutCards")}
+                    >
+                        <i className="fa-solid fa-table-cells-large"></i>
+                    </button>
+                </div>
             </header>
             {posts.length ? (
                 <PostsContainer
@@ -127,7 +152,11 @@ function MyPosts() {
                     onDeletePost={handleDeletePost}
                     actionInProgressId={actionInProgressId}
                     currentUserId={auth?.id || ""}
-                    className="PostsContainer--records"
+                    className={
+                        layoutMode === "records"
+                            ? "PostsContainer--records"
+                            : "PostsContainer--record-cards"
+                    }
                 />
             ) : (
                 <NoPostsFoundMessage

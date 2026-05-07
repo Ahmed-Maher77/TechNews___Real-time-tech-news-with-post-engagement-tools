@@ -15,5 +15,8 @@
     "editDescriptionPrompt": "Update post description",
     "editContentPrompt": "Update post content",
     "editSuccess": "Post updated successfully.",
-    "editError": "Unable to update post. Please try again."
+    "editError": "Unable to update post. Please try again.",
+    "layoutToggleAria": "Switch my posts layout",
+    "layoutRecords": "Records layout",
+    "layoutCards": "Cards layout"
 }

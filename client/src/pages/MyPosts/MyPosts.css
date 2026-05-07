@@ -1,6 +1,7 @@
 .MyPosts {
     max-width: 1120px;
     margin-inline: auto;
+    overflow-x: clip;
     /* padding-inline: 0.75rem; */
 }
 
@@ -22,7 +23,51 @@
     line-height: 1.6;
 }
 
+.MyPosts .my-posts-layout-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--theme-border);
+    background: var(--theme-tabs-track, var(--theme-surface));
+    box-shadow: var(--theme-sort-toggle-shadow, none);
+}
+
+.MyPosts .my-posts-layout-btn {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.55rem;
+    border: 0;
+    background: transparent;
+    color: var(--theme-text-secondary);
+    display: grid;
+    place-items: center;
+    transition: var(--trans-3);
+}
+
+.MyPosts .my-posts-layout-btn:hover {
+    color: var(--theme-text-primary);
+    background: var(--theme-surface-hover);
+}
+
+.MyPosts .my-posts-layout-btn.active {
+    color: var(--theme-text-primary);
+    background: #fff;
+    box-shadow: var(--theme-tabs-thumb-shadow, 0 1px 2px rgb(16 24 40 / 15%));
+}
+
+:root[data-theme="dark"] .MyPosts .my-posts-layout-btn.active {
+    background: #000;
+    color: #fff;
+}
+
 .MyPosts .PostsContainer.PostsContainer--records {
+    max-width: 1040px;
+    margin-inline: auto;
+}
+
+.MyPosts .PostsContainer.PostsContainer--record-cards {
     max-width: 1040px;
     margin-inline: auto;
 }
@@ -53,6 +98,36 @@
 
 .MyPosts .PostCard.PostCard--record .post-manage-actions {
     width: 100%;
+    justify-content: flex-end;
+}
+
+.MyPosts .PostsContainer.PostsContainer--record-cards .PostCard.PostCard--record {
+    display: block;
+    min-height: 0;
+    max-height: none;
+}
+
+.MyPosts .PostsContainer.PostsContainer--record-cards .PostCard.PostCard--record .post-image {
+    height: 180px !important;
+    aspect-ratio: auto;
+    border-top-right-radius: calc(0.9rem - 2.5px) !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.MyPosts .PostsContainer.PostsContainer--record-cards .PostCard.PostCard--record .post-content {
+    padding: 1rem 1.1rem !important;
+}
+
+.MyPosts .PostsContainer.PostsContainer--record-cards .PostCard.PostCard--record .post-manage-actions {
+    justify-content: flex-start;
+}
+
+.MyPosts .PostsContainer.PostsContainer--record-cards .PostCard.PostCard--record .post-record-footer {
+    flex-direction: row;
+    align-items: center;
+}
+
+.MyPosts .PostsContainer.PostsContainer--record-cards .PostCard.PostCard--record .post-record-metrics {
     justify-content: flex-end;
 }
 

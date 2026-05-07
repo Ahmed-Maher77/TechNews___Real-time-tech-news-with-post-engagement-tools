@@ -10,6 +10,10 @@ function PostsContainer({
     currentUserId = "",
     className = "",
 }) {
+    const isRecordView =
+        className.includes("PostsContainer--records") ||
+        className.includes("PostsContainer--record-cards");
+
     return (
         <div className={`PostsContainer${className ? ` ${className}` : ""}`}>
             {posts.map((post) => (
@@ -20,7 +24,7 @@ function PostsContainer({
                     onDeletePost={onDeletePost}
                     actionInProgressId={actionInProgressId}
                     currentUserId={currentUserId}
-                    recordView={className.includes("PostsContainer--records")}
+                    recordView={isRecordView}
                 />
             ))}
         </div>

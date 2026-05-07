@@ -131,9 +131,13 @@ export default function PostDetailsModal({ open, onClose, postId }) {
 
                         <div className="post-details-modal-section">
                             <div className="post-details-modal-section-title">
-                                <i className="fa-regular fa-comments"></i>{" "}
-                                {t("postDetails.discussionTitle")} (
-                                {post?.comments || comments.length})
+                                <span className="post-details-modal-title-left">
+                                    <i className="fa-regular fa-comments"></i>
+                                    {t("postDetails.discussionTitle")}
+                                </span>
+                                <span className="post-details-modal-count-badge">
+                                    {post?.comments || comments.length}
+                                </span>
                             </div>
                             <div className="post-details-modal-users-list">
                                 {comments.length ? (
@@ -161,7 +165,7 @@ export default function PostDetailsModal({ open, onClose, postId }) {
                                         </div>
                                     ))
                                 ) : (
-                                    <p className="mb-0 text-muted">
+                                    <p className="mb-0 post-details-empty-note">
                                         {t("postDetails.noCommentsYet")}
                                     </p>
                                 )}
@@ -170,8 +174,13 @@ export default function PostDetailsModal({ open, onClose, postId }) {
 
                         <div className="post-details-modal-section">
                             <div className="post-details-modal-section-title">
-                                <i className="fa-regular fa-thumbs-up"></i>{" "}
-                                {reactions.likes} Likes
+                                <span className="post-details-modal-title-left">
+                                    <i className="fa-regular fa-thumbs-up"></i>
+                                    Likes
+                                </span>
+                                <span className="post-details-modal-count-badge">
+                                    {reactions.likes}
+                                </span>
                             </div>
                             <div className="post-details-modal-users-list">
                                 {reactions.likedBy.length ? (
@@ -190,7 +199,7 @@ export default function PostDetailsModal({ open, onClose, postId }) {
                                         </Link>
                                     ))
                                 ) : (
-                                    <p className="mb-0 text-muted">
+                                    <p className="mb-0 post-details-empty-note">
                                         No likes yet
                                     </p>
                                 )}
@@ -199,8 +208,13 @@ export default function PostDetailsModal({ open, onClose, postId }) {
 
                         <div className="post-details-modal-section">
                             <div className="post-details-modal-section-title danger">
-                                <i className="fa-regular fa-thumbs-down"></i>{" "}
-                                {reactions.dislikes} Dislikes
+                                <span className="post-details-modal-title-left">
+                                    <i className="fa-regular fa-thumbs-down"></i>
+                                    Dislikes
+                                </span>
+                                <span className="post-details-modal-count-badge">
+                                    {reactions.dislikes}
+                                </span>
                             </div>
                             <div className="post-details-modal-users-list">
                                 {reactions.dislikedBy.length ? (
@@ -219,7 +233,7 @@ export default function PostDetailsModal({ open, onClose, postId }) {
                                         </Link>
                                     ))
                                 ) : (
-                                    <p className="mb-0 text-muted">
+                                    <p className="mb-0 post-details-empty-note">
                                         No dislikes yet
                                     </p>
                                 )}
