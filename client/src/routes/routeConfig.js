@@ -29,7 +29,6 @@ export const USER_ROUTES = [
     { path: "/my-posts", Component: MyPostsPage },
     { path: "/profile", Component: ProfilePage },
     { path: "/profile/:userId", Component: UserProfileByIdPage },
-    { path: "/posts/:postId", Component: PostDetailsPage },
     { path: "/explore", Component: ExplorePage },
 ];
 

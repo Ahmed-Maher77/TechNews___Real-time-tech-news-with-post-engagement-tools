@@ -7,7 +7,12 @@ import LazyPage from "./components/routing/LazyPage";
 import NotFoundPage from "./components/routing/NotFoundPage";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import RouteLoader from "./components/routing/RouteLoader";
-import { ADMIN_ROUTES, LoginPage, USER_ROUTES } from "./routes/routeConfig.js";
+import {
+    ADMIN_ROUTES,
+    LoginPage,
+    PostDetailsPage,
+    USER_ROUTES,
+} from "./routes/routeConfig.js";
 import api from "./utils/api";
 import {
     selectAuth,
@@ -157,6 +162,15 @@ function App() {
                 }
             >
                 <Route index element={<Navigate to={homePath} replace />} />
+
+                <Route
+                    path="/posts/:postId"
+                    element={
+                        <ProtectedRoute isLoggedIn={isLoggedIn}>
+                            <LazyPage Component={PostDetailsPage} />
+                        </ProtectedRoute>
+                    }
+                />
 
                 {USER_ROUTES.map(({ path, Component }) => (
                     <Route

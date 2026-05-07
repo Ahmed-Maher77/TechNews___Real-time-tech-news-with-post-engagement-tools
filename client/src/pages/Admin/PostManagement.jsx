@@ -1,17 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import DeletePostModal from "../../components/Posts_Components/DeletePostModal/DeletePostModal";
 import api from "../../utils/api";
 import formatDate from "../../utils/functions/formatDate";
 import "./AdminTables.css";
 
 function PostManagement() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
     const [busyPostId, setBusyPostId] = useState("");
+    const [deletingPost, setDeletingPost] = useState(null);
+    const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -49,6 +54,25 @@ function PostManagement() {
         }
     };
 
+    const handleDeletePost = async (postId) => {
+        if (!postId) return;
+        setDeleteSubmitting(true);
+        try {
+            await api.delete(`/posts/${postId}`);
+            toast.success(t("admin.postDeleted"));
+            setDeletingPost(null);
+            if (posts.length === 1 && page > 1) {
+                setPage((prev) => Math.max(1, prev - 1));
+                return;
+            }
+            load();
+        } catch {
+            toast.error(t("admin.postDeleteError"));
+        } finally {
+            setDeleteSubmitting(false);
+        }
+    };
+
     return (
         <section className="PostManagement py-4">
             <h1 className="h3 mb-2">{t("nav.postManagement")}</h1>
@@ -72,6 +96,7 @@ function PostManagement() {
                             <span className="admin-skeleton-line short"></span>
                             <span className="admin-skeleton-line short"></span>
                             <span className="admin-skeleton-line short"></span>
+                            <span className="admin-skeleton-line short"></span>
                         </div>
                         {Array.from({ length: 5 }).map((_, idx) => (
                             <div
@@ -83,6 +108,7 @@ function PostManagement() {
                                 <span className="admin-skeleton-line short"></span>
                                 <span className="admin-skeleton-line short"></span>
                                 <span className="admin-skeleton-line medium"></span>
+                                <span className="admin-skeleton-line short"></span>
                             </div>
                         ))}
                     </div>
@@ -98,6 +124,7 @@ function PostManagement() {
                                     <th>{t("admin.markAsFeatured")}</th>
                                     <th>{t("admin.statusCol")}</th>
                                     <th>{t("admin.dateCol")}</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -151,6 +178,35 @@ function PostManagement() {
                                         >
                                             {formatDate(post.date)}
                                         </td>
+                                        <td className="text-end admin-actions-cell">
+                                            <div className="admin-actions-group">
+                                                <button
+                                                    type="button"
+                                                    className="admin-icon-action-btn"
+                                                    onClick={() =>
+                                                        navigate(`/posts/${post.id}`)
+                                                    }
+                                                    aria-label={t("admin.viewPost")}
+                                                    title={t("admin.viewPost")}
+                                                >
+                                                    <i className="fa-regular fa-eye"></i>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="admin-icon-action-btn admin-icon-action-btn--danger"
+                                                    onClick={() =>
+                                                        setDeletingPost({
+                                                            id: post.id,
+                                                            title: post.title,
+                                                        })
+                                                    }
+                                                    aria-label={t("admin.deletePost")}
+                                                    title={t("admin.deletePost")}
+                                                >
+                                                    <i className="fa-regular fa-trash-can"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -184,6 +240,23 @@ function PostManagement() {
                     ) : null}
                 </>
             )}
+
+            <DeletePostModal
+                open={Boolean(deletingPost)}
+                post={deletingPost}
+                submitting={deleteSubmitting}
+                onClose={() => {
+                    if (deleteSubmitting) return;
+                    setDeletingPost(null);
+                }}
+                onConfirm={handleDeletePost}
+                title={t("admin.deletePostModalTitle")}
+                subtitle={t("admin.deletePostModalSubtitle")}
+                itemLabel={t("admin.deletePostModalLabel")}
+                cancelLabel={t("admin.deleteCancel")}
+                confirmLabel={t("admin.deleteConfirm")}
+                deletingLabel={t("admin.deletingPost")}
+            />
         </section>
     );
 }
