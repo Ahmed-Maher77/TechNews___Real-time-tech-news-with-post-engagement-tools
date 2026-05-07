@@ -1,5 +1,5 @@
 aside.Sidebar {
-    width: 230px;
+    width: 233px;
     min-height: 100vh;
     height: 100vh;
     position: fixed;
@@ -63,7 +63,7 @@ aside.Sidebar .sidebar-header .logo h1 {
 }
 
 aside.Sidebar .navlink-item span {
-    max-width: 120px;
+    max-width: 133px;
     overflow: hidden;
     white-space: nowrap;
 }
