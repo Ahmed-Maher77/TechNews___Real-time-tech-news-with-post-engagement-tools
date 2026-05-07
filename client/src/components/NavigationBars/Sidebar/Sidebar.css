@@ -218,13 +218,37 @@ aside.Sidebar.is-collapsed .sidebar-header .logo h1 {
 }
 
 .navlink-item.logout-item,
-.navlink-item.logout-item a {
+.navlink-item.logout-item a,
+.navlink-item.logout-item button {
     color: #dc3545;
 }
 
+.navlink-item.logout-item:hover {
+    background-color: rgb(220 53 69 / 10%);
+    border-color: rgb(220 53 69 / 22%);
+}
+
 .navlink-item.logout-item:hover,
-.navlink-item.logout-item:hover a {
+.navlink-item.logout-item:hover a,
+.navlink-item.logout-item:hover button {
     color: #bb2d3b;
+}
+
+:root[data-theme="dark"] .navlink-item.logout-item,
+:root[data-theme="dark"] .navlink-item.logout-item a,
+:root[data-theme="dark"] .navlink-item.logout-item button {
+    color: #ff6b7a;
+}
+
+:root[data-theme="dark"] .navlink-item.logout-item:hover {
+    background-color: rgb(255 107 122 / 14%);
+    border-color: rgb(255 107 122 / 30%);
+}
+
+:root[data-theme="dark"] .navlink-item.logout-item:hover,
+:root[data-theme="dark"] .navlink-item.logout-item:hover a,
+:root[data-theme="dark"] .navlink-item.logout-item:hover button {
+    color: #ff8793;
 }
 
 .bottom .login-main-btn > span {

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const DESCRIPTION_MAX_LENGTH = 180;
 export const TITLE_MIN_LENGTH = 5;
-export const CATEGORY_MIN_LENGTH = 3;
+export const CATEGORY_MIN_LENGTH = 2;
 export const DESCRIPTION_MIN_LENGTH = 15;
 export const CONTENT_MIN_LENGTH = 30;
 
