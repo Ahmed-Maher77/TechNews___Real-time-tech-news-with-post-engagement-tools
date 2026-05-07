@@ -86,3 +86,75 @@ export async function moderatePost(req, res) {
     emitSocket("post:updated", { post: updated, actorId: req.user?.id || "" });
     res.json(updated);
 }
+
+function lastNDates(days) {
+    const now = new Date();
+    const list = [];
+    for (let i = days - 1; i >= 0; i -= 1) {
+        const date = new Date(now);
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - i);
+        list.push(date);
+    }
+    return list;
+}
+
+export async function getDashboardStats(_req, res) {
+    const [users, admins, posts, pending, approved, rejected] = await Promise.all([
+        User.countDocuments({}),
+        User.countDocuments({ role: "admin" }),
+        Post.countDocuments({}),
+        Post.countDocuments({ moderationStatus: "pending" }),
+        Post.countDocuments({ moderationStatus: "approved" }),
+        Post.countDocuments({ moderationStatus: "rejected" }),
+    ]);
+
+    const dates = lastNDates(7);
+    const startDate = dates[0];
+    const byDayAgg = await Post.aggregate([
+        { $match: { createdAt: { $gte: startDate } } },
+        {
+            $group: {
+                _id: {
+                    y: { $year: "$createdAt" },
+                    m: { $month: "$createdAt" },
+                    d: { $dayOfMonth: "$createdAt" },
+                },
+                count: { $sum: 1 },
+            },
+        },
+    ]);
+
+    const countByKey = new Map(
+        byDayAgg.map((item) => [
+            `${item._id.y}-${String(item._id.m).padStart(2, "0")}-${String(item._id.d).padStart(2, "0")}`,
+            item.count,
+        ]),
+    );
+
+    const postsByDay = dates.map((date) => {
+        const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+        return {
+            date: key,
+            label: date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+            }),
+            count: countByKey.get(key) || 0,
+        };
+    });
+
+    res.json({
+        overview: {
+            users,
+            admins,
+            posts,
+        },
+        moderation: {
+            pending,
+            approved,
+            rejected,
+        },
+        postsByDay,
+    });
+}

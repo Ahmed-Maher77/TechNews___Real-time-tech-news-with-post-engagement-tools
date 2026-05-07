@@ -30,5 +30,13 @@
     "moderationFilter_all": "الكل",
     "moderationStatus_pending": "قيد المراجعة",
     "moderationStatus_approved": "مقبول",
-    "moderationStatus_rejected": "مرفوض"
+    "moderationStatus_rejected": "مرفوض",
+    "dashboardBlurb": "راقب صحة الإشراف واتجاهات النشر بشكل لحظي.",
+    "dashboardError": "تعذر تحميل إحصاءات لوحة التحكم حالياً.",
+    "kpiUsers": "إجمالي المستخدمين",
+    "kpiAdmins": "المسؤولون",
+    "kpiPosts": "إجمالي المنشورات",
+    "moderationBreakdownTitle": "توزيع حالات الإشراف",
+    "postsTrendTitle": "المنشورات المنشأة (آخر 7 أيام)",
+    "postsCreatedLabel": "المنشورات المنشأة"
 }

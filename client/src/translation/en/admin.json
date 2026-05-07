@@ -30,5 +30,13 @@
     "moderationFilter_all": "All",
     "moderationStatus_pending": "Pending",
     "moderationStatus_approved": "Approved",
-    "moderationStatus_rejected": "Rejected"
+    "moderationStatus_rejected": "Rejected",
+    "dashboardBlurb": "Monitor moderation health and publishing trends in real time.",
+    "dashboardError": "Could not load dashboard stats right now.",
+    "kpiUsers": "Total users",
+    "kpiAdmins": "Administrators",
+    "kpiPosts": "Total posts",
+    "moderationBreakdownTitle": "Moderation distribution",
+    "postsTrendTitle": "Posts created (last 7 days)",
+    "postsCreatedLabel": "Posts created"
 }

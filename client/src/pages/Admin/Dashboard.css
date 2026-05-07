@@ -1,0 +1,61 @@
+.Dashboard .dashboard-header p {
+    max-width: 60ch;
+}
+
+.dashboard-kpi-grid {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-kpi-card {
+    border: 1px solid var(--theme-border-soft);
+    border-radius: 0.8rem;
+    padding: 0.9rem 1rem;
+    background: var(--theme-surface);
+}
+
+.dashboard-kpi-label {
+    color: var(--theme-text-secondary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.dashboard-kpi-value {
+    font-weight: 800;
+    color: var(--theme-text-primary);
+    font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+}
+
+.dashboard-chart-grid {
+    display: grid;
+    gap: 0.95rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dashboard-chart-card {
+    border: 1px solid var(--theme-border-soft);
+    border-radius: 0.8rem;
+    padding: 0.9rem 1rem;
+    background: var(--theme-surface);
+}
+
+.dashboard-chart-title {
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: var(--theme-text-primary);
+}
+
+.dashboard-chart-shell {
+    width: 100%;
+    height: 300px;
+}
+
+@media (max-width: 991.98px) {
+    .dashboard-kpi-grid,
+    .dashboard-chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
