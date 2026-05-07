@@ -2,10 +2,18 @@
     max-width: 60ch;
 }
 
+.Dashboard {
+    overflow-x: clip;
+}
+
 .dashboard-kpi-grid {
     display: grid;
     gap: 0.9rem;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dashboard-kpi-grid > * {
+    min-width: 0;
 }
 
 .dashboard-kpi-card {
@@ -35,10 +43,18 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.dashboard-chart-grid > * {
+    min-width: 0;
+}
+
 .dashboard-extra-grid {
     display: grid;
     gap: 1.95rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dashboard-extra-grid > * {
+    min-width: 0;
 }
 
 .dashboard-chart-card {
@@ -57,6 +73,14 @@
 .dashboard-chart-shell {
     width: 100%;
     height: 300px;
+    min-width: 0;
+}
+
+.dashboard-chart-shell .recharts-default-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 0.7rem;
 }
 
 .dashboard-link-btn {
@@ -117,6 +141,7 @@
     padding: 0.26rem 0 0.52rem;
     border-bottom: 1px dashed var(--theme-border-soft);
     background: transparent;
+    min-width: 0;
 }
 
 .dashboard-pending-timeline-item:last-child .dashboard-pending-card {
@@ -128,11 +153,13 @@
     color: var(--theme-text-primary);
     font-weight: 600;
     font-size: 0.91rem;
+    overflow-wrap: anywhere;
 }
 
 .dashboard-pending-meta {
     color: var(--theme-text-secondary);
     font-size: 0.82rem;
+    overflow-wrap: anywhere;
 }
 
 .dashboard-health-grid {
