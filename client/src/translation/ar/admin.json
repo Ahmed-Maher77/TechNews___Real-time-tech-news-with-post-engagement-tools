@@ -43,6 +43,7 @@
     "pendingQuickQueueTitle": "المنشورات المعلقة (قائمة سريعة)",
     "openModerationQueue": "فتح قائمة الإشراف",
     "byAuthor": "بواسطة {{author}}",
+    "pendingTotalSummary": "إجمالي المنشورات المعلقة: {{total}}",
     "noPendingPosts": "لا توجد منشورات معلقة حالياً.",
     "moderationHealthTitle": "صحة الإشراف",
     "reviewedPosts": "المنشورات المُراجعة",

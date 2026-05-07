@@ -146,7 +146,7 @@ export async function getDashboardStats(_req, res) {
 
     const recentPendingDocs = await Post.find({ moderationStatus: "pending" })
         .sort({ createdAt: -1 })
-        .limit(5)
+        .limit(2)
         .populate({ path: "author", select: "name userPic" })
         .exec();
 

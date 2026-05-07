@@ -200,34 +200,41 @@ function Dashboard() {
                                 </Link>
                             </div>
                             {recentPending.length ? (
-                                <ul className="dashboard-pending-timeline list-unstyled mb-0">
-                                    {recentPending.map((post) => (
-                                        <li
-                                            key={post.id}
-                                            className="dashboard-pending-timeline-item"
-                                        >
-                                            <span
-                                                className="dashboard-pending-dot"
-                                                aria-hidden="true"
-                                            ></span>
-                                            <div className="dashboard-pending-card">
-                                                <div>
-                                                    <p className="dashboard-pending-title mb-1">
-                                                        {post.title}
-                                                    </p>
-                                                    <p className="dashboard-pending-meta mb-0">
-                                                        {t("admin.byAuthor", {
-                                                            author: post.author,
-                                                        })}
-                                                    </p>
+                                <>
+                                    <ul className="dashboard-pending-timeline list-unstyled mb-0">
+                                        {recentPending.map((post) => (
+                                            <li
+                                                key={post.id}
+                                                className="dashboard-pending-timeline-item"
+                                            >
+                                                <span
+                                                    className="dashboard-pending-dot"
+                                                    aria-hidden="true"
+                                                ></span>
+                                                <div className="dashboard-pending-card">
+                                                    <div>
+                                                        <p className="dashboard-pending-title mb-1">
+                                                            {post.title}
+                                                        </p>
+                                                        <p className="dashboard-pending-meta mb-0">
+                                                            {t("admin.byAuthor", {
+                                                                author: post.author,
+                                                            })}
+                                                        </p>
+                                                    </div>
+                                                    <span className="badge text-bg-warning">
+                                                        {t("admin.moderationStatus_pending")}
+                                                    </span>
                                                 </div>
-                                                <span className="badge text-bg-warning">
-                                                    {t("admin.moderationStatus_pending")}
-                                                </span>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <p className="dashboard-pending-total mb-0 mt-3">
+                                        {t("admin.pendingTotalSummary", {
+                                            total: moderation.pending,
+                                        })}
+                                    </p>
+                                </>
                             ) : (
                                 <p className="text-muted mb-0">
                                     {t("admin.noPendingPosts")}
