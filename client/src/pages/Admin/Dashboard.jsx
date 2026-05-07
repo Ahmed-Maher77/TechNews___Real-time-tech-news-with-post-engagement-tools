@@ -235,7 +235,7 @@ function Dashboard() {
                             )}
                         </article>
 
-                        <article className="dashboard-chart-card">
+                        <article className="dashboard-chart-card dashboard-health-card">
                             <h3 className="dashboard-chart-title mb-3">
                                 {t("admin.moderationHealthTitle")}
                             </h3>

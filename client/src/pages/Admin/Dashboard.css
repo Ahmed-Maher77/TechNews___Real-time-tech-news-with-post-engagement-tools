@@ -141,6 +141,13 @@
     gap: 0.8rem;
 }
 
+.dashboard-health-card {
+    background: color-mix(in srgb, var(--theme-surface) 72%, transparent);
+    border: 1px solid var(--theme-border-soft);
+    border-radius: 0.72rem;
+    padding: 0.95rem 1rem;
+}
+
 .dashboard-health-value {
     color: var(--theme-text-primary);
     font-size: 1.3rem;
