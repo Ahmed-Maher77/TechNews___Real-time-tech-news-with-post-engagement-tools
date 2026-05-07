@@ -1,0 +1,17 @@
+.MyPosts .my-posts-header {
+    max-width: 760px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.MyPosts .my-posts-title {
+    color: var(--theme-text-primary);
+    font-size: clamp(1.45rem, 2.4vw, 1.95rem);
+    font-weight: 800;
+}
+
+.MyPosts .my-posts-caption {
+    color: var(--theme-text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.6;
+}

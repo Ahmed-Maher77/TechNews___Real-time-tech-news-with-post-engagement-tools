@@ -32,6 +32,7 @@ function translateCreatePostFieldError(t, error) {
 
 const CreatePostForm = () => {
     const { t } = useTranslation();
+    const [coverInputMode, setCoverInputMode] = useState("url");
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState("");
     const [imageFileError, setImageFileError] = useState("");
@@ -105,7 +106,13 @@ const CreatePostForm = () => {
 
     const onSubmit = async (formData) => {
         const url = formData.imageUrl?.trim() || "";
-        if (!url && !imageFile) {
+        const usingUrl = coverInputMode === "url";
+
+        if (usingUrl && !url) {
+            toast.error(t("createPost.imageRequired"));
+            return;
+        }
+        if (!usingUrl && !imageFile) {
             toast.error(t("createPost.imageRequired"));
             return;
         }
@@ -116,7 +123,7 @@ const CreatePostForm = () => {
             fd.append("category", formData.category.trim());
             fd.append("description", formData.description.trim());
             fd.append("content", formData.content.trim());
-            if (imageFile) {
+            if (!usingUrl && imageFile) {
                 fd.append("imageFile", imageFile);
             } else {
                 fd.append("image", url);
@@ -134,6 +141,7 @@ const CreatePostForm = () => {
 
             toast.success(t("createPost.success"));
             reset(createPostDefaultValues());
+            setCoverInputMode("url");
             clearSelectedImage();
         } catch (error) {
             const serverMessage = error?.response?.data?.message;
@@ -204,78 +212,108 @@ const CreatePostForm = () => {
                     >
                         {t("createPost.fieldImage")} {requiredMark}
                     </label>
-                    <input
-                        type="url"
-                        className={`form-control app-form-control ${errors.imageUrl ? "is-invalid" : ""}`}
-                        id="imageUrl"
-                        placeholder={t("createPost.placeholderImage")}
-                        {...register("imageUrl")}
-                    />
-                    {errors.imageUrl ? (
-                        <div className="app-field-error">
-                            {translateCreatePostFieldError(t, errors.imageUrl)}
-                        </div>
-                    ) : null}
-                    <p className="form-text mb-2">
-                        {t("createPost.imageOrFile")}
-                    </p>
-                    <input
-                        type="file"
-                        id="post-image-file"
-                        className="create-post-file-input"
-                        accept="image/*"
-                        ref={imageFileInputRef}
-                        onChange={handleImageFileChange}
-                    />
-                    <label
-                        htmlFor="post-image-file"
-                        className="create-post-upload-card"
-                    >
-                        {imagePreview ? (
-                            <img
-                                src={imagePreview}
-                                alt={t("createPost.fieldImage")}
-                                className="create-post-upload-preview"
-                            />
-                        ) : (
-                            <span
-                                className="create-post-upload-placeholder"
-                                aria-hidden
-                            >
-                                <i className="fa-regular fa-image" />
-                            </span>
-                        )}
-                    </label>
-                    <div className="create-post-upload-actions">
+                    <div className="create-post-image-tabs mb-2" role="tablist">
                         <button
                             type="button"
-                            className="btn btn-sm btn-outline-secondary"
-                            onClick={() => imageFileInputRef.current?.click()}
+                            role="tab"
+                            aria-selected={coverInputMode === "url"}
+                            className={`create-post-image-tab ${coverInputMode === "url" ? "active" : ""}`}
+                            onClick={() => setCoverInputMode("url")}
                         >
-                            {imageFile
-                                ? "Change uploaded image"
-                                : "Choose image from device"}
+                            {t("createPost.imageTabUrl")}
                         </button>
-                        {imageFile ? (
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={clearSelectedImage}
-                            >
-                                Remove image
-                            </button>
-                        ) : null}
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={coverInputMode === "file"}
+                            className={`create-post-image-tab ${coverInputMode === "file" ? "active" : ""}`}
+                            onClick={() => setCoverInputMode("file")}
+                        >
+                            {t("createPost.imageTabFile")}
+                        </button>
                     </div>
-                    <input
-                        type="hidden"
-                        value={imageFile ? imageFile.name : ""}
-                        readOnly
-                    />
-                    {imageFileError ? (
-                        <div className="app-field-error">
-                            {t(imageFileError)}
-                        </div>
-                    ) : null}
+                    {coverInputMode === "url" ? (
+                        <>
+                            <input
+                                type="url"
+                                className={`form-control app-form-control ${errors.imageUrl ? "is-invalid" : ""}`}
+                                id="imageUrl"
+                                placeholder={t("createPost.placeholderImage")}
+                                {...register("imageUrl")}
+                            />
+                            {errors.imageUrl ? (
+                                <div className="app-field-error">
+                                    {translateCreatePostFieldError(
+                                        t,
+                                        errors.imageUrl,
+                                    )}
+                                </div>
+                            ) : null}
+                            <p className="form-text mb-2">
+                                {t("createPost.imageUrlHint")}
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <p className="form-text mb-2">
+                                {t("createPost.imageFileHint")}
+                            </p>
+                            <input
+                                type="file"
+                                id="post-image-file"
+                                className="create-post-file-input"
+                                accept="image/*"
+                                ref={imageFileInputRef}
+                                onChange={handleImageFileChange}
+                            />
+                            <label
+                                htmlFor="post-image-file"
+                                className="create-post-upload-card"
+                            >
+                                {imagePreview ? (
+                                    <img
+                                        src={imagePreview}
+                                        alt={t("createPost.fieldImage")}
+                                        className="create-post-upload-preview"
+                                    />
+                                ) : (
+                                    <span
+                                        className="create-post-upload-placeholder"
+                                        aria-hidden
+                                    >
+                                        <i className="fa-regular fa-image" />
+                                    </span>
+                                )}
+                            </label>
+                            <div className="create-post-upload-actions">
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-secondary"
+                                    onClick={() =>
+                                        imageFileInputRef.current?.click()
+                                    }
+                                >
+                                    {imageFile
+                                        ? t("createPost.changeUploadedImage")
+                                        : t("createPost.chooseImageFromDevice")}
+                                </button>
+                                {imageFile ? (
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-outline-danger"
+                                        onClick={clearSelectedImage}
+                                    >
+                                        {t("createPost.removeImage")}
+                                    </button>
+                                ) : null}
+                            </div>
+                            {imageFileError ? (
+                                <div className="app-field-error">
+                                    {t(imageFileError)}
+                                </div>
+                            ) : null}
+                        </>
+                    )}
                 </div>
 
                 <div className="mb-3">

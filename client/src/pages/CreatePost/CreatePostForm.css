@@ -91,6 +91,36 @@
     color: #b3b3b3;
 }
 
+.create-post-form .create-post-image-tabs {
+    background-color: var(--theme-tabs-track);
+    border: 1px solid var(--theme-border-soft);
+    border-radius: 999px;
+    padding: 0.3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem;
+}
+
+.create-post-form .create-post-image-tab {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.5rem 0.8rem;
+    font-weight: 600;
+    background: transparent;
+    color: var(--theme-text-secondary);
+    transition: var(--trans-3);
+}
+
+.create-post-form .create-post-image-tab:hover {
+    color: var(--theme-text-primary);
+}
+
+.create-post-form .create-post-image-tab.active {
+    background: var(--theme-text-primary);
+    color: var(--theme-bg);
+    box-shadow: var(--theme-tabs-thumb-shadow);
+}
+
 .create-post-form .create-post-file-input {
     position: absolute;
     width: 1px;
