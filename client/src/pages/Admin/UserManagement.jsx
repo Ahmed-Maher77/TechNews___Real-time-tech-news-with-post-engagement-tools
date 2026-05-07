@@ -204,7 +204,9 @@ function UserManagement() {
                             <table className="table table-striped align-middle admin-table user-management-table">
                                 <thead>
                                     <tr>
-                                        <th>{t("auth.fullName")}</th>
+                                        <th className="admin-name-col">
+                                            {t("auth.fullName")}
+                                        </th>
                                         <th className="admin-email-col">{t("auth.email")}</th>
                                         <th>{t("admin.roleCol")}</th>
                                         <th>{t("admin.joinedAtCol")}</th>
@@ -214,7 +216,7 @@ function UserManagement() {
                                     {users.map((user) => (
                                         <tr key={user.id}>
                                             <td
-                                                className="admin-title-cell"
+                                                className="admin-title-cell admin-name-col"
                                                 data-label={t("auth.fullName")}
                                             >
                                                 {user.name}

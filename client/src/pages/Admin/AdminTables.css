@@ -9,6 +9,17 @@
     --admin-table-muted: var(--theme-text-secondary, #6b7280);
 }
 
+[data-theme="dark"] .PostManagement,
+[data-theme="dark"] .ModerationQueue,
+[data-theme="dark"] .UserManagement {
+    --admin-table-border: #2b3344;
+    --admin-table-border-soft: #2f3a4f;
+    --admin-table-head-bg: #1b2434;
+    --admin-table-row-bg: #121a28;
+    --admin-table-text: #e6edf7;
+    --admin-table-muted: #9eacc4;
+}
+
 .admin-table-wrap {
     border: 0;
     border-radius: 0;
@@ -20,6 +31,13 @@
     margin-bottom: 0;
     color: var(--admin-table-text);
     background: transparent;
+    --bs-table-color: var(--admin-table-text);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--admin-table-border-soft);
+    --bs-table-striped-color: var(--admin-table-text);
+    --bs-table-striped-bg: transparent;
+    --bs-table-hover-color: var(--admin-table-text);
+    --bs-table-hover-bg: transparent;
     border-collapse: separate;
     border-spacing: 0 0.55rem;
     width: 100%;
@@ -30,7 +48,7 @@
     border-bottom: 1px solid var(--admin-table-border-soft);
     background: color-mix(in srgb, var(--admin-table-head-bg) 55%, transparent);
     border-top: 1px solid var(--admin-table-border-soft);
-    color: var(--admin-table-text);
+    color: var(--admin-table-text) !important;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -45,6 +63,7 @@
     vertical-align: middle;
     border-color: var(--admin-table-border-soft);
     background: transparent;
+    color: var(--admin-table-text) !important;
     min-width: 0;
 }
 
@@ -79,7 +98,7 @@
 }
 
 .admin-author-cell {
-    color: var(--admin-table-muted);
+    color: var(--admin-table-muted) !important;
     font-weight: 400;
 }
 
@@ -91,7 +110,7 @@
 }
 
 .admin-date-cell {
-    color: var(--admin-table-muted);
+    color: var(--admin-table-muted) !important;
     font-weight: 500;
     white-space: nowrap;
     font-size: 0.9rem;
@@ -111,6 +130,63 @@
 .admin-actions-group .btn {
     border-radius: 0.5rem;
     font-weight: 600;
+}
+
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-success {
+    color: #7ee2a8;
+    border-color: #2e7d57;
+}
+
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-success:hover:not(:disabled),
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-success:focus-visible:not(:disabled) {
+    color: #07180f;
+    background: #7ee2a8;
+    border-color: #7ee2a8;
+}
+
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-danger {
+    color: #ff9f9f;
+    border-color: #8b3f3f;
+}
+
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-danger:hover:not(:disabled),
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-danger:focus-visible:not(:disabled) {
+    color: #2a0909;
+    background: #ff9f9f;
+    border-color: #ff9f9f;
+}
+
+[data-theme="dark"] .btn.btn-outline-secondary.btn-sm {
+    color: var(--admin-table-text);
+    border-color: var(--admin-table-border);
+    background: transparent;
+}
+
+[data-theme="dark"] .btn.btn-outline-secondary.btn-sm:hover:not(:disabled),
+[data-theme="dark"] .btn.btn-outline-secondary.btn-sm:focus-visible:not(:disabled) {
+    color: #0f172a;
+    background: #d6deea;
+    border-color: #d6deea;
+}
+
+[data-theme="dark"] .btn.btn-outline-dark.btn-sm {
+    color: var(--admin-table-text);
+    border-color: var(--admin-table-border);
+    background: transparent;
+}
+
+[data-theme="dark"] .btn.btn-outline-dark.btn-sm:hover:not(:disabled),
+[data-theme="dark"] .btn.btn-outline-dark.btn-sm:focus-visible:not(:disabled) {
+    color: #0f172a;
+    background: #d6deea;
+    border-color: #d6deea;
+}
+
+[data-theme="dark"] .btn.btn-outline-dark.btn-sm,
+[data-theme="dark"] .btn.btn-outline-secondary.btn-sm,
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-success,
+[data-theme="dark"] .admin-actions-group .btn.btn-outline-danger {
+    box-shadow: none;
 }
 
 .admin-checkbox-cell {
@@ -145,6 +221,17 @@
     font-size: 0.72rem;
     font-weight: 700;
     padding: 0.34rem 0.5rem;
+}
+
+[data-theme="dark"] .admin-user-role.text-bg-dark {
+    background-color: #2a354a !important;
+    color: #eef4ff !important;
+}
+
+[data-theme="dark"] .admin-user-role.text-bg-secondary,
+[data-theme="dark"] .admin-status-badge.text-bg-secondary {
+    background-color: #34435c !important;
+    color: #e3ebfa !important;
 }
 
 .admin-page-loader {
@@ -280,8 +367,13 @@
 }
 
 .UserManagement .admin-email-col {
-    min-width: 250px;
-    width: 250px;
+    min-width: 260px;
+    width: 320px;
+}
+
+.UserManagement .admin-name-col {
+    min-width: 0;
+    width: auto;
 }
 
 @keyframes admin-loader-spin {
@@ -363,6 +455,11 @@
     }
 
     .UserManagement .admin-email-col {
+        min-width: 0;
+        width: auto;
+    }
+
+    .UserManagement .admin-name-col {
         min-width: 0;
         width: auto;
     }
