@@ -4,6 +4,13 @@ import { useTranslation } from "react-i18next";
 import "./FeaturedPost.css";
 import formatDate from "../../../utils/functions/formatDate";
 
+function truncateText(value, maxLen) {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    if (!Number.isFinite(maxLen) || maxLen <= 0) return text;
+    return text.length > maxLen ? `${text.slice(0, maxLen - 1)}…` : text;
+}
+
 function FeaturedPost({ posts = [] }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -61,10 +68,13 @@ function FeaturedPost({ posts = [] }) {
                                 {t("featured.label")}
                             </p>
 
-                            <h2 className="featured-title mb-2">
-                                {post.title}
+                            <h2 className="featured-title mb-2" title={post.title}>
+                                {truncateText(post.title, 40)}
                             </h2>
-                            <p className="featured-description mb-0">
+                            <p
+                                className="featured-description mb-0"
+                                title={post.description}
+                            >
                                 {post.description}
                             </p>
                         </div>
@@ -72,8 +82,11 @@ function FeaturedPost({ posts = [] }) {
                         <div className="featured-meta">
                             <span className="featured-author">
                                 <i className="fa-regular fa-user"></i>
-                                <span className="featured-author-name">
-                                    {post.author}
+                                <span
+                                    className="featured-author-name"
+                                    title={post.author}
+                                >
+                                    {truncateText(post.author, 18)}
                                 </span>
                             </span>
                             <span>
