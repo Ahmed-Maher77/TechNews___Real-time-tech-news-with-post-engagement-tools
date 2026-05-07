@@ -202,7 +202,7 @@
     }
 }
 
-.post-details-action-btn:hover {
+.post-details-action-btn:not(:disabled):hover {
     color: #101828;
     border-color: #98a2b3;
     background-color: #f8fafc;
@@ -220,16 +220,27 @@
     color: #b42318;
 }
 
-.post-details-action-btn.active:hover {
+.post-details-action-btn.active:not(:disabled):hover {
     border-color: #2e90fa;
     background: #eaf3ff;
     color: #175cd3;
 }
 
-.post-details-action-btn.active.dislike:hover {
+.post-details-action-btn.active.dislike:not(:disabled):hover {
     border-color: #f04438;
     background: #fff0ef;
     color: #b42318;
+}
+
+.post-details-action-btn:not(:disabled):focus-visible {
+    outline: 0;
+    border-color: #98a2b3;
+    box-shadow: 0 0 0 2px rgba(16, 24, 40, 0.14);
+}
+
+.post-details-action-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 .post-details-comments {
@@ -417,10 +428,16 @@
     color: var(--theme-text-primary);
 }
 
-[data-theme="dark"] .PostDetails .post-details-action-btn:hover {
+[data-theme="dark"] .PostDetails .post-details-action-btn:not(:disabled):hover {
     border-color: var(--theme-border-soft);
     background: var(--theme-surface-hover);
     color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-action-btn:not(:disabled):focus-visible {
+    outline: 0;
+    border-color: var(--theme-border-soft);
+    box-shadow: 0 0 0 2px rgb(46 144 250 / 18%);
 }
 
 [data-theme="dark"] .PostDetails .post-details-action-btn.active {

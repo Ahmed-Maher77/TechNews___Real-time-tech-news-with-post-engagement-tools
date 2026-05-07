@@ -44,5 +44,14 @@
 .reaction-btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
-    pointer-events: none;
+    box-shadow: none;
+}
+
+.reaction-btn:disabled:hover,
+.reaction-btn:disabled:focus,
+.reaction-btn:disabled:focus-visible {
+    border-color: var(--theme-border);
+    background: var(--theme-surface);
+    color: var(--theme-text-secondary);
+    box-shadow: none;
 }
