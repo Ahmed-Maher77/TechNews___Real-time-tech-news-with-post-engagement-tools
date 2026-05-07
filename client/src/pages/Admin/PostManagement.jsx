@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import DeletePostModal from "../../components/Posts_Components/DeletePostModal/DeletePostModal";
 import api from "../../utils/api";
@@ -10,12 +10,16 @@ import "./AdminTables.css";
 function PostManagement() {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(() => {
+        const value = Number.parseInt(searchParams.get("page") || "1", 10);
+        return Number.isFinite(value) && value > 0 ? value : 1;
+    });
     const [pages, setPages] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [sortBy, setSortBy] = useState("newest");
+    const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
+    const [sortBy, setSortBy] = useState(searchParams.get("sort") || "newest");
     const [busyPostId, setBusyPostId] = useState("");
     const [deletingPost, setDeletingPost] = useState(null);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
@@ -42,6 +46,13 @@ function PostManagement() {
     useEffect(() => {
         setPage(1);
     }, [searchTerm, sortBy]);
+
+    useEffect(() => {
+        const nextParams = { page: String(page) };
+        if (searchTerm.trim()) nextParams.search = searchTerm.trim();
+        if (sortBy && sortBy !== "newest") nextParams.sort = sortBy;
+        setSearchParams(nextParams, { replace: true });
+    }, [page, searchTerm, setSearchParams, sortBy]);
 
     const toggleFeatured = async (post) => {
         setBusyPostId(post.id);

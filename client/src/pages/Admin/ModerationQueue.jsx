@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import formatDate from "../../utils/functions/formatDate";
@@ -7,11 +8,15 @@ import "./AdminTables.css";
 
 function ModerationQueue() {
     const { t } = useTranslation();
-    const [status, setStatus] = useState("pending");
-    const [page, setPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [status, setStatus] = useState(searchParams.get("status") || "pending");
+    const [page, setPage] = useState(() => {
+        const value = Number.parseInt(searchParams.get("page") || "1", 10);
+        return Number.isFinite(value) && value > 0 ? value : 1;
+    });
     const [pages, setPages] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [sortBy, setSortBy] = useState("newest");
+    const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
+    const [sortBy, setSortBy] = useState(searchParams.get("sort") || "newest");
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
     const [busyPostId, setBusyPostId] = useState("");
@@ -45,6 +50,14 @@ function ModerationQueue() {
     useEffect(() => {
         setPage(1);
     }, [searchTerm, sortBy, status]);
+
+    useEffect(() => {
+        const nextParams = { page: String(page) };
+        if (status && status !== "pending") nextParams.status = status;
+        if (searchTerm.trim()) nextParams.search = searchTerm.trim();
+        if (sortBy && sortBy !== "newest") nextParams.sort = sortBy;
+        setSearchParams(nextParams, { replace: true });
+    }, [page, searchTerm, setSearchParams, sortBy, status]);
 
     const handleModeration = async (postId, nextStatus) => {
         setBusyPostId(postId);

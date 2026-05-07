@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import MainButton from "../../components/common/MainButton/MainButton";
@@ -13,6 +13,7 @@ import "./AdminTables.css";
 function UserManagement() {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const auth = useSelector(selectAuth);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -21,10 +22,13 @@ function UserManagement() {
     const [users, setUsers] = useState([]);
     const [usersLoading, setUsersLoading] = useState(true);
     const [usersError, setUsersError] = useState(false);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(() => {
+        const value = Number.parseInt(searchParams.get("page") || "1", 10);
+        return Number.isFinite(value) && value > 0 ? value : 1;
+    });
     const [pages, setPages] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [sortBy, setSortBy] = useState("newest");
+    const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
+    const [sortBy, setSortBy] = useState(searchParams.get("sort") || "newest");
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [deletingUser, setDeletingUser] = useState(null);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
@@ -54,6 +58,13 @@ function UserManagement() {
     useEffect(() => {
         setPage(1);
     }, [searchTerm, sortBy]);
+
+    useEffect(() => {
+        const nextParams = { page: String(page) };
+        if (searchTerm.trim()) nextParams.search = searchTerm.trim();
+        if (sortBy && sortBy !== "newest") nextParams.sort = sortBy;
+        setSearchParams(nextParams, { replace: true });
+    }, [page, searchTerm, setSearchParams, sortBy]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
