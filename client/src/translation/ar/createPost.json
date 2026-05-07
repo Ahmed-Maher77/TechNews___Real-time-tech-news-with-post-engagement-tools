@@ -1,0 +1,21 @@
+{
+    "title": "إنشاء منشور جديد",
+    "fieldTitle": "العنوان",
+    "fieldAuthor": "الكاتب",
+    "fieldCategory": "التصنيف",
+    "fieldImage": "صورة الغلاف (رابط أو ملف)",
+    "imageOrFile": "الصق رابط صورة https أو اختر ملفًا أدناه.",
+    "imageRequired": "أضف رابط صورة أو ارفع ملف صورة.",
+    "fieldDescription": "الوصف",
+    "fieldContent": "المحتوى",
+    "placeholderTitle": "أدخل عنوان المنشور",
+    "placeholderAuthor": "اسم الكاتب",
+    "placeholderCategory": "مثال: React, AI",
+    "placeholderImage": "https://example.com/image.jpg",
+    "placeholderDescription": "ملخص قصير للمنشور...",
+    "placeholderContent": "المحتوى الكامل للمنشور...",
+    "submit": "إنشاء منشور",
+    "submitting": "جارٍ الإنشاء...",
+    "success": "تم إنشاء المنشور بنجاح.",
+    "error": "تعذر إنشاء المنشور. حاول مرة أخرى."
+}

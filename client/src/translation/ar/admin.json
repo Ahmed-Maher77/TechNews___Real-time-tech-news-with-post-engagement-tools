@@ -1,0 +1,17 @@
+{
+    "routeReady": "مسار {{section}} للمسؤول جاهز.",
+    "createAdminBlurb": "أنشئ حساب مسؤول آخر. يمكنه تسجيل الدخول بالبريد وكلمة المرور التي تضعها.",
+    "createAdminSubmit": "إنشاء مسؤول",
+    "creatingAdmin": "جارٍ الإنشاء...",
+    "adminCreated": "تم إنشاء حساب المسؤول.",
+    "adminCreateError": "تعذر إنشاء المسؤول.",
+    "postManagementBlurb": "حدد المنشورات التي تظهر في شريط المميز في الصفحة الرئيسية.",
+    "featuredCol": "مميز",
+    "dateCol": "التاريخ",
+    "featuredYes": "نعم",
+    "featuredNo": "لا",
+    "feature": "تمييز",
+    "unfeature": "إلغاء التمييز",
+    "featuredUpdated": "تم تحديث حالة التمييز.",
+    "featuredError": "تعذر تحديث حالة التمييز."
+}
