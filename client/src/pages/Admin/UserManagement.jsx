@@ -85,11 +85,15 @@ function UserManagement() {
                 </button>
             </div>
 
-            {showCreateForm ? (
+            <div
+                className={`user-management-create-form-wrap ${
+                    showCreateForm ? "is-open" : "is-collapsed"
+                }`}
+                aria-hidden={!showCreateForm}
+            >
                 <form
                     id="create-admin-form"
-                    className="card border-0 shadow-sm rounded-4 p-4"
-                    style={{ maxWidth: 480 }}
+                    className="card border-0 shadow-sm rounded-4 p-4 user-management-create-form"
                     onSubmit={handleSubmit}
                 >
                     <div className="mb-3">
@@ -101,6 +105,7 @@ function UserManagement() {
                             className="form-control app-form-control"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            placeholder={t("admin.adminNamePlaceholder")}
                             required
                         />
                     </div>
@@ -114,6 +119,7 @@ function UserManagement() {
                             className="form-control app-form-control"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            placeholder={t("admin.adminEmailPlaceholder")}
                             required
                         />
                     </div>
@@ -127,6 +133,7 @@ function UserManagement() {
                             className="form-control app-form-control"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            placeholder={t("admin.adminPasswordPlaceholder")}
                             required
                             minLength={6}
                         />
@@ -145,7 +152,7 @@ function UserManagement() {
                         )}
                     </MainButton>
                 </form>
-            ) : null}
+            </div>
 
             <div className="mt-4">
                 <h2 className="h5 mb-3">{t("admin.usersTableTitle")}</h2>
@@ -194,13 +201,13 @@ function UserManagement() {
                 ) : (
                     <>
                         <div className="table-responsive admin-table-wrap">
-                            <table className="table table-striped align-middle admin-table">
+                            <table className="table table-striped align-middle admin-table user-management-table">
                                 <thead>
                                     <tr>
                                         <th>{t("auth.fullName")}</th>
-                                        <th>{t("auth.email")}</th>
+                                        <th className="admin-email-col">{t("auth.email")}</th>
                                         <th>{t("admin.roleCol")}</th>
-                                        <th>{t("admin.dateCol")}</th>
+                                        <th>{t("admin.joinedAtCol")}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -213,7 +220,7 @@ function UserManagement() {
                                                 {user.name}
                                             </td>
                                             <td
-                                                className="admin-author-cell"
+                                                className="admin-author-cell admin-email-col"
                                                 data-label={t("auth.email")}
                                             >
                                                 {user.email}
@@ -233,7 +240,7 @@ function UserManagement() {
                                             </td>
                                             <td
                                                 className="admin-date-cell"
-                                                data-label={t("admin.dateCol")}
+                                                data-label={t("admin.joinedAtCol")}
                                             >
                                                 {user.createdAt
                                                     ? formatDate(user.createdAt)

@@ -239,6 +239,46 @@
     height: 0.9rem;
 }
 
+.user-management-create-form-wrap {
+    display: grid;
+    transition:
+        grid-template-rows 240ms ease,
+        opacity 240ms ease,
+        margin-bottom 240ms ease;
+}
+
+.user-management-create-form-wrap.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    margin-bottom: 0;
+}
+
+.user-management-create-form-wrap.is-collapsed {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    margin-bottom: -0.15rem;
+}
+
+.user-management-create-form {
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+    overflow: hidden;
+}
+
+.UserManagement .admin-table.user-management-table {
+    table-layout: auto;
+}
+
+.UserManagement .admin-email-col {
+    min-width: 250px;
+    width: 250px;
+}
+
 @keyframes admin-loader-spin {
     to {
         transform: rotate(360deg);
@@ -338,5 +378,9 @@
     .admin-page-loader-spinner,
     .admin-skeleton-line {
         animation: none;
+    }
+
+    .user-management-create-form-wrap {
+        transition: none;
     }
 }
