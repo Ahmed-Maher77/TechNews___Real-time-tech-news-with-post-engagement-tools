@@ -1,0 +1,10 @@
+{
+    "searchPlaceholder": "ابحث بالعنوان أو التصنيف",
+    "sortAria": "ترتيب المنشورات حسب التاريخ",
+    "newest": "الأحدث",
+    "oldest": "الأقدم",
+    "paginationAria": "ترقيم الصفحات",
+    "prev": "السابق",
+    "next": "التالي",
+    "pageStatus": "صفحة {{current}} / {{total}}"
+}

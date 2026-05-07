@@ -1,0 +1,11 @@
+{
+    "fallbackUser": "مستخدم",
+    "roleLabels": {
+        "user": "مستخدم",
+        "admin": "مسؤول"
+    },
+    "saveChanges": "حفظ التغييرات",
+    "saving": "جارٍ الحفظ...",
+    "updateSuccess": "تم تحديث الملف الشخصي.",
+    "updateError": "تعذر تحديث الملف الشخصي."
+}
