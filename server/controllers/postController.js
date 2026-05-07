@@ -181,6 +181,22 @@ export async function setFeatured(req, res) {
     res.json(toPublicPost(populated));
 }
 
+export async function deletePost(req, res) {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+        return res.status(404).json({ message: "Not found" });
+    }
+
+    const isOwner = post.author.toString() === req.user.id;
+    const isAdmin = req.user.role === "admin";
+    if (!isOwner && !isAdmin) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
+    await Post.deleteOne({ _id: post._id });
+    res.json({ ok: true });
+}
+
 export async function listAllForAdmin(req, res) {
     const page = parseIntParam(req.query.page, 1);
     const limit = Math.min(parseIntParam(req.query.limit, 20), 100);

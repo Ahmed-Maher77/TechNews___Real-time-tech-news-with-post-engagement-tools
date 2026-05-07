@@ -18,12 +18,18 @@ function PostCard({
     category,
     likes: initialLikes = 0,
     dislikes: initialDislikes = 0,
+    onEditPost,
+    onDeletePost,
+    actionInProgressId,
 }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [likes, setLikes] = useState(initialLikes);
     const [dislikes, setDislikes] = useState(initialDislikes);
     const [reaction, setReaction] = useState(null);
+    const isManaging = actionInProgressId === id;
+    const showManageActions =
+        typeof onEditPost === "function" || typeof onDeletePost === "function";
     const fallbackImage = "https://placehold.net/800x600.png";
 
     const handleImageError = useCallback((event) => {
@@ -132,6 +138,32 @@ function PostCard({
                 </header>
 
                 <footer className="post-footer mt-4">
+                    {showManageActions ? (
+                        <div className="post-manage-actions mb-3">
+                            {typeof onEditPost === "function" ? (
+                                <button
+                                    type="button"
+                                    className="post-manage-btn"
+                                    onClick={() => onEditPost(id)}
+                                    disabled={isManaging}
+                                >
+                                    <i className="fa-regular fa-pen-to-square"></i>
+                                    {t("postCard.editAction")}
+                                </button>
+                            ) : null}
+                            {typeof onDeletePost === "function" ? (
+                                <button
+                                    type="button"
+                                    className="post-manage-btn danger"
+                                    onClick={() => onDeletePost(id)}
+                                    disabled={isManaging}
+                                >
+                                    <i className="fa-regular fa-trash-can"></i>
+                                    {t("postCard.deleteAction")}
+                                </button>
+                            ) : null}
+                        </div>
+                    ) : null}
                     <div className="post-meta d-flex align-items-center gap-3 flex-wrap">
                         <span className="meta-item gap-2">
                             <i className="fa-regular fa-user"></i>
