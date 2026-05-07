@@ -229,6 +229,10 @@ export async function reactToPost(req, res) {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Not found" });
 
+    if (post.author?.toString?.() === req.user.id) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
     const type = String(req.body?.type || "").trim();
     if (type !== "like" && type !== "dislike") {
         return res.status(400).json({ message: "Invalid reaction type" });

@@ -195,6 +195,8 @@ function PostDetails() {
         [auth, postId, t],
     );
 
+    const isOwnPost = Boolean(auth?.id) && auth.id === post?.authorId;
+
     if (isLoading)
         return (
             <section className="PostDetails post-details-loading-state">
@@ -320,14 +322,16 @@ function PostDetails() {
                         <button
                             type="button"
                             className={`post-details-action-btn ${reaction === "like" ? "active" : ""}`}
-                            onClick={handleLike}
+                            onClick={isOwnPost ? undefined : handleLike}
+                            disabled={isOwnPost}
                         >
                             <i className="fa-regular fa-thumbs-up"></i> {likes}
                         </button>
                         <button
                             type="button"
                             className={`post-details-action-btn ${reaction === "dislike" ? "active dislike" : ""}`}
-                            onClick={handleDislike}
+                            onClick={isOwnPost ? undefined : handleDislike}
+                            disabled={isOwnPost}
                         >
                             <i className="fa-regular fa-thumbs-down"></i>{" "}
                             {dislikes}
