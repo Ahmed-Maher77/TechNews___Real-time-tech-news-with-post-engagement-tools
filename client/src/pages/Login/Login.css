@@ -1,0 +1,453 @@
+/* Auth page: follows global `data-theme` from index.css variables */
+
+.LoginPage {
+    position: relative;
+    min-height: 100svh;
+    background: linear-gradient(
+        160deg,
+        var(--theme-bg) 0%,
+        var(--theme-surface-soft) 45%,
+        var(--theme-bg) 100%
+    );
+    color: var(--theme-text-primary);
+    transition:
+        background 0.35s ease,
+        color 0.2s ease;
+}
+
+.LoginPage__toolbar {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.45rem;
+    border-radius: 999px;
+    background-color: var(--theme-surface);
+    border: 1px solid var(--theme-border-soft);
+    box-shadow: 0 0px 0px rgb(0 0 0 / 6%);
+    transition: var(--trans-3);
+}
+
+:root[data-theme="dark"] .LoginPage__toolbar {
+    box-shadow:
+        0 4px 24px rgb(0 0 0 / 35%),
+        inset 0 1px 0 rgb(255 255 255 / 4%);
+}
+
+[dir="rtl"] .LoginPage__toolbar {
+    right: auto;
+    left: 1rem;
+}
+
+.auth-stack {
+    max-width: 560px;
+    margin-inline: auto;
+}
+
+.auth-card {
+    max-width: 560px;
+    background-color: var(--theme-surface);
+    color: var(--theme-text-primary);
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+    box-shadow:
+        0 0 0 1px rgb(16 24 40 / 5%),
+        0 12px 40px rgb(16 24 40 / 6%);
+    padding: 1.5rem;
+    overflow: hidden;
+    transition: var(--trans-3);
+}
+
+:root[data-theme="dark"] .auth-card {
+    box-shadow:
+        0 0 0 1px rgb(255 255 255 / 5%),
+        0 16px 48px rgb(0 0 0 / 45%);
+}
+
+.auth-header {
+    text-align: center;
+}
+
+.auth-kicker {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--theme-text-secondary);
+    font-weight: 700;
+}
+
+.auth-system-title {
+    color: var(--theme-text-primary);
+    font-size: 1.75rem;
+}
+
+.auth-toggle {
+    background-color: var(--theme-tabs-track);
+    border: 1px solid var(--theme-border-soft);
+    border-radius: 999px;
+    padding: 0.35rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+}
+
+.auth-toggle-btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-weight: 600;
+    background: transparent;
+    color: var(--theme-text-secondary);
+    transition: var(--trans-3);
+}
+
+.auth-toggle-btn:hover {
+    color: var(--theme-text-primary);
+}
+
+.auth-toggle-btn.active {
+    background: var(--theme-text-primary);
+    color: var(--theme-bg);
+    box-shadow: var(--theme-tabs-thumb-shadow);
+}
+
+.auth-forms-slider {
+    overflow: hidden;
+}
+
+.auth-form {
+    width: 100%;
+    padding: 0.3rem 0.2rem 0.2rem;
+}
+
+.auth-form-panel {
+    animation: authPanelEnter 0.28s ease;
+}
+
+.auth-form-panel--login {
+    transform-origin: left center;
+}
+
+.auth-form-panel--register {
+    transform-origin: right center;
+}
+
+.auth-form .form-label {
+    font-weight: 600;
+    color: var(--theme-text-primary);
+}
+
+.auth-form h1 {
+    color: var(--theme-text-primary);
+    font-weight: 700;
+}
+
+.LoginPage .app-form-control {
+    min-height: 44px;
+    border-radius: 0.65rem;
+    background-color: var(--theme-surface);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-border);
+}
+
+.LoginPage .app-form-control::placeholder {
+    color: var(--theme-text-secondary);
+    opacity: 0.85;
+}
+
+.LoginPage .app-form-control:focus {
+    border-color: var(--theme-border);
+    box-shadow: 0 0 0 3px var(--theme-focus-ring);
+}
+
+.auth-password-wrap {
+    position: relative;
+}
+
+.auth-password-wrap .app-form-control {
+    padding-inline-end: 2.8rem;
+}
+
+.auth-password-toggle {
+    position: absolute;
+    top: 50%;
+    inset-inline-end: 0.7rem;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: var(--theme-text-secondary);
+    width: 1.9rem;
+    height: 1.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    transition: var(--trans-3);
+}
+
+.auth-password-toggle:hover {
+    color: var(--theme-text-primary);
+    background: rgb(0 0 0 / 6%);
+}
+
+.auth-password-toggle:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 2px var(--theme-focus-ring);
+}
+
+.LoginPage .auth-form .app-form-control.is-invalid {
+    border-color: #f04438;
+    box-shadow: 0 0 0 3px rgb(240 68 56 / 18%);
+}
+
+:root[data-theme="dark"] .LoginPage .auth-form .app-form-control.is-invalid {
+    border-color: #f87171;
+    box-shadow: 0 0 0 3px rgb(248 113 113 / 22%);
+}
+
+.auth-field-error {
+    margin-top: 0.35rem;
+    color: #b42318;
+    font-size: 0.83rem;
+    font-weight: 500;
+}
+
+:root[data-theme="dark"] .auth-field-error {
+    color: #fca5a5;
+}
+
+.auth-submit-btn > span {
+    letter-spacing: 0.04em;
+    font-weight: 600;
+}
+
+.auth-avatar-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.65rem;
+}
+
+.auth-avatar-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.auth-avatar-label {
+    display: grid;
+    place-items: center;
+    width: 104px;
+    height: 104px;
+    margin: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px dashed var(--theme-border);
+    background: linear-gradient(
+        180deg,
+        var(--theme-surface-soft) 0%,
+        var(--theme-surface-hover) 100%
+    );
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 6%);
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+    overflow: hidden;
+}
+
+.auth-avatar-label:hover {
+    border-color: var(--theme-text-secondary);
+    transform: translateY(-1px);
+}
+
+:root[data-theme="dark"] .auth-avatar-label:hover {
+    box-shadow:
+        inset 0 0 0 1px rgb(255 255 255 / 6%),
+        0 8px 28px rgb(0 0 0 / 55%);
+}
+
+.auth-avatar-label:focus-within {
+    outline: none;
+    border-color: var(--theme-text-secondary);
+    box-shadow: 0 0 0 3px var(--theme-focus-ring);
+}
+
+.auth-avatar-label img {
+    width: 100%;
+    height: 100%;
+    max-height: 104px;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.auth-avatar-placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--theme-text-secondary);
+    font-size: 2rem;
+    border-radius: 50%;
+}
+
+.auth-avatar-caption {
+    font-size: 0.8rem;
+    color: var(--theme-text-secondary);
+    font-weight: 600;
+    max-width: 16rem;
+    line-height: 1.35;
+}
+
+.auth-avatar-caption strong {
+    color: var(--theme-text-primary);
+    font-weight: 700;
+}
+
+:root[data-theme="dark"] .LoginPage {
+    background: linear-gradient(180deg, #161616 0%, #121212 100%);
+}
+
+:root[data-theme="dark"] .auth-kicker {
+    color: #a3a3a3;
+}
+
+:root[data-theme="dark"] .auth-system-title,
+:root[data-theme="dark"] .auth-form h1,
+:root[data-theme="dark"] .auth-form .form-label {
+    color: #f5f5f5;
+}
+
+:root[data-theme="dark"] .auth-card {
+    background-color: #1a1a1a;
+    border-color: #2f2f2f;
+}
+
+:root[data-theme="dark"] .auth-toggle {
+    background-color: #242424;
+    border-color: #333333;
+}
+
+:root[data-theme="dark"] .auth-toggle-btn {
+    color: #c9c9c9;
+}
+
+:root[data-theme="dark"] .auth-toggle-btn.active {
+    background: #3a3a3a;
+    color: #f5f5f5;
+}
+
+:root[data-theme="dark"] .LoginPage .app-form-control {
+    background-color: #111111;
+    color: #f1f1f1;
+    border-color: #323232;
+}
+
+:root[data-theme="dark"] .LoginPage .app-form-control::placeholder {
+    color: #9e9e9e;
+    opacity: 1;
+}
+
+:root[data-theme="dark"] .LoginPage .app-form-control:focus {
+    border-color: #575757;
+    box-shadow: 0 0 0 3px rgb(255 255 255 / 10%);
+}
+
+:root[data-theme="dark"] .auth-password-toggle:hover {
+    background: rgb(255 255 255 / 8%);
+}
+
+:root[data-theme="dark"] .auth-avatar-caption {
+    color: #a6a6a6;
+}
+
+/* Fallback: if html[data-theme] is delayed, use component class */
+.LoginPage.is-dark {
+    background: linear-gradient(180deg, #161616 0%, #121212 100%);
+}
+
+.LoginPage.is-dark .auth-kicker {
+    color: #a3a3a3;
+}
+
+.LoginPage.is-dark .auth-system-title,
+.LoginPage.is-dark .auth-form h1,
+.LoginPage.is-dark .auth-form .form-label {
+    color: #f5f5f5;
+}
+
+.LoginPage.is-dark .auth-card {
+    background-color: #1a1a1a;
+    border-color: #2f2f2f;
+}
+
+.LoginPage.is-dark .auth-toggle {
+    background-color: #242424;
+    border-color: #333333;
+}
+
+.LoginPage.is-dark .auth-toggle-btn {
+    color: #c9c9c9;
+}
+
+.LoginPage.is-dark .auth-toggle-btn.active {
+    background: #3a3a3a;
+    color: #f5f5f5;
+}
+
+.LoginPage.is-dark .app-form-control {
+    background-color: #111111;
+    color: #f1f1f1;
+    border-color: #323232;
+}
+
+.LoginPage.is-dark .app-form-control::placeholder {
+    color: #9e9e9e;
+    opacity: 1;
+}
+
+.LoginPage.is-dark .app-form-control:focus {
+    border-color: #575757;
+    box-shadow: 0 0 0 3px rgb(255 255 255 / 10%);
+}
+
+.LoginPage.is-dark .auth-password-toggle:hover {
+    background: rgb(255 255 255 / 8%);
+}
+
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 1.1rem;
+    }
+
+    .LoginPage__toolbar {
+        top: 0.65rem;
+        right: 0.65rem;
+    }
+
+    [dir="rtl"] .LoginPage__toolbar {
+        left: 0.65rem;
+    }
+}
+
+@keyframes authPanelEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
