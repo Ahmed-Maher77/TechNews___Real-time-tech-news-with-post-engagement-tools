@@ -113,9 +113,37 @@ export default function PostDetailsModal({ open, onClose, postId }) {
 
                 {loading ? (
                     <div className="post-details-modal-body">
-                        <p className="mb-0 text-muted">
-                            {t("postDetails.loadingComments")}
-                        </p>
+                        <div className="post-details-loading" role="status" aria-live="polite">
+                            <div className="post-details-loading-head">
+                                <span className="post-details-loading-spinner" aria-hidden="true"></span>
+                                <span className="post-details-loading-label">
+                                    {t("postDetails.loadingComments")}
+                                </span>
+                            </div>
+                            <div className="post-details-loading-list" aria-hidden="true">
+                                <div className="post-details-loading-item">
+                                    <span className="post-details-loading-avatar"></span>
+                                    <div className="post-details-loading-lines">
+                                        <span className="post-details-loading-line short"></span>
+                                        <span className="post-details-loading-line"></span>
+                                    </div>
+                                </div>
+                                <div className="post-details-loading-item">
+                                    <span className="post-details-loading-avatar"></span>
+                                    <div className="post-details-loading-lines">
+                                        <span className="post-details-loading-line short"></span>
+                                        <span className="post-details-loading-line"></span>
+                                    </div>
+                                </div>
+                                <div className="post-details-loading-item">
+                                    <span className="post-details-loading-avatar"></span>
+                                    <div className="post-details-loading-lines">
+                                        <span className="post-details-loading-line short"></span>
+                                        <span className="post-details-loading-line medium"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 ) : error ? (
                     <div className="post-details-modal-body">
