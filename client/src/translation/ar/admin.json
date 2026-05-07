@@ -36,7 +36,16 @@
     "kpiUsers": "إجمالي المستخدمين",
     "kpiAdmins": "المسؤولون",
     "kpiPosts": "إجمالي المنشورات",
+    "kpiApprovalRate": "نسبة القبول",
     "moderationBreakdownTitle": "توزيع حالات الإشراف",
     "postsTrendTitle": "المنشورات المنشأة (آخر 7 أيام)",
-    "postsCreatedLabel": "المنشورات المنشأة"
+    "postsCreatedLabel": "المنشورات المنشأة",
+    "pendingQuickQueueTitle": "المنشورات المعلقة (قائمة سريعة)",
+    "openModerationQueue": "فتح قائمة الإشراف",
+    "byAuthor": "بواسطة {{author}}",
+    "noPendingPosts": "لا توجد منشورات معلقة حالياً.",
+    "moderationHealthTitle": "صحة الإشراف",
+    "reviewedPosts": "المنشورات المُراجعة",
+    "pendingPosts": "المنشورات المعلقة",
+    "moderationHealthHint": "نسبة القبول الحالية {{approvalRate}}٪. حافظ على انخفاض قائمة الانتظار لتسريع النشر."
 }

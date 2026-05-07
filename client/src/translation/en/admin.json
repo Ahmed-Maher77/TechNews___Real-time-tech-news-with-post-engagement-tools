@@ -36,7 +36,16 @@
     "kpiUsers": "Total users",
     "kpiAdmins": "Administrators",
     "kpiPosts": "Total posts",
+    "kpiApprovalRate": "Approval rate",
     "moderationBreakdownTitle": "Moderation distribution",
     "postsTrendTitle": "Posts created (last 7 days)",
-    "postsCreatedLabel": "Posts created"
+    "postsCreatedLabel": "Posts created",
+    "pendingQuickQueueTitle": "Pending posts (quick queue)",
+    "openModerationQueue": "Open moderation queue",
+    "byAuthor": "by {{author}}",
+    "noPendingPosts": "No pending posts right now.",
+    "moderationHealthTitle": "Moderation health",
+    "reviewedPosts": "Reviewed posts",
+    "pendingPosts": "Pending posts",
+    "moderationHealthHint": "Current approval rate is {{approvalRate}}%. Keep pending queue low for faster publishing."
 }

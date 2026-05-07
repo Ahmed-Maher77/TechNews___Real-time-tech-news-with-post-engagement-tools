@@ -144,6 +144,15 @@ export async function getDashboardStats(_req, res) {
         };
     });
 
+    const recentPendingDocs = await Post.find({ moderationStatus: "pending" })
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .populate({ path: "author", select: "name userPic" })
+        .exec();
+
+    const reviewed = approved + rejected;
+    const approvalRate = reviewed > 0 ? Math.round((approved / reviewed) * 100) : 0;
+
     res.json({
         overview: {
             users,
@@ -156,5 +165,10 @@ export async function getDashboardStats(_req, res) {
             rejected,
         },
         postsByDay,
+        quality: {
+            reviewed,
+            approvalRate,
+        },
+        recentPending: recentPendingDocs.map((d) => toPublicPost(d)),
     });
 }

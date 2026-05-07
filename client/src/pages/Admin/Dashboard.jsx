@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import {
     CartesianGrid,
     Cell,
@@ -43,6 +44,8 @@ function Dashboard() {
         rejected: 0,
     };
     const trend = stats?.postsByDay || [];
+    const quality = stats?.quality || { reviewed: 0, approvalRate: 0 };
+    const recentPending = stats?.recentPending || [];
 
     const moderationChartData = useMemo(
         () => [
@@ -78,7 +81,7 @@ function Dashboard() {
                 <p className="text-muted mb-0">{t("admin.dashboardError")}</p>
             ) : (
                 <>
-                    <div className="dashboard-kpi-grid mb-4">
+                    <div className="dashboard-kpi-grid mb-5">
                         <article className="dashboard-kpi-card">
                             <p className="dashboard-kpi-label mb-1">
                                 {t("admin.kpiUsers")}
@@ -101,6 +104,14 @@ function Dashboard() {
                             </p>
                             <h2 className="dashboard-kpi-value mb-0">
                                 {overview.posts}
+                            </h2>
+                        </article>
+                        <article className="dashboard-kpi-card">
+                            <p className="dashboard-kpi-label mb-1">
+                                {t("admin.kpiApprovalRate")}
+                            </p>
+                            <h2 className="dashboard-kpi-value mb-0">
+                                {quality.approvalRate}%
                             </h2>
                         </article>
                     </div>
@@ -172,6 +183,85 @@ function Dashboard() {
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
+                        </article>
+                    </div>
+
+                    <div className="dashboard-extra-grid mt-5">
+                        <article className="dashboard-chart-card">
+                            <div className="d-flex align-items-center justify-content-between gap-2 mb-3">
+                                <h3 className="dashboard-chart-title mb-0">
+                                    {t("admin.pendingQuickQueueTitle")}
+                                </h3>
+                                <Link
+                                    to="/admin/moderation-queue"
+                                    className="dashboard-link-btn"
+                                >
+                                    {t("admin.openModerationQueue")}
+                                </Link>
+                            </div>
+                            {recentPending.length ? (
+                                <ul className="dashboard-pending-timeline list-unstyled mb-0">
+                                    {recentPending.map((post) => (
+                                        <li
+                                            key={post.id}
+                                            className="dashboard-pending-timeline-item"
+                                        >
+                                            <span
+                                                className="dashboard-pending-dot"
+                                                aria-hidden="true"
+                                            ></span>
+                                            <div className="dashboard-pending-card">
+                                                <div>
+                                                    <p className="dashboard-pending-title mb-1">
+                                                        {post.title}
+                                                    </p>
+                                                    <p className="dashboard-pending-meta mb-0">
+                                                        {t("admin.byAuthor", {
+                                                            author: post.author,
+                                                        })}
+                                                    </p>
+                                                </div>
+                                                <span className="badge text-bg-warning">
+                                                    {t("admin.moderationStatus_pending")}
+                                                </span>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="text-muted mb-0">
+                                    {t("admin.noPendingPosts")}
+                                </p>
+                            )}
+                        </article>
+
+                        <article className="dashboard-chart-card">
+                            <h3 className="dashboard-chart-title mb-3">
+                                {t("admin.moderationHealthTitle")}
+                            </h3>
+                            <div className="dashboard-health-grid">
+                                <div>
+                                    <p className="dashboard-kpi-label mb-1">
+                                        {t("admin.reviewedPosts")}
+                                    </p>
+                                    <p className="dashboard-health-value mb-0">
+                                        {quality.reviewed}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="dashboard-kpi-label mb-1">
+                                        {t("admin.pendingPosts")}
+                                    </p>
+                                    <p className="dashboard-health-value mb-0">
+                                        {moderation.pending}
+                                    </p>
+                                </div>
+                            </div>
+                            <p className="dashboard-health-note mb-0 mt-3">
+                                {t("admin.moderationHealthHint", {
+                                    approvalRate: quality.approvalRate,
+                                })}
+                            </p>
                         </article>
                     </div>
                 </>
