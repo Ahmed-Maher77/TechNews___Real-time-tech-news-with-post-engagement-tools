@@ -6,6 +6,7 @@ import api from "../../utils/api";
 import NoPostsFoundMessage from "../../components/NoPostsFoundMessage/NoPostsFoundMessage";
 import PostsContainer from "../../components/Posts_Components/PostsContainer/PostsContainer";
 import PostsLoading from "../../components/Posts_Components/PostsLoading/PostsLoading";
+import EditPostModal from "../../components/Posts_Components/EditPostModal/EditPostModal";
 import { selectAuth } from "../../store/authSlice";
 import "./MyPosts.css";
 
@@ -17,6 +18,7 @@ function MyPosts() {
     const [hasError, setHasError] = useState(false);
     const [actionInProgressId, setActionInProgressId] = useState("");
     const [layoutMode, setLayoutMode] = useState("records");
+    const [editingPost, setEditingPost] = useState(null);
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -57,38 +59,40 @@ function MyPosts() {
     );
 
     const handleEditPost = useCallback(
-        async (postId) => {
+        (postId) => {
             const current = posts.find((post) => post.id === postId);
             if (!current) return;
+            setEditingPost(current);
+        },
+        [posts],
+    );
 
-            const title = window.prompt(
-                t("myPosts.editTitlePrompt"),
-                current.title,
-            );
-            if (title === null) return;
-
-            const description = window.prompt(
-                t("myPosts.editDescriptionPrompt"),
-                current.description,
-            );
-            if (description === null) return;
-
-            const content = window.prompt(
-                t("myPosts.editContentPrompt"),
-                current.content,
-            );
-            if (content === null) return;
-
-            setActionInProgressId(postId);
+    const handleSubmitEdit = useCallback(
+        async ({
+            id,
+            title,
+            category,
+            description,
+            content,
+            coverInputMode,
+            imageUrl,
+            imageFile,
+        }) => {
+            setActionInProgressId(id);
             try {
-                const { data } = await api.patch(`/posts/${postId}`, {
-                    title: title.trim(),
-                    description: description.trim(),
-                    content: content.trim(),
-                });
-                setPosts((prev) =>
-                    prev.map((post) => (post.id === postId ? data : post)),
-                );
+                const payload = new FormData();
+                payload.append("title", title);
+                payload.append("category", category);
+                payload.append("description", description);
+                payload.append("content", content);
+                if (coverInputMode === "file" && imageFile) {
+                    payload.append("imageFile", imageFile);
+                } else {
+                    payload.append("image", imageUrl);
+                }
+                const { data } = await api.patch(`/posts/${id}`, payload);
+                setPosts((prev) => prev.map((post) => (post.id === id ? data : post)));
+                setEditingPost(null);
                 toast.success(t("myPosts.editSuccess"));
             } catch {
                 toast.error(t("myPosts.editError"));
@@ -96,7 +100,7 @@ function MyPosts() {
                 setActionInProgressId("");
             }
         },
-        [posts, t],
+        [t],
     );
 
     if (loading) {
@@ -178,6 +182,18 @@ function MyPosts() {
                     onButtonClick={hasError ? load : undefined}
                 />
             )}
+            <EditPostModal
+                open={Boolean(editingPost)}
+                post={editingPost}
+                submitting={
+                    Boolean(editingPost) && actionInProgressId === editingPost?.id
+                }
+                onClose={() => {
+                    if (actionInProgressId) return;
+                    setEditingPost(null);
+                }}
+                onSubmit={handleSubmitEdit}
+            />
         </section>
     );
 }

@@ -16,6 +16,11 @@
     "editContentPrompt": "حدّث محتوى المنشور",
     "editSuccess": "تم تحديث المنشور بنجاح.",
     "editError": "تعذر تحديث المنشور. حاول مرة أخرى.",
+    "editModalTitle": "تعديل المنشور",
+    "editModalClose": "إغلاق نافذة التعديل",
+    "editCancel": "إلغاء",
+    "editSave": "حفظ التغييرات",
+    "editSaving": "جارٍ الحفظ...",
     "layoutToggleAria": "تبديل عرض منشوراتي",
     "layoutRecords": "عرض السجلات",
     "layoutCards": "عرض البطاقات"

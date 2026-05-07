@@ -30,7 +30,12 @@ router.post("/", authRequired, uploadPostImage.single("imageFile"), createPost);
 router.get("/:id", getPost);
 router.get("/:id/reactions/users", authRequired, listPostReactionUsers);
 router.post("/:id/reactions", authRequired, reactToPost);
-router.patch("/:id", optionalAuth, patchPost);
+router.patch(
+    "/:id",
+    optionalAuth,
+    uploadPostImage.single("imageFile"),
+    patchPost,
+);
 router.delete("/:id", authRequired, deletePost);
 router.patch("/:id/featured", authRequired, adminOnly, setFeatured);
 

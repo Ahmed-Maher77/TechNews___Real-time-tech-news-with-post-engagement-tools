@@ -16,6 +16,11 @@
     "editContentPrompt": "Update post content",
     "editSuccess": "Post updated successfully.",
     "editError": "Unable to update post. Please try again.",
+    "editModalTitle": "Edit post",
+    "editModalClose": "Close edit dialog",
+    "editCancel": "Cancel",
+    "editSave": "Save changes",
+    "editSaving": "Saving...",
     "layoutToggleAria": "Switch my posts layout",
     "layoutRecords": "Records layout",
     "layoutCards": "Cards layout"

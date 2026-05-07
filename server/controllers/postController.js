@@ -164,6 +164,12 @@ export async function patchPost(req, res) {
             post[key] = req.body[key];
         }
     }
+    if (req.body.imageUrl !== undefined) {
+        post.image = req.body.imageUrl;
+    }
+    if (req.file) {
+        post.image = `/uploads/${req.file.filename}`;
+    }
 
     await post.save();
     const populated = await Post.findById(post._id).populate(populateAuthor);
