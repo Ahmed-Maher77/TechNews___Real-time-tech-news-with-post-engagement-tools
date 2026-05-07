@@ -3,13 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./FeaturedPost.css";
 import formatDate from "../../../utils/functions/formatDate";
-
-function truncateText(value, maxLen) {
-    const text = String(value || "").trim();
-    if (!text) return "";
-    if (!Number.isFinite(maxLen) || maxLen <= 0) return text;
-    return text.length > maxLen ? `${text.slice(0, maxLen - 1)}…` : text;
-}
+import truncateText from "../../../utils/functions/truncateText";
 
 function FeaturedPost({ posts = [] }) {
     const { t } = useTranslation();
