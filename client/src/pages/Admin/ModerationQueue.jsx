@@ -81,7 +81,38 @@ function ModerationQueue() {
             </div>
 
             {loading ? (
-                <p className="mb-0">{t("common.loading")}</p>
+                <div className="admin-page-loader" role="status" aria-live="polite">
+                    <div className="admin-page-loader-head">
+                        <span
+                            className="admin-page-loader-spinner"
+                            aria-hidden="true"
+                        ></span>
+                        <p className="admin-page-loader-text mb-0">
+                            {t("common.loading")}
+                        </p>
+                    </div>
+                    <div className="admin-table-skeleton" aria-hidden="true">
+                        <div className="admin-table-skeleton-head">
+                            <span className="admin-skeleton-line medium"></span>
+                            <span className="admin-skeleton-line short"></span>
+                            <span className="admin-skeleton-line short"></span>
+                            <span className="admin-skeleton-line short"></span>
+                            <span className="admin-skeleton-line short"></span>
+                        </div>
+                        {Array.from({ length: 5 }).map((_, idx) => (
+                            <div
+                                key={`moderation-queue-skeleton-${idx}`}
+                                className="admin-table-skeleton-row"
+                            >
+                                <span className="admin-skeleton-line long"></span>
+                                <span className="admin-skeleton-line medium"></span>
+                                <span className="admin-skeleton-line short"></span>
+                                <span className="admin-skeleton-line short"></span>
+                                <span className="admin-skeleton-line medium"></span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             ) : posts.length === 0 ? (
                 <p className="text-muted mb-0">{t("admin.moderationEmpty")}</p>
             ) : (

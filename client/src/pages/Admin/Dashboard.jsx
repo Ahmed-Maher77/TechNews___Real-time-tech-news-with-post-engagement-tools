@@ -79,7 +79,47 @@ function Dashboard() {
             </header>
 
             {loading ? (
-                <p className="mb-0">{t("common.loading")}</p>
+                <div className="dashboard-loading" role="status" aria-live="polite">
+                    <div className="dashboard-loading-head mb-4">
+                        <span
+                            className="dashboard-loading-spinner"
+                            aria-hidden="true"
+                        ></span>
+                        <p className="dashboard-loading-text mb-0">
+                            {t("common.loading")}
+                        </p>
+                    </div>
+
+                    <div className="dashboard-kpi-grid mb-5">
+                        {Array.from({ length: 4 }).map((_, idx) => (
+                            <article
+                                key={`kpi-skeleton-${idx}`}
+                                className="dashboard-kpi-card dashboard-skeleton-card"
+                                aria-hidden="true"
+                            >
+                                <span className="dashboard-skeleton-line short"></span>
+                                <span className="dashboard-skeleton-line medium"></span>
+                            </article>
+                        ))}
+                    </div>
+
+                    <div className="dashboard-chart-grid">
+                        <article
+                            className="dashboard-chart-card dashboard-skeleton-card"
+                            aria-hidden="true"
+                        >
+                            <span className="dashboard-skeleton-line short mb-3"></span>
+                            <div className="dashboard-skeleton-block"></div>
+                        </article>
+                        <article
+                            className="dashboard-chart-card dashboard-skeleton-card"
+                            aria-hidden="true"
+                        >
+                            <span className="dashboard-skeleton-line short mb-3"></span>
+                            <div className="dashboard-skeleton-block"></div>
+                        </article>
+                    </div>
+                </div>
             ) : !stats ? (
                 <p className="text-muted mb-0">{t("admin.dashboardError")}</p>
             ) : (

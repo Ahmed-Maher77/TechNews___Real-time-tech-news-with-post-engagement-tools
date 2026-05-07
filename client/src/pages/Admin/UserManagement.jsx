@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import MainButton from "../../components/common/MainButton/MainButton";
+import "./AdminTables.css";
 
 function UserManagement() {
     const { t } = useTranslation();
@@ -81,9 +82,17 @@ function UserManagement() {
                     />
                 </div>
                 <MainButton type="submit" disabled={submitting} fullWidth>
-                    {submitting
-                        ? t("admin.creatingAdmin")
-                        : t("admin.createAdminSubmit")}
+                    {submitting ? (
+                        <span className="user-management-submitting">
+                            <span
+                                className="admin-page-loader-spinner"
+                                aria-hidden="true"
+                            ></span>
+                            <span>{t("admin.creatingAdmin")}</span>
+                        </span>
+                    ) : (
+                        t("admin.createAdminSubmit")
+                    )}
                 </MainButton>
             </form>
         </section>
