@@ -1,6 +1,8 @@
 {
     "routeReady": "Admin {{section}} route is ready.",
     "createAdminBlurb": "Create another administrator account. They can sign in with the email and password you set.",
+    "showCreateAdminForm": "Create admin",
+    "hideCreateAdminForm": "Hide create form",
     "createAdminSubmit": "Create admin",
     "creatingAdmin": "Creating...",
     "adminCreated": "Administrator account created.",

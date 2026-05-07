@@ -1,6 +1,8 @@
 {
     "routeReady": "مسار {{section}} للمسؤول جاهز.",
     "createAdminBlurb": "أنشئ حساب مسؤول آخر. يمكنه تسجيل الدخول بالبريد وكلمة المرور التي تضعها.",
+    "showCreateAdminForm": "إنشاء مسؤول",
+    "hideCreateAdminForm": "إخفاء نموذج الإنشاء",
     "createAdminSubmit": "إنشاء مسؤول",
     "creatingAdmin": "جارٍ الإنشاء...",
     "adminCreated": "تم إنشاء حساب المسؤول.",
