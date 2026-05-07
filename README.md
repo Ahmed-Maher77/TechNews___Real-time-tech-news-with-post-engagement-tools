@@ -24,14 +24,14 @@ The application allows users to:
 - **Reusable design system components** (e.g., `MainButton`, `TooltipText`, shared utilities)
 - **Local mock API integration** through `json-server`
 
-## Tech Stack
+## Tech Stack (Resume-Ready)
 
-- **Frontend:** React, Vite
-- **Styling:** CSS, Bootstrap 5
-- **HTTP Client:** Axios
-- **Notifications:** React Toastify
-- **Icons:** Font Awesome
-- **Mock Backend/Data:** json-server (`db.json`)
+- **Frontend:** React, Vite, React Router, Redux Toolkit, React Hook Form, Zod, i18next
+- **Backend:** Node.js, Express.js, Mongoose, Socket.IO, Multer, JWT, bcryptjs
+- **Database:** MongoDB (Atlas/local)
+- **Styling/UI:** CSS, Bootstrap 5, Recharts, Font Awesome
+- **Networking/State:** Axios, cookie-based auth sessions, real-time socket sync
+- **Tooling:** ESLint, concurrently, custom dev guard scripts
 
 ## Project Structure
 

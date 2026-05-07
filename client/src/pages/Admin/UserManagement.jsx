@@ -23,6 +23,8 @@ function UserManagement() {
     const [usersError, setUsersError] = useState(false);
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortBy, setSortBy] = useState("newest");
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [deletingUser, setDeletingUser] = useState(null);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
@@ -32,7 +34,7 @@ function UserManagement() {
         setUsersError(false);
         try {
             const { data } = await api.get("/admin/users", {
-                params: { page, limit: 12 },
+                params: { page, limit: 12, search: searchTerm, sort: sortBy },
             });
             setUsers(data?.users || []);
             setPages(data?.pages || 1);
@@ -43,11 +45,15 @@ function UserManagement() {
         } finally {
             setUsersLoading(false);
         }
-    }, [page]);
+    }, [page, searchTerm, sortBy]);
 
     useEffect(() => {
         loadUsers();
     }, [loadUsers]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [searchTerm, sortBy]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -184,6 +190,29 @@ function UserManagement() {
 
             <div className="mt-4">
                 <h2 className="h5 mb-3">{t("admin.usersTableTitle")}</h2>
+                <div className="d-flex flex-wrap gap-2 mb-3">
+                    <input
+                        type="search"
+                        className="form-control app-form-control"
+                        style={{ maxWidth: 320 }}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder={t("admin.searchUsersPlaceholder")}
+                    />
+                    <select
+                        className="form-select app-form-control"
+                        style={{ maxWidth: 220 }}
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                    >
+                        <option value="newest">{t("admin.sortNewest")}</option>
+                        <option value="oldest">{t("admin.sortOldest")}</option>
+                        <option value="name_asc">{t("admin.sortNameAsc")}</option>
+                        <option value="name_desc">{t("admin.sortNameDesc")}</option>
+                        <option value="email_asc">{t("admin.sortEmailAsc")}</option>
+                        <option value="email_desc">{t("admin.sortEmailDesc")}</option>
+                    </select>
+                </div>
                 {usersLoading ? (
                     <div
                         className="admin-page-loader"

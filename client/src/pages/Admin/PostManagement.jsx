@@ -14,6 +14,8 @@ function PostManagement() {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortBy, setSortBy] = useState("newest");
     const [busyPostId, setBusyPostId] = useState("");
     const [deletingPost, setDeletingPost] = useState(null);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
@@ -22,7 +24,7 @@ function PostManagement() {
         setLoading(true);
         try {
             const { data } = await api.get("/posts/admin/all", {
-                params: { page, limit: 15 },
+                params: { page, limit: 15, search: searchTerm, sort: sortBy },
             });
             setPosts(data.posts || []);
             setPages(data.pages || 1);
@@ -31,11 +33,15 @@ function PostManagement() {
         } finally {
             setLoading(false);
         }
-    }, [page]);
+    }, [page, searchTerm, sortBy]);
 
     useEffect(() => {
         load();
     }, [load]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [searchTerm, sortBy]);
 
     const toggleFeatured = async (post) => {
         setBusyPostId(post.id);
@@ -77,6 +83,27 @@ function PostManagement() {
         <section className="PostManagement py-4">
             <h1 className="h3 mb-2">{t("nav.postManagement")}</h1>
             <p className="text-muted mb-4">{t("admin.postManagementBlurb")}</p>
+            <div className="d-flex flex-wrap gap-2 mb-3">
+                <input
+                    type="search"
+                    className="form-control app-form-control"
+                    style={{ maxWidth: 320 }}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder={t("admin.searchPostsPlaceholder")}
+                />
+                <select
+                    className="form-select app-form-control"
+                    style={{ maxWidth: 220 }}
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                >
+                    <option value="newest">{t("admin.sortNewest")}</option>
+                    <option value="oldest">{t("admin.sortOldest")}</option>
+                    <option value="title_asc">{t("admin.sortTitleAsc")}</option>
+                    <option value="title_desc">{t("admin.sortTitleDesc")}</option>
+                </select>
+            </div>
 
             {loading ? (
                 <div className="admin-page-loader" role="status" aria-live="polite">

@@ -10,6 +10,8 @@ function ModerationQueue() {
     const [status, setStatus] = useState("pending");
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortBy, setSortBy] = useState("newest");
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
     const [busyPostId, setBusyPostId] = useState("");
@@ -18,7 +20,13 @@ function ModerationQueue() {
         setLoading(true);
         try {
             const { data } = await api.get("/admin/posts/moderation", {
-                params: { status, page, limit: 15 },
+                params: {
+                    status,
+                    page,
+                    limit: 15,
+                    search: searchTerm,
+                    sort: sortBy,
+                },
             });
             setPosts(data.posts || []);
             setPages(data.pages || 1);
@@ -28,7 +36,7 @@ function ModerationQueue() {
         } finally {
             setLoading(false);
         }
-    }, [page, status]);
+    }, [page, searchTerm, sortBy, status]);
 
     useEffect(() => {
         load();
@@ -36,7 +44,7 @@ function ModerationQueue() {
 
     useEffect(() => {
         setPage(1);
-    }, [status]);
+    }, [searchTerm, sortBy, status]);
 
     const handleModeration = async (postId, nextStatus) => {
         setBusyPostId(postId);
@@ -78,6 +86,27 @@ function ModerationQueue() {
                         {t(`admin.moderationFilter_${key}`)}
                     </button>
                 ))}
+            </div>
+            <div className="d-flex flex-wrap gap-2 mb-3">
+                <input
+                    type="search"
+                    className="form-control app-form-control"
+                    style={{ maxWidth: 320 }}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder={t("admin.searchModerationPlaceholder")}
+                />
+                <select
+                    className="form-select app-form-control"
+                    style={{ maxWidth: 220 }}
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                >
+                    <option value="newest">{t("admin.sortNewest")}</option>
+                    <option value="oldest">{t("admin.sortOldest")}</option>
+                    <option value="title_asc">{t("admin.sortTitleAsc")}</option>
+                    <option value="title_desc">{t("admin.sortTitleDesc")}</option>
+                </select>
             </div>
 
             {loading ? (

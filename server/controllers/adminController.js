@@ -41,18 +41,34 @@ export async function listModerationPosts(req, res) {
     const page = parseIntParam(req.query.page, 1);
     const limit = Math.min(parseIntParam(req.query.limit, 20), 100);
     const status = String(req.query.status || "pending");
+    const search = String(req.query.search || "").trim();
+    const sort = String(req.query.sort || "newest").trim();
     const allowed = new Set(["pending", "approved", "rejected", "all"]);
     const normalizedStatus = allowed.has(status) ? status : "pending";
     const filter =
         normalizedStatus === "all"
             ? {}
             : { moderationStatus: normalizedStatus };
+    if (search) {
+        filter.$or = [
+            { title: { $regex: search, $options: "i" } },
+            { category: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+        ];
+    }
     const skip = (page - 1) * limit;
+    const sortMap = {
+        newest: { createdAt: -1 },
+        oldest: { createdAt: 1 },
+        title_asc: { title: 1 },
+        title_desc: { title: -1 },
+    };
+    const sortStage = sortMap[sort] || sortMap.newest;
 
     const [total, docs] = await Promise.all([
         Post.countDocuments(filter),
         Post.find(filter)
-            .sort({ createdAt: -1 })
+            .sort(sortStage)
             .skip(skip)
             .limit(limit)
             .populate({ path: "author", select: "name userPic" })
@@ -66,18 +82,38 @@ export async function listModerationPosts(req, res) {
         total,
         limit,
         status: normalizedStatus,
+        search,
+        sort,
     });
 }
 
 export async function listUsers(req, res) {
     const page = parseIntParam(req.query.page, 1);
     const limit = Math.min(parseIntParam(req.query.limit, 15), 100);
+    const search = String(req.query.search || "").trim();
+    const sort = String(req.query.sort || "newest").trim();
     const skip = (page - 1) * limit;
+    const filter = {};
+    if (search) {
+        filter.$or = [
+            { name: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+        ];
+    }
+    const sortMap = {
+        newest: { createdAt: -1 },
+        oldest: { createdAt: 1 },
+        name_asc: { name: 1 },
+        name_desc: { name: -1 },
+        email_asc: { email: 1 },
+        email_desc: { email: -1 },
+    };
+    const sortStage = sortMap[sort] || sortMap.newest;
 
     const [total, docs] = await Promise.all([
-        User.countDocuments({}),
-        User.find({})
-            .sort({ createdAt: -1 })
+        User.countDocuments(filter),
+        User.find(filter)
+            .sort(sortStage)
             .skip(skip)
             .limit(limit)
             .exec(),
@@ -95,6 +131,8 @@ export async function listUsers(req, res) {
         pages: Math.max(1, Math.ceil(total / limit)),
         total,
         limit,
+        search,
+        sort,
     });
 }
 

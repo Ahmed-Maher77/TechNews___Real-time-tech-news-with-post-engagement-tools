@@ -335,12 +335,29 @@ export async function listAllForAdmin(req, res) {
     const viewerUserId = req.user?.id || "";
     const page = parseIntParam(req.query.page, 1);
     const limit = Math.min(parseIntParam(req.query.limit, 20), 100);
+    const search = String(req.query.search || "").trim();
+    const sort = String(req.query.sort || "newest").trim();
     const skip = (page - 1) * limit;
+    const filter = {};
+    if (search) {
+        filter.$or = [
+            { title: { $regex: search, $options: "i" } },
+            { category: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+        ];
+    }
+    const sortMap = {
+        newest: { date: -1 },
+        oldest: { date: 1 },
+        title_asc: { title: 1 },
+        title_desc: { title: -1 },
+    };
+    const sortStage = sortMap[sort] || sortMap.newest;
 
     const [total, docs] = await Promise.all([
-        Post.countDocuments({}),
-        Post.find({})
-            .sort({ date: -1 })
+        Post.countDocuments(filter),
+        Post.find(filter)
+            .sort(sortStage)
             .skip(skip)
             .limit(limit)
             .populate(populateAuthor)
@@ -353,5 +370,7 @@ export async function listAllForAdmin(req, res) {
         pages: Math.max(1, Math.ceil(total / limit)),
         total,
         limit,
+        search,
+        sort,
     });
 }
