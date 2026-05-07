@@ -197,8 +197,16 @@ function PostDetails() {
 
     if (isLoading)
         return (
-            <section className="PostDetails">
-                {t("postDetails.loading")}
+            <section className="PostDetails post-details-loading-state">
+                <div className="post-details-loading-box" aria-live="polite">
+                    <span
+                        className="post-details-loading-spinner"
+                        aria-hidden="true"
+                    ></span>
+                    <p className="post-details-loading-text mb-0">
+                        {t("postDetails.loading")}
+                    </p>
+                </div>
             </section>
         );
     if (!post) {

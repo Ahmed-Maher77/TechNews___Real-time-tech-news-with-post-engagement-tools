@@ -6,6 +6,41 @@
     }
 }
 
+.post-details-loading-state {
+    min-height: 46vh;
+    display: grid;
+    place-items: center;
+}
+
+.post-details-loading-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.1rem 1.25rem;
+}
+
+.post-details-loading-spinner {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    border: 3px solid color-mix(in srgb, var(--theme-border) 70%, transparent);
+    border-top-color: #2e90fa;
+    animation: postDetailsSpin 0.9s linear infinite;
+}
+
+.post-details-loading-text {
+    color: var(--theme-text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+@keyframes postDetailsSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .post-details-card {
     background: transparent;
     border: 0;
@@ -36,12 +71,7 @@
     position: absolute;
     inset: 0;
     border-radius: 0.7rem;
-    background: linear-gradient(
-        180deg,
-        rgba(2, 6, 23, 0.08) 0%,
-        rgba(2, 6, 23, 0.24) 52%,
-        rgba(2, 6, 23, 0.45) 100%
-    );
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.08) 0%, rgb(2 6 23 / 58%) 52%, rgb(2 6 23 / 85%) 100%);
     z-index: 1;
     pointer-events: none;
 }
@@ -355,4 +385,109 @@
         inset-inline-end: 0;
         transform: translate(135%, -50%);
     }
+}
+
+[data-theme="dark"] .PostDetails .post-details-meta {
+    color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-body {
+    color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-discussion-title {
+    color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-discussion-subtitle {
+    color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-discussion-dots {
+    color: var(--theme-text-muted);
+}
+
+[data-theme="dark"] .PostDetails .post-details-comments {
+    border-top-color: var(--theme-border);
+}
+
+[data-theme="dark"] .PostDetails .post-details-action-btn {
+    border-color: var(--theme-border);
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-action-btn:hover {
+    border-color: var(--theme-border-soft);
+    background: var(--theme-surface-hover);
+    color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-action-btn.active {
+    border-color: #2e90fa;
+    background: color-mix(in srgb, #2e90fa 20%, var(--theme-surface));
+    color: #72b2ff;
+}
+
+[data-theme="dark"] .PostDetails .post-details-action-btn.active.dislike {
+    border-color: #f04438;
+    background: color-mix(in srgb, #f04438 18%, var(--theme-surface));
+    color: #ff8f88;
+}
+
+[data-theme="dark"] .PostDetails .post-details-comment-form textarea {
+    border-color: var(--theme-border);
+    background-color: var(--theme-surface);
+    color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-comment-form textarea::placeholder {
+    color: var(--theme-text-muted);
+}
+
+[data-theme="dark"] .PostDetails .post-details-comment-form textarea:focus {
+    border-color: var(--theme-border-soft);
+    box-shadow: 0 0 0 3px rgb(46 144 250 / 18%);
+}
+
+[data-theme="dark"] .PostDetails .post-details-comment-item {
+    background: color-mix(in srgb, var(--theme-surface) 80%, transparent);
+    border: 1px solid var(--theme-border);
+    border-radius: 0.75rem;
+}
+
+[data-theme="dark"] .PostDetails .post-details-comment-item p {
+    color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .PostDetails .comment-vote-btn {
+    border-color: var(--theme-border);
+    background: var(--theme-surface);
+    color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .PostDetails .comment-vote-btn:hover {
+    border-color: var(--theme-border-soft);
+    color: var(--theme-text-primary);
+    background: var(--theme-surface-hover);
+}
+
+[data-theme="dark"] .PostDetails .comment-vote-btn.active {
+    border-color: #2e90fa;
+    background: color-mix(in srgb, #2e90fa 20%, var(--theme-surface));
+    color: #72b2ff;
+}
+
+[data-theme="dark"] .PostDetails .comment-vote-btn.active.dislike {
+    border-color: #f04438;
+    background: color-mix(in srgb, #f04438 18%, var(--theme-surface));
+    color: #ff8f88;
+}
+
+[data-theme="dark"] .PostDetails .post-details-empty-comments {
+    color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .PostDetails .post-details-empty-comments .fa-comments {
+    color: var(--theme-text-muted);
 }
