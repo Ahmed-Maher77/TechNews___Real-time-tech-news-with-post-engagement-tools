@@ -100,7 +100,7 @@ function MyPosts() {
 
     if (loading) {
         return (
-            <section className="MyPosts py-4">
+            <section className="MyPosts py-max-lg-4">
                 <header className="my-posts-header mb-5">
                     <h1 className="my-posts-title mb-2">
                         {t("myPosts.title")}
@@ -115,7 +115,7 @@ function MyPosts() {
     }
 
     return (
-        <section className="MyPosts py-4">
+        <section className="MyPosts py-5 py-lg-4">
             <header className="my-posts-header mb-5">
                 <h1 className="my-posts-title mb-2">{t("myPosts.title")}</h1>
                 <p className="my-posts-caption mb-0">{t("myPosts.caption")}</p>

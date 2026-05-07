@@ -1,7 +1,7 @@
 .MyPosts {
     max-width: 1120px;
     margin-inline: auto;
-    padding-inline: 0.75rem;
+    /* padding-inline: 0.75rem; */
 }
 
 .MyPosts .my-posts-header {

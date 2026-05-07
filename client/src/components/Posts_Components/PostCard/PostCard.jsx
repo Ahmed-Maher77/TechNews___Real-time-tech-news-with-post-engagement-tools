@@ -150,9 +150,13 @@ function PostCard({
 
             <div className="post-content p-3 p-md-4">
                 <header className="post-header">
-                    <TooltipText text={title}>
+                    {recordView ? (
                         <h3 className="post-title mb-2">{title}</h3>
-                    </TooltipText>
+                    ) : (
+                        <TooltipText text={title}>
+                            <h3 className="post-title mb-2">{title}</h3>
+                        </TooltipText>
+                    )}
                     <p className="post-description mb-0">{description}</p>
                 </header>
 
