@@ -17,5 +17,12 @@
     "submit": "Create Post",
     "submitting": "Creating...",
     "success": "Post created successfully.",
-    "error": "Unable to create post. Please try again."
+    "error": "Unable to create post. Please try again.",
+    "imageTabUrl": "Use image URL",
+    "imageTabFile": "Upload file",
+    "imageUrlHint": "Paste an https image URL.",
+    "imageFileHint": "Upload an image from your device.",
+    "chooseImageFromDevice": "Choose image from device",
+    "changeUploadedImage": "Change uploaded image",
+    "removeImage": "Remove image"
 }

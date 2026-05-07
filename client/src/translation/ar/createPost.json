@@ -17,5 +17,12 @@
     "submit": "إنشاء منشور",
     "submitting": "جارٍ الإنشاء...",
     "success": "تم إنشاء المنشور بنجاح.",
-    "error": "تعذر إنشاء المنشور. حاول مرة أخرى."
+    "error": "تعذر إنشاء المنشور. حاول مرة أخرى.",
+    "imageTabUrl": "استخدام رابط صورة",
+    "imageTabFile": "رفع ملف",
+    "imageUrlHint": "الصق رابط صورة يبدأ بـ https.",
+    "imageFileHint": "ارفع صورة من جهازك.",
+    "chooseImageFromDevice": "اختر صورة من الجهاز",
+    "changeUploadedImage": "تغيير الصورة المرفوعة",
+    "removeImage": "إزالة الصورة"
 }

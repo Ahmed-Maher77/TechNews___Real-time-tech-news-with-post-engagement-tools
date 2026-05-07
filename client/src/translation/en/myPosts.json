@@ -1,4 +1,11 @@
 {
     "title": "My Posts",
-    "empty": "My Posts is currently empty."
+    "empty": "My Posts is currently empty.",
+    "emptyTitle": "No posts yet",
+    "emptySubtitle": "You have not published anything yet. Create your first post to start building your profile.",
+    "createFirstPost": "Create your first post",
+    "errorTitle": "Could not load your posts",
+    "errorSubtitle": "Something went wrong while loading your posts. Please try again.",
+    "retry": "Try again",
+    "caption": "Manage and review all posts you have published."
 }
