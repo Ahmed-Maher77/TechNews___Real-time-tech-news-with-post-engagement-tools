@@ -1,0 +1,10 @@
+{
+    "searchPlaceholder": "Search by title or category",
+    "sortAria": "Sort posts by date",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "paginationAria": "Posts pagination",
+    "prev": "Previous",
+    "next": "Next",
+    "pageStatus": "Page {{current}} / {{total}}"
+}
