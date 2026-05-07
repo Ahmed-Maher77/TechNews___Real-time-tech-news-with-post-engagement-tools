@@ -8,6 +8,12 @@ export default function DeletePostModal({
     submitting = false,
     onClose,
     onConfirm,
+    title,
+    subtitle,
+    itemLabel,
+    cancelLabel,
+    confirmLabel,
+    deletingLabel,
 }) {
     const { t } = useTranslation();
 
@@ -36,16 +42,16 @@ export default function DeletePostModal({
                     </div>
                     <div>
                         <h3 className="delete-post-modal-title mb-1">
-                            {t("myPosts.deleteModalTitle")}
+                            {title || t("myPosts.deleteModalTitle")}
                         </h3>
                         <p className="delete-post-modal-subtitle mb-0">
-                            {t("myPosts.deleteModalSubtitle")}
+                            {subtitle || t("myPosts.deleteModalSubtitle")}
                         </p>
                     </div>
                 </div>
                 <div className="delete-post-modal-body">
                     <p className="delete-post-modal-post-label mb-1">
-                        {t("myPosts.deleteModalPostLabel")}
+                        {itemLabel || t("myPosts.deleteModalPostLabel")}
                     </p>
                     <p className="delete-post-modal-post-title mb-0">{post.title}</p>
                 </div>
@@ -56,7 +62,7 @@ export default function DeletePostModal({
                         onClick={() => onClose?.()}
                         disabled={submitting}
                     >
-                        {t("myPosts.deleteCancel")}
+                        {cancelLabel || t("myPosts.deleteCancel")}
                     </button>
                     <button
                         type="button"
@@ -64,7 +70,9 @@ export default function DeletePostModal({
                         onClick={() => onConfirm?.(post.id)}
                         disabled={submitting}
                     >
-                        {submitting ? t("myPosts.deleteDeleting") : t("myPosts.deleteConfirm")}
+                        {submitting
+                            ? deletingLabel || t("myPosts.deleteDeleting")
+                            : confirmLabel || t("myPosts.deleteConfirm")}
                     </button>
                 </div>
             </div>

@@ -38,4 +38,5 @@ export const ADMIN_ROUTES = [
     { path: "/admin/user-management", Component: UserManagementPage },
     { path: "/admin/post-management", Component: PostManagementPage },
     { path: "/admin/moderation-queue", Component: ModerationQueuePage },
+    { path: "/users/:userId", Component: UserProfileByIdPage },
 ];

@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
 import { toPublicUser } from "../utils/serializers.js";
 import { toPublicPost } from "../utils/serializers.js";
 import { emitSocket } from "../realtime/socket.js";
@@ -114,6 +115,30 @@ export async function moderatePost(req, res) {
     const updated = toPublicPost(post);
     emitSocket("post:updated", { post: updated, actorId: req.user?.id || "" });
     res.json(updated);
+}
+
+export async function deleteUser(req, res) {
+    const userId = String(req.params.id || "").trim();
+    if (!userId) return res.status(400).json({ message: "Invalid user id" });
+    if (String(req.user?.id || "") === userId) {
+        return res.status(400).json({ message: "admin.cannotDeleteSelf" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "Not found" });
+
+    const userPosts = await Post.find({ author: userId }).select("_id").lean();
+    const userPostIds = userPosts.map((post) => post._id);
+
+    await Promise.all([
+        Post.deleteMany({ author: userId }),
+        Comment.deleteMany({
+            $or: [{ user: userId }, { post: { $in: userPostIds } }],
+        }),
+        User.findByIdAndDelete(userId),
+    ]);
+
+    res.json({ ok: true, id: userId });
 }
 
 function lastNDates(days) {

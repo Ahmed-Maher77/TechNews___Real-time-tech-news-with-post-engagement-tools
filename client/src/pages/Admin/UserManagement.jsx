@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import MainButton from "../../components/common/MainButton/MainButton";
+import DeletePostModal from "../../components/Posts_Components/DeletePostModal/DeletePostModal";
 import formatDate from "../../utils/functions/formatDate";
+import { selectAuth } from "../../store/authSlice";
 import "./AdminTables.css";
 
 function UserManagement() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const auth = useSelector(selectAuth);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,6 +24,8 @@ function UserManagement() {
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [deletingUser, setDeletingUser] = useState(null);
+    const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
     const loadUsers = useCallback(async () => {
         setUsersLoading(true);
@@ -64,6 +72,26 @@ function UserManagement() {
             toast.error(t(msg, { defaultValue: msg }));
         } finally {
             setSubmitting(false);
+        }
+    };
+
+    const handleDeleteUser = async (userId) => {
+        if (!userId) return;
+        setDeleteSubmitting(true);
+        try {
+            await api.delete(`/admin/users/${userId}`);
+            toast.success(t("admin.userDeleted"));
+            setDeletingUser(null);
+            if (users.length === 1 && page > 1) {
+                setPage((prev) => Math.max(1, prev - 1));
+                return;
+            }
+            loadUsers();
+        } catch (err) {
+            const msg = err.response?.data?.message || "admin.userDeleteError";
+            toast.error(t(msg, { defaultValue: msg }));
+        } finally {
+            setDeleteSubmitting(false);
         }
     };
 
@@ -210,6 +238,7 @@ function UserManagement() {
                                         <th className="admin-email-col">{t("auth.email")}</th>
                                         <th>{t("admin.roleCol")}</th>
                                         <th>{t("admin.joinedAtCol")}</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -248,6 +277,36 @@ function UserManagement() {
                                                     ? formatDate(user.createdAt)
                                                     : "—"}
                                             </td>
+                                            <td className="text-end admin-actions-cell">
+                                                <div className="admin-actions-group">
+                                                    <button
+                                                        type="button"
+                                                        className="admin-icon-action-btn"
+                                                        onClick={() =>
+                                                            navigate(`/users/${user.id}`)
+                                                        }
+                                                        aria-label={t("admin.viewUser")}
+                                                        title={t("admin.viewUser")}
+                                                    >
+                                                        <i className="fa-regular fa-eye"></i>
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="admin-icon-action-btn admin-icon-action-btn--danger"
+                                                        onClick={() =>
+                                                            setDeletingUser({
+                                                                id: user.id,
+                                                                title: user.name,
+                                                            })
+                                                        }
+                                                        aria-label={t("admin.deleteUser")}
+                                                        title={t("admin.deleteUser")}
+                                                        disabled={user.id === auth?.id}
+                                                    >
+                                                        <i className="fa-regular fa-trash-can"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -283,6 +342,23 @@ function UserManagement() {
                     </>
                 )}
             </div>
+
+            <DeletePostModal
+                open={Boolean(deletingUser)}
+                post={deletingUser}
+                submitting={deleteSubmitting}
+                onClose={() => {
+                    if (deleteSubmitting) return;
+                    setDeletingUser(null);
+                }}
+                onConfirm={handleDeleteUser}
+                title={t("admin.deleteUserModalTitle")}
+                subtitle={t("admin.deleteUserModalSubtitle")}
+                itemLabel={t("admin.deleteUserModalLabel")}
+                cancelLabel={t("admin.deleteCancel")}
+                confirmLabel={t("admin.deleteConfirm")}
+                deletingLabel={t("admin.deletingUser")}
+            />
         </section>
     );
 }

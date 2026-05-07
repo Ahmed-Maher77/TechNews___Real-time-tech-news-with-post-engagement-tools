@@ -132,6 +132,44 @@
     font-weight: 600;
 }
 
+.admin-icon-action-btn {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--admin-table-border-soft);
+    background: transparent;
+    color: var(--admin-table-text);
+    border-radius: 0.52rem;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.admin-icon-action-btn:hover:not(:disabled),
+.admin-icon-action-btn:focus-visible:not(:disabled) {
+    background: color-mix(in srgb, var(--admin-table-head-bg) 62%, transparent);
+    border-color: var(--admin-table-border);
+}
+
+.admin-icon-action-btn--danger {
+    color: #dc2626;
+}
+
+.admin-icon-action-btn--danger:hover:not(:disabled),
+.admin-icon-action-btn--danger:focus-visible:not(:disabled) {
+    color: #fff;
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.admin-icon-action-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
 [data-theme="dark"] .admin-actions-group .btn.btn-outline-success {
     color: #7ee2a8;
     border-color: #2e7d57;
@@ -151,6 +189,28 @@
 
 [data-theme="dark"] .admin-actions-group .btn.btn-outline-danger:hover:not(:disabled),
 [data-theme="dark"] .admin-actions-group .btn.btn-outline-danger:focus-visible:not(:disabled) {
+    color: #2a0909;
+    background: #ff9f9f;
+    border-color: #ff9f9f;
+}
+
+[data-theme="dark"] .admin-icon-action-btn {
+    border-color: var(--admin-table-border);
+    color: var(--admin-table-text);
+}
+
+[data-theme="dark"] .admin-icon-action-btn:hover:not(:disabled),
+[data-theme="dark"] .admin-icon-action-btn:focus-visible:not(:disabled) {
+    background: color-mix(in srgb, var(--admin-table-head-bg) 82%, #fff 18%);
+}
+
+[data-theme="dark"] .admin-icon-action-btn--danger {
+    color: #ff9f9f;
+    border-color: #8b3f3f;
+}
+
+[data-theme="dark"] .admin-icon-action-btn--danger:hover:not(:disabled),
+[data-theme="dark"] .admin-icon-action-btn--danger:focus-visible:not(:disabled) {
     color: #2a0909;
     background: #ff9f9f;
     border-color: #ff9f9f;
