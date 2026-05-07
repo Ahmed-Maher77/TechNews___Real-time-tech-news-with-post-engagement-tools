@@ -208,7 +208,12 @@
     background: linear-gradient(
         90deg,
         color-mix(in srgb, var(--admin-table-border-soft) 68%, transparent) 20%,
-        color-mix(in srgb, var(--admin-table-border-soft) 35%, var(--admin-table-row-bg) 65%) 50%,
+        color-mix(
+                in srgb,
+                var(--admin-table-border-soft) 35%,
+                var(--admin-table-row-bg) 65%
+            )
+            50%,
         color-mix(in srgb, var(--admin-table-border-soft) 68%, transparent) 80%
     );
     background-size: 220% 100%;
@@ -314,7 +319,11 @@
         box-shadow: 0 1px 2px rgb(16 24 40 / 8%);
         border: 1px solid var(--admin-table-border-soft);
         border-radius: 0.72rem;
-        background: color-mix(in srgb, var(--admin-table-head-bg) 38%, transparent);
+        background: color-mix(
+            in srgb,
+            var(--admin-table-head-bg) 38%,
+            transparent
+        );
     }
 
     .admin-table tbody tr:last-child {
@@ -351,6 +360,19 @@
         letter-spacing: 0.02em;
         text-align: start;
         flex: 0 0 46%;
+    }
+
+    .UserManagement .admin-email-col {
+        min-width: 0;
+        width: auto;
+    }
+
+    .UserManagement .admin-author-cell.admin-email-col {
+        justify-content: flex-end;
+        text-align: end;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .admin-actions-cell::before {
