@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import formatDate from "../../utils/functions/formatDate";
+import "./AdminTables.css";
 
 function PostManagement() {
     const { t } = useTranslation();
@@ -10,6 +11,7 @@ function PostManagement() {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
+    const [busyPostId, setBusyPostId] = useState("");
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -31,6 +33,7 @@ function PostManagement() {
     }, [load]);
 
     const toggleFeatured = async (post) => {
+        setBusyPostId(post.id);
         try {
             const { data } = await api.patch(`/posts/${post.id}/featured`, {
                 featured: !post.featured,
@@ -41,6 +44,8 @@ function PostManagement() {
             toast.success(t("admin.featuredUpdated"));
         } catch {
             toast.error(t("admin.featuredError"));
+        } finally {
+            setBusyPostId("");
         }
     };
 
@@ -53,58 +58,67 @@ function PostManagement() {
                 <p className="mb-0">{t("common.loading")}</p>
             ) : (
                 <>
-                    <div className="table-responsive rounded-3 border">
-                        <table className="table table-striped mb-0 align-middle">
+                    <div className="table-responsive admin-table-wrap">
+                        <table className="table table-striped align-middle admin-table">
                             <thead>
                                 <tr>
                                     <th>{t("createPost.fieldTitle")}</th>
                                     <th>{t("createPost.fieldAuthor")}</th>
-                                    <th>{t("admin.featuredCol")}</th>
+                                    <th>{t("admin.markAsFeatured")}</th>
                                     <th>{t("admin.statusCol")}</th>
                                     <th>{t("admin.dateCol")}</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {posts.map((post) => (
                                     <tr key={post.id}>
-                                        <td>{post.title}</td>
-                                        <td>{post.author}</td>
-                                        <td>
-                                            {post.featured ? (
-                                                <span className="badge text-bg-success">
-                                                    {t("admin.featuredYes")}
-                                                </span>
-                                            ) : (
-                                                <span className="badge text-bg-secondary">
-                                                    {t("admin.featuredNo")}
-                                                </span>
-                                            )}
+                                        <td
+                                            className="admin-title-cell"
+                                            data-label={t("createPost.fieldTitle")}
+                                        >
+                                            {post.title}
                                         </td>
-                                        <td>
-                                            <span className="badge text-bg-secondary text-capitalize">
+                                        <td
+                                            className="admin-author-cell"
+                                            data-label={t("createPost.fieldAuthor")}
+                                        >
+                                            {post.author}
+                                        </td>
+                                        <td
+                                            data-label={t("admin.markAsFeatured")}
+                                            className="admin-checkbox-cell"
+                                        >
+                                            <label className="admin-checkbox-wrap">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={Boolean(post.featured)}
+                                                    disabled={
+                                                        post.moderationStatus === "rejected" ||
+                                                        busyPostId === post.id
+                                                    }
+                                                    onChange={() =>
+                                                        toggleFeatured(post)
+                                                    }
+                                                />
+                                                <span className="admin-checkbox-label">
+                                                    {post.featured
+                                                        ? t("admin.featuredYes")
+                                                        : t("admin.featuredNo")}
+                                                </span>
+                                            </label>
+                                        </td>
+                                        <td data-label={t("admin.statusCol")}>
+                                            <span className="badge text-bg-secondary text-capitalize admin-status-badge">
                                                 {t(
                                                     `admin.moderationStatus_${post.moderationStatus || "approved"}`,
                                                 )}
                                             </span>
                                         </td>
-                                        <td>{formatDate(post.date)}</td>
-                                        <td className="text-end">
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm btn-outline-dark"
-                                                disabled={
-                                                    post.moderationStatus ===
-                                                    "rejected"
-                                                }
-                                                onClick={() =>
-                                                    toggleFeatured(post)
-                                                }
-                                            >
-                                                {post.featured
-                                                    ? t("admin.unfeature")
-                                                    : t("admin.feature")}
-                                            </button>
+                                        <td
+                                            className="admin-date-cell"
+                                            data-label={t("admin.dateCol")}
+                                        >
+                                            {formatDate(post.date)}
                                         </td>
                                     </tr>
                                 ))}

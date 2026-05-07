@@ -1,0 +1,215 @@
+.PostManagement,
+.ModerationQueue {
+    --admin-table-border: var(--theme-border, #e5e7eb);
+    --admin-table-border-soft: var(--theme-border-soft, #eef1f4);
+    --admin-table-head-bg: var(--theme-surface-soft, #f8fafc);
+    --admin-table-row-bg: var(--theme-surface, #fff);
+    --admin-table-text: var(--theme-text-primary, #111827);
+    --admin-table-muted: var(--theme-text-secondary, #6b7280);
+}
+
+.admin-table-wrap {
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+    background: transparent;
+}
+
+.admin-table {
+    margin-bottom: 0;
+    color: var(--admin-table-text);
+    background: transparent;
+    border-collapse: separate;
+    border-spacing: 0 0.55rem;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.admin-table thead th {
+    border-bottom: 1px solid var(--admin-table-border-soft);
+    background: color-mix(in srgb, var(--admin-table-head-bg) 55%, transparent);
+    border-top: 1px solid var(--admin-table-border-soft);
+    color: var(--admin-table-text);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0.72rem 0.68rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+    min-width: 0;
+}
+
+.admin-table tbody td {
+    padding: 0.82rem 0.78rem;
+    vertical-align: middle;
+    border-color: var(--admin-table-border-soft);
+    background: transparent;
+    min-width: 0;
+}
+
+.admin-table tbody tr {
+    box-shadow: 0 0 0 1px var(--admin-table-border-soft);
+}
+
+.admin-table tbody tr > td:first-child {
+    border-top-left-radius: 0.55rem;
+    border-bottom-left-radius: 0.55rem;
+}
+
+.admin-table tbody tr > td:last-child {
+    border-top-right-radius: 0.55rem;
+    border-bottom-right-radius: 0.55rem;
+}
+
+.admin-table.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-bg-type: transparent;
+}
+
+.admin-table.table-striped > tbody > tr:nth-of-type(even) > * {
+    --bs-table-bg-type: transparent;
+}
+
+.admin-title-cell,
+.admin-author-cell {
+    color: var(--admin-table-text);
+    font-weight: 400;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.admin-author-cell {
+    color: var(--admin-table-muted);
+    font-weight: 400;
+}
+
+.admin-status-badge,
+.admin-featured-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.34rem 0.5rem;
+}
+
+.admin-date-cell {
+    color: var(--admin-table-muted);
+    font-weight: 500;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+.admin-actions-cell {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.admin-actions-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.admin-actions-group .btn {
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.admin-checkbox-cell {
+    min-width: 0;
+}
+
+.admin-checkbox-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--admin-table-text);
+    font-weight: 600;
+    font-size: 0.84rem;
+}
+
+.admin-checkbox-wrap input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: #111827;
+}
+
+.admin-checkbox-wrap input[type="checkbox"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.admin-checkbox-label {
+    color: var(--admin-table-muted);
+}
+
+@media (max-width: 767.98px) {
+    .admin-table thead {
+        display: none;
+    }
+
+    .admin-table,
+    .admin-table tbody,
+    .admin-table tr,
+    .admin-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-table tbody tr {
+        border-bottom: 1px solid var(--admin-table-border-soft);
+        padding: 0.66rem 0.82rem;
+        margin-bottom: 0.62rem;
+        box-shadow: 0 1px 2px rgb(16 24 40 / 8%);
+        border: 1px solid var(--admin-table-border-soft);
+        border-radius: 0.72rem;
+        background: color-mix(in srgb, var(--admin-table-head-bg) 38%, transparent);
+    }
+
+    .admin-table tbody tr:last-child {
+        border-bottom: 0;
+        margin-bottom: 0;
+    }
+
+    .admin-table tbody td {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.7rem;
+        border: 0;
+        padding: 0.66rem 0;
+        text-align: end;
+        min-width: 0;
+        background: transparent;
+    }
+
+    .admin-table tbody td:first-child {
+        padding-top: 0.28rem;
+    }
+
+    .admin-table tbody td:last-child {
+        padding-bottom: 0.18rem;
+    }
+
+    .admin-table tbody td::before {
+        content: attr(data-label);
+        color: var(--admin-table-muted);
+        font-size: 0.76rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        text-align: start;
+        flex: 0 0 46%;
+    }
+
+    .admin-actions-cell::before {
+        display: none;
+    }
+
+    .admin-actions-group {
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .admin-checkbox-cell {
+        min-width: 0;
+    }
+}

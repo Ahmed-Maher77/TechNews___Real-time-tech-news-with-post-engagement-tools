@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import formatDate from "../../utils/functions/formatDate";
+import "./AdminTables.css";
 
 function ModerationQueue() {
     const { t } = useTranslation();
@@ -64,7 +65,7 @@ function ModerationQueue() {
     return (
         <section className="ModerationQueue py-4">
             <h1 className="h3 mb-2">{t("nav.moderationQueue")}</h1>
-            <p className="text-muted mb-3">{t("admin.moderationBlurb")}</p>
+            <p className="text-muted mb-5">{t("admin.moderationBlurb")}</p>
 
             <div className="d-flex gap-2 flex-wrap mb-3">
                 {["pending", "approved", "rejected", "all"].map((key) => (
@@ -85,8 +86,8 @@ function ModerationQueue() {
                 <p className="text-muted mb-0">{t("admin.moderationEmpty")}</p>
             ) : (
                 <>
-                    <div className="table-responsive rounded-3 border">
-                        <table className="table table-striped mb-0 align-middle">
+                    <div className="table-responsive admin-table-wrap">
+                        <table className="table table-striped align-middle admin-table">
                             <thead>
                                 <tr>
                                     <th>{t("createPost.fieldTitle")}</th>
@@ -99,51 +100,75 @@ function ModerationQueue() {
                             <tbody>
                                 {posts.map((post) => {
                                     const isBusy = busyPostId === post.id;
+                                    const isPending =
+                                        (post.moderationStatus || "pending") ===
+                                        "pending";
+                                    const canShowActions =
+                                        status === "all" ? isPending : true;
                                     return (
                                         <tr key={post.id}>
-                                            <td>{post.title}</td>
-                                            <td>{post.author}</td>
-                                            <td>
-                                                <span className="badge text-bg-secondary text-capitalize">
+                                            <td
+                                                className="admin-title-cell"
+                                                data-label={t("createPost.fieldTitle")}
+                                            >
+                                                {post.title}
+                                            </td>
+                                            <td
+                                                className="admin-author-cell"
+                                                data-label={t("createPost.fieldAuthor")}
+                                            >
+                                                {post.author}
+                                            </td>
+                                            <td data-label={t("admin.statusCol")}>
+                                                <span className="badge text-bg-secondary text-capitalize admin-status-badge">
                                                     {t(`admin.moderationStatus_${post.moderationStatus || "approved"}`)}
                                                 </span>
                                             </td>
-                                            <td>{formatDate(post.date)}</td>
-                                            <td className="text-end">
-                                                <div className="d-inline-flex gap-2">
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-outline-success"
-                                                        disabled={
-                                                            isBusy ||
-                                                            post.moderationStatus === "approved"
-                                                        }
-                                                        onClick={() =>
-                                                            handleModeration(
-                                                                post.id,
-                                                                "approved",
-                                                            )
-                                                        }
-                                                    >
-                                                        {t("admin.approve")}
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-outline-danger"
-                                                        disabled={
-                                                            isBusy ||
-                                                            post.moderationStatus === "rejected"
-                                                        }
-                                                        onClick={() =>
-                                                            handleModeration(
-                                                                post.id,
-                                                                "rejected",
-                                                            )
-                                                        }
-                                                    >
-                                                        {t("admin.reject")}
-                                                    </button>
-                                                </div>
+                                            <td
+                                                className="admin-date-cell"
+                                                data-label={t("admin.dateCol")}
+                                            >
+                                                {formatDate(post.date)}
+                                            </td>
+                                            <td className="text-end admin-actions-cell">
+                                                {canShowActions ? (
+                                                    <div className="admin-actions-group">
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-sm btn-outline-success"
+                                                            disabled={
+                                                                isBusy ||
+                                                                post.moderationStatus === "approved"
+                                                            }
+                                                            onClick={() =>
+                                                                handleModeration(
+                                                                    post.id,
+                                                                    "approved",
+                                                                )
+                                                            }
+                                                        >
+                                                            {t("admin.approve")}
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-sm btn-outline-danger"
+                                                            disabled={
+                                                                isBusy ||
+                                                                post.moderationStatus === "rejected"
+                                                            }
+                                                            onClick={() =>
+                                                                handleModeration(
+                                                                    post.id,
+                                                                    "rejected",
+                                                                )
+                                                            }
+                                                        >
+                                                            {t("admin.reject")}
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-muted small">—</span>
+                                                )}
                                             </td>
                                         </tr>
                                     );

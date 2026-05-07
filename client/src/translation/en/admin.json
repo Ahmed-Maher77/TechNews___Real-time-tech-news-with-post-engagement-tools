@@ -10,6 +10,7 @@
     "dateCol": "Date",
     "featuredYes": "Yes",
     "featuredNo": "No",
+    "markAsFeatured": "Mark as featured",
     "feature": "Feature",
     "unfeature": "Unfeature",
     "featuredUpdated": "Featured status updated.",
