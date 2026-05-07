@@ -91,6 +91,18 @@ const CreatePostForm = () => {
         setImageFileError("");
     };
 
+    const clearSelectedImage = () => {
+        setImageFile(null);
+        setImageFileError("");
+        if (imagePreview.startsWith("blob:")) {
+            URL.revokeObjectURL(imagePreview);
+        }
+        setImagePreview("");
+        if (imageFileInputRef.current) {
+            imageFileInputRef.current.value = "";
+        }
+    };
+
     const onSubmit = async (formData) => {
         const url = formData.imageUrl?.trim() || "";
         if (!url && !imageFile) {
@@ -122,15 +134,7 @@ const CreatePostForm = () => {
 
             toast.success(t("createPost.success"));
             reset(createPostDefaultValues());
-            setImageFile(null);
-            setImageFileError("");
-            if (imagePreview.startsWith("blob:")) {
-                URL.revokeObjectURL(imagePreview);
-            }
-            setImagePreview("");
-            if (imageFileInputRef.current) {
-                imageFileInputRef.current.value = "";
-            }
+            clearSelectedImage();
         } catch (error) {
             const serverMessage = error?.response?.data?.message;
             toast.error(
@@ -215,27 +219,57 @@ const CreatePostForm = () => {
                     <p className="form-text mb-2">
                         {t("createPost.imageOrFile")}
                     </p>
-                    {imagePreview ? (
-                        <div className="mb-2">
-                            <img
-                                src={imagePreview}
-                                alt={t("createPost.fieldImage")}
-                                style={{
-                                    width: "100%",
-                                    maxHeight: 220,
-                                    objectFit: "cover",
-                                    borderRadius: 12,
-                                }}
-                            />
-                        </div>
-                    ) : null}
                     <input
                         type="file"
                         id="post-image-file"
-                        className="form-control app-form-control"
+                        className="create-post-file-input"
                         accept="image/*"
                         ref={imageFileInputRef}
                         onChange={handleImageFileChange}
+                    />
+                    <label
+                        htmlFor="post-image-file"
+                        className="create-post-upload-card"
+                    >
+                        {imagePreview ? (
+                            <img
+                                src={imagePreview}
+                                alt={t("createPost.fieldImage")}
+                                className="create-post-upload-preview"
+                            />
+                        ) : (
+                            <span
+                                className="create-post-upload-placeholder"
+                                aria-hidden
+                            >
+                                <i className="fa-regular fa-image" />
+                            </span>
+                        )}
+                    </label>
+                    <div className="create-post-upload-actions">
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-outline-secondary"
+                            onClick={() => imageFileInputRef.current?.click()}
+                        >
+                            {imageFile
+                                ? "Change uploaded image"
+                                : "Choose image from device"}
+                        </button>
+                        {imageFile ? (
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={clearSelectedImage}
+                            >
+                                Remove image
+                            </button>
+                        ) : null}
+                    </div>
+                    <input
+                        type="hidden"
+                        value={imageFile ? imageFile.name : ""}
+                        readOnly
                     />
                     {imageFileError ? (
                         <div className="app-field-error">
