@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./PostCard.css";
@@ -22,6 +22,7 @@ function PostCard({
     category,
     likes: initialLikes = 0,
     dislikes: initialDislikes = 0,
+    reaction: initialReaction = null,
     onEditPost,
     onDeletePost,
     actionInProgressId,
@@ -40,6 +41,18 @@ function PostCard({
     const showManageActions =
         typeof onEditPost === "function" || typeof onDeletePost === "function";
     const fallbackImage = "https://placehold.net/800x600.png";
+
+    useEffect(() => {
+        setLikes(initialLikes);
+    }, [initialLikes]);
+
+    useEffect(() => {
+        setDislikes(initialDislikes);
+    }, [initialDislikes]);
+
+    useEffect(() => {
+        setReaction(initialReaction || null);
+    }, [initialReaction]);
 
     const handleImageError = useCallback((event) => {
         event.currentTarget.onerror = null;

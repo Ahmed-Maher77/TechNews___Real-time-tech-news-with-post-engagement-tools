@@ -17,10 +17,16 @@
     transition: var(--trans-3);
 }
 
-.reaction-btn:hover {
+.reaction-btn:not(:disabled):hover {
     border-color: var(--theme-border);
     color: var(--theme-text-primary);
     background: var(--theme-surface-hover);
+}
+
+.reaction-btn:not(:disabled):focus-visible {
+    outline: 0;
+    border-color: var(--theme-border);
+    box-shadow: 0 0 0 2px var(--theme-focus-ring);
 }
 
 .reaction-btn.active {
@@ -38,4 +44,5 @@
 .reaction-btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
+    pointer-events: none;
 }

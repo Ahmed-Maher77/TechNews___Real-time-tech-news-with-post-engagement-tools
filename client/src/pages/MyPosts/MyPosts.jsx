@@ -9,6 +9,7 @@ import PostsLoading from "../../components/Posts_Components/PostsLoading/PostsLo
 import EditPostModal from "../../components/Posts_Components/EditPostModal/EditPostModal";
 import DeletePostModal from "../../components/Posts_Components/DeletePostModal/DeletePostModal";
 import { selectAuth } from "../../store/authSlice";
+import { getSocket } from "../../utils/socket";
 import "./MyPosts.css";
 
 function MyPosts() {
@@ -41,6 +42,54 @@ function MyPosts() {
     useEffect(() => {
         load();
     }, [load]);
+
+    useEffect(() => {
+        const socket = getSocket();
+
+        const onPostUpdated = ({ post, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!post) return;
+            setPosts((prev) => prev.map((p) => (p.id === post.id ? { ...p, ...post } : p)));
+        };
+
+        const onPostDeleted = ({ postId, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!postId) return;
+            setPosts((prev) => prev.filter((p) => p.id !== postId));
+        };
+
+        const onPostReacted = ({ postId, likes, dislikes, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!postId) return;
+            setPosts((prev) =>
+                prev.map((p) =>
+                    p.id === postId
+                        ? { ...p, likes: Number(likes || 0), dislikes: Number(dislikes || 0) }
+                        : p,
+                ),
+            );
+        };
+
+        const onCommentCreated = ({ postId, comments, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!postId) return;
+            setPosts((prev) =>
+                prev.map((p) => (p.id === postId ? { ...p, comments: Number(comments || 0) } : p)),
+            );
+        };
+
+        socket.on("post:updated", onPostUpdated);
+        socket.on("post:deleted", onPostDeleted);
+        socket.on("post:reacted", onPostReacted);
+        socket.on("comment:created", onCommentCreated);
+
+        return () => {
+            socket.off("post:updated", onPostUpdated);
+            socket.off("post:deleted", onPostDeleted);
+            socket.off("post:reacted", onPostReacted);
+            socket.off("comment:created", onCommentCreated);
+        };
+    }, [auth?.id]);
 
     const handleDeletePost = useCallback(
         (postId) => {

@@ -10,6 +10,7 @@ import { selectAuth } from "../../store/authSlice";
 import "./PostDetails.css";
 import { toast } from "react-toastify";
 import TooltipText from "../../components/common/TooltipText/TooltipText";
+import { getSocket } from "../../utils/socket";
 
 function PostDetails() {
     const { t } = useTranslation();
@@ -37,6 +38,7 @@ function PostDetails() {
                 setPost(fetchedPost);
                 setLikes(fetchedPost?.likes || 0);
                 setDislikes(fetchedPost?.dislikes || 0);
+                setReaction(fetchedPost?.reaction || null);
             } catch {
                 setPost(null);
             } finally {
@@ -66,6 +68,93 @@ function PostDetails() {
         };
         loadComments();
     }, [postId]);
+
+    useEffect(() => {
+        const socket = getSocket();
+        socket.emit("post:join", postId);
+
+        const onPostReacted = ({ postId: eventPostId, likes, dislikes, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (eventPostId !== postId) return;
+            const nextLikes = Number(likes || 0);
+            const nextDislikes = Number(dislikes || 0);
+            setLikes(nextLikes);
+            setDislikes(nextDislikes);
+            setPost((prevPost) =>
+                prevPost
+                    ? {
+                          ...prevPost,
+                          likes: nextLikes,
+                          dislikes: nextDislikes,
+                      }
+                    : prevPost,
+            );
+        };
+
+        const onCommentCreated = ({
+            postId: eventPostId,
+            comment,
+            comments,
+            actorId,
+        }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (eventPostId !== postId || !comment) return;
+            setComments((prev) => {
+                if (prev.some((c) => c.id === comment.id)) return prev;
+                return [{ ...comment, reaction: null }, ...prev];
+            });
+            setPost((prevPost) =>
+                prevPost
+                    ? {
+                          ...prevPost,
+                          comments: Number(comments || (prevPost.comments || 0) + 1),
+                      }
+                    : prevPost,
+            );
+        };
+
+        const onCommentVoted = ({ postId: eventPostId, comment, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (eventPostId !== postId || !comment) return;
+            setComments((prevComments) =>
+                prevComments.map((c) =>
+                    c.id === comment.id
+                        ? {
+                              ...c,
+                              upvotes: comment.upvotes,
+                              downvotes: comment.downvotes,
+                          }
+                        : c,
+                ),
+            );
+        };
+
+        const onPostUpdated = ({ post: updatedPost, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!updatedPost || updatedPost.id !== postId) return;
+            setPost((prevPost) => (prevPost ? { ...prevPost, ...updatedPost } : updatedPost));
+        };
+
+        const onPostDeleted = ({ postId: deletedPostId }) => {
+            if (deletedPostId !== postId) return;
+            setPost(null);
+        };
+
+        socket.on("post:reacted", onPostReacted);
+        socket.on("comment:created", onCommentCreated);
+        socket.on("comment:voted", onCommentVoted);
+        socket.on("post:updated", onPostUpdated);
+        socket.on("post:deleted", onPostDeleted);
+
+        return () => {
+            socket.emit("post:leave", postId);
+            socket.off("post:reacted", onPostReacted);
+            socket.off("comment:created", onCommentCreated);
+            socket.off("comment:voted", onCommentVoted);
+            socket.off("post:updated", onPostUpdated);
+            socket.off("post:deleted", onPostDeleted);
+        };
+    }, [auth?.id, postId]);
 
     const readMins = useMemo(() => {
         if (!post) return 1;

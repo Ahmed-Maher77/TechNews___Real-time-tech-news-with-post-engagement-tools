@@ -162,7 +162,6 @@ const CreatePostForm = () => {
             onSubmit={handleSubmit(onSubmit)}
             noValidate
         >
-            <h3 className="form-title mb-4">{t("createPost.title")}</h3>
             <fieldset className="create-post-fieldset" disabled={isSubmitting}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label fw-semibold">

@@ -1,6 +1,7 @@
 import Comment from "../models/Comment.js";
 import Post from "../models/Post.js";
 import { toPublicComment } from "../utils/serializers.js";
+import { emitSocket, emitSocketToPost } from "../realtime/socket.js";
 
 export async function listComments(req, res) {
     const post = await Post.findById(req.params.id);
@@ -40,8 +41,15 @@ export async function createComment(req, res) {
         path: "user",
         select: "name userPic",
     });
+    const publicComment = toPublicComment(populated);
+    emitSocket("comment:created", {
+        postId: post._id.toString(),
+        comment: publicComment,
+        comments: post.commentCount || 0,
+        actorId: req.user?.id || "",
+    });
 
-    res.status(201).json(toPublicComment(populated));
+    res.status(201).json(publicComment);
 }
 
 export async function voteComment(req, res) {
@@ -69,5 +77,11 @@ export async function voteComment(req, res) {
         path: "user",
         select: "name userPic",
     });
-    res.json(toPublicComment(populated));
+    const votedComment = toPublicComment(populated);
+    emitSocketToPost(req.params.id, "comment:voted", {
+        postId: req.params.id,
+        comment: votedComment,
+        actorId: req.user?.id || "",
+    });
+    res.json(votedComment);
 }

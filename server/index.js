@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
 import { resolve } from "path";
+import { createServer } from "http";
 import app from "./app.js";
 import { connectDb } from "./config/db.js";
+import { initSocket } from "./realtime/socket.js";
 
 dotenv.config({ path: resolve(process.cwd(), ".env") });
 dotenv.config({ path: resolve(process.cwd(), "../.env") });
@@ -20,7 +22,10 @@ async function connectWithRetry() {
 }
 
 function start() {
-    app.listen(PORT, () => {
+    const server = createServer(app);
+    const clientOrigin = process.env.CLIENT_URL || "http://localhost:5173";
+    initSocket(server, clientOrigin);
+    server.listen(PORT, () => {
         console.log(`API listening on http://localhost:${PORT}`);
     });
     connectWithRetry();

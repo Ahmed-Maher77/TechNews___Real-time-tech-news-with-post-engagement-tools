@@ -10,6 +10,7 @@ import PostsContainer from "../../components/Posts_Components/PostsContainer/Pos
 import PostsToolbar from "../../components/common/PostsToolbar/PostsToolbar";
 import useDebounce from "../../hooks/useDebounce";
 import { selectAuth } from "../../store/authSlice";
+import { getSocket } from "../../utils/socket";
 import "./Posts.css";
 
 function Posts() {
@@ -84,6 +85,80 @@ function Posts() {
             window.removeEventListener("postCreated", handlePostCreated);
         };
     }, [handlePostCreated]);
+
+    useEffect(() => {
+        const socket = getSocket();
+
+        const onPostCreated = ({ post, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!post) return;
+            setPosts((prev) => {
+                if (prev.some((p) => p.id === post.id)) return prev;
+                return [post, ...prev];
+            });
+        };
+
+        const onPostUpdated = ({ post, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!post) return;
+            setPosts((prev) => prev.map((p) => (p.id === post.id ? { ...p, ...post } : p)));
+            setFeaturedPosts((prev) =>
+                prev.map((p) => (p.id === post.id ? { ...p, ...post } : p)),
+            );
+        };
+
+        const onPostDeleted = ({ postId, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!postId) return;
+            setPosts((prev) => prev.filter((p) => p.id !== postId));
+            setFeaturedPosts((prev) => prev.filter((p) => p.id !== postId));
+        };
+
+        const onPostReacted = ({ postId, likes, dislikes, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!postId) return;
+            setPosts((prev) =>
+                prev.map((p) =>
+                    p.id === postId
+                        ? { ...p, likes: Number(likes || 0), dislikes: Number(dislikes || 0) }
+                        : p,
+                ),
+            );
+            setFeaturedPosts((prev) =>
+                prev.map((p) =>
+                    p.id === postId
+                        ? { ...p, likes: Number(likes || 0), dislikes: Number(dislikes || 0) }
+                        : p,
+                ),
+            );
+        };
+
+        const onCommentCreated = ({ postId, comments, actorId }) => {
+            if (actorId && actorId === auth?.id) return;
+            if (!postId) return;
+            const count = Number(comments || 0);
+            setPosts((prev) =>
+                prev.map((p) => (p.id === postId ? { ...p, comments: count } : p)),
+            );
+            setFeaturedPosts((prev) =>
+                prev.map((p) => (p.id === postId ? { ...p, comments: count } : p)),
+            );
+        };
+
+        socket.on("post:created", onPostCreated);
+        socket.on("post:updated", onPostUpdated);
+        socket.on("post:deleted", onPostDeleted);
+        socket.on("post:reacted", onPostReacted);
+        socket.on("comment:created", onCommentCreated);
+
+        return () => {
+            socket.off("post:created", onPostCreated);
+            socket.off("post:updated", onPostUpdated);
+            socket.off("post:deleted", onPostDeleted);
+            socket.off("post:reacted", onPostReacted);
+            socket.off("comment:created", onCommentCreated);
+        };
+    }, [auth?.id]);
 
     const handleSearchChange = useCallback((event) => {
         setSearchQuery(event.target.value);

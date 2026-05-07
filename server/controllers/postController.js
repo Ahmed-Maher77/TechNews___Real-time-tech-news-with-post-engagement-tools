@@ -1,5 +1,6 @@
 import Post from "../models/Post.js";
 import { toPublicPost, toPublicUser } from "../utils/serializers.js";
+import { emitSocket } from "../realtime/socket.js";
 
 const populateAuthor = { path: "author", select: "name userPic" };
 
@@ -9,6 +10,7 @@ function parseIntParam(value, fallback) {
 }
 
 export async function listPosts(req, res) {
+    const viewerUserId = req.user?.id || "";
     const page = parseIntParam(req.query.page, 1);
     const limit = Math.min(parseIntParam(req.query.limit, 10), 50);
     const search = String(req.query.search || "").trim();
@@ -33,7 +35,7 @@ export async function listPosts(req, res) {
         query.exec(),
     ]);
 
-    const posts = docs.map((d) => toPublicPost(d));
+    const posts = docs.map((d) => toPublicPost(d, "", viewerUserId));
     res.json({
         posts,
         page,
@@ -44,6 +46,7 @@ export async function listPosts(req, res) {
 }
 
 export async function featuredPosts(req, res) {
+    const viewerUserId = req.user?.id || "";
     const limit = Math.min(parseIntParam(req.query.limit, 3), 10);
     const docs = await Post.find({ featured: true })
         .sort({ date: -1 })
@@ -52,19 +55,20 @@ export async function featuredPosts(req, res) {
         .exec();
 
     const posts = docs.length
-        ? docs.map((d) => toPublicPost(d))
+        ? docs.map((d) => toPublicPost(d, "", viewerUserId))
         : (
               await Post.find({})
                   .sort({ date: -1 })
                   .limit(limit)
                   .populate(populateAuthor)
                   .exec()
-          ).map((d) => toPublicPost(d));
+          ).map((d) => toPublicPost(d, "", viewerUserId));
 
     res.json(posts);
 }
 
 export async function myPosts(req, res) {
+    const viewerUserId = req.user?.id || "";
     const page = parseIntParam(req.query.page, 1);
     const limit = Math.min(parseIntParam(req.query.limit, 10), 50);
     const skip = (page - 1) * limit;
@@ -81,7 +85,7 @@ export async function myPosts(req, res) {
     ]);
 
     res.json({
-        posts: docs.map((d) => toPublicPost(d)),
+        posts: docs.map((d) => toPublicPost(d, "", viewerUserId)),
         page,
         pages: Math.max(1, Math.ceil(total / limit)),
         total,
@@ -90,13 +94,14 @@ export async function myPosts(req, res) {
 }
 
 export async function getPost(req, res) {
+    const viewerUserId = req.user?.id || "";
     const post = await Post.findById(req.params.id).populate(populateAuthor);
     if (!post) {
         return res.status(404).json({ message: "Not found" });
     }
     post.views = (post.views || 0) + 1;
     await post.save();
-    res.json(toPublicPost(post));
+    res.json(toPublicPost(post, "", viewerUserId));
 }
 
 export async function createPost(req, res) {
@@ -125,7 +130,9 @@ export async function createPost(req, res) {
     });
 
     const populated = await Post.findById(post._id).populate(populateAuthor);
-    res.status(201).json(toPublicPost(populated));
+    const created = toPublicPost(populated);
+    emitSocket("post:created", { post: created, actorId: req.user?.id || "" });
+    res.status(201).json(created);
 }
 
 export async function patchPost(req, res) {
@@ -173,7 +180,9 @@ export async function patchPost(req, res) {
 
     await post.save();
     const populated = await Post.findById(post._id).populate(populateAuthor);
-    res.json(toPublicPost(populated));
+    const updated = toPublicPost(populated);
+    emitSocket("post:updated", { post: updated, actorId: req.user?.id || "" });
+    res.json(updated);
 }
 
 function upsertReactionUser(post, userId, type) {
@@ -255,6 +264,12 @@ export async function reactToPost(req, res) {
     post.dislikedBy = result.dislikedIds;
 
     await post.save();
+    emitSocket("post:reacted", {
+        postId: post._id.toString(),
+        likes: post.likes,
+        dislikes: post.dislikes,
+        actorId: req.user?.id || "",
+    });
     res.json({ likes: post.likes, dislikes: post.dislikes, reaction: result.reaction });
 }
 
@@ -281,7 +296,9 @@ export async function setFeatured(req, res) {
     post.featured = Boolean(req.body.featured);
     await post.save();
     const populated = await Post.findById(post._id).populate(populateAuthor);
-    res.json(toPublicPost(populated));
+    const updated = toPublicPost(populated);
+    emitSocket("post:updated", { post: updated, actorId: req.user?.id || "" });
+    res.json(updated);
 }
 
 export async function deletePost(req, res) {
@@ -296,11 +313,14 @@ export async function deletePost(req, res) {
         return res.status(403).json({ message: "Forbidden" });
     }
 
+    const postId = post._id.toString();
     await Post.deleteOne({ _id: post._id });
+    emitSocket("post:deleted", { postId, actorId: req.user?.id || "" });
     res.json({ ok: true });
 }
 
 export async function listAllForAdmin(req, res) {
+    const viewerUserId = req.user?.id || "";
     const page = parseIntParam(req.query.page, 1);
     const limit = Math.min(parseIntParam(req.query.limit, 20), 100);
     const skip = (page - 1) * limit;
@@ -316,7 +336,7 @@ export async function listAllForAdmin(req, res) {
     ]);
 
     res.json({
-        posts: docs.map((d) => toPublicPost(d)),
+        posts: docs.map((d) => toPublicPost(d, "", viewerUserId)),
         page,
         pages: Math.max(1, Math.ceil(total / limit)),
         total,

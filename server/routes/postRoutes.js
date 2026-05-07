@@ -22,12 +22,12 @@ import { uploadPostImage } from "../middlewares/upload.js";
 
 const router = Router();
 
-router.get("/", listPosts);
-router.get("/featured", featuredPosts);
+router.get("/", optionalAuth, listPosts);
+router.get("/featured", optionalAuth, featuredPosts);
 router.get("/mine", authRequired, myPosts);
 router.get("/admin/all", authRequired, adminOnly, listAllForAdmin);
 router.post("/", authRequired, uploadPostImage.single("imageFile"), createPost);
-router.get("/:id", getPost);
+router.get("/:id", optionalAuth, getPost);
 router.get("/:id/reactions/users", authRequired, listPostReactionUsers);
 router.post("/:id/reactions", authRequired, reactToPost);
 router.patch(

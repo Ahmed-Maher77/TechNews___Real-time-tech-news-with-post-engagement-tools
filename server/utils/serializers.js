@@ -11,7 +11,7 @@ export function toPublicUser(userDoc) {
     };
 }
 
-export function toPublicPost(postDoc, authorFallback = "") {
+export function toPublicPost(postDoc, authorFallback = "", viewerUserId = "") {
     if (!postDoc) return null;
     const p = postDoc.toObject ? postDoc.toObject() : { ...postDoc };
     let authorId = "";
@@ -22,6 +22,17 @@ export function toPublicPost(postDoc, authorFallback = "") {
     } else if (p.author && typeof p.author !== "object") {
         authorId = p.author.toString?.() ?? String(p.author);
     }
+    const likedBy = Array.isArray(p.likedBy) ? p.likedBy : [];
+    const dislikedBy = Array.isArray(p.dislikedBy) ? p.dislikedBy : [];
+    const viewerId = String(viewerUserId || "");
+    const hasLike = viewerId
+        ? likedBy.some((u) => (u?.toString?.() ?? String(u)) === viewerId)
+        : false;
+    const hasDislike = viewerId
+        ? dislikedBy.some((u) => (u?.toString?.() ?? String(u)) === viewerId)
+        : false;
+    const reaction = hasLike ? "like" : hasDislike ? "dislike" : null;
+
     return {
         id: p._id?.toString?.() ?? p.id,
         authorId,
@@ -41,6 +52,7 @@ export function toPublicPost(postDoc, authorFallback = "") {
         likes: p.likes ?? 0,
         dislikes: p.dislikes ?? 0,
         comments: p.commentCount ?? 0,
+        reaction,
         featured: Boolean(p.featured),
     };
 }
