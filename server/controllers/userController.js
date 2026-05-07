@@ -1,6 +1,14 @@
 import User from "../models/User.js";
 import { toPublicUser } from "../utils/serializers.js";
 
+export async function getUserById(req, res) {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        return res.status(404).json({ message: "Not found" });
+    }
+    res.json({ user: toPublicUser(user) });
+}
+
 export async function updateMe(req, res) {
     const updates = {};
     const name = req.body.name !== undefined ? String(req.body.name).trim() : null;

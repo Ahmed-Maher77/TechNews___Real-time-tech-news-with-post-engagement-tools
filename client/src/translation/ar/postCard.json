@@ -7,5 +7,9 @@
     "shareTitleFallback": "منشور TechNews",
     "commentsCountAria": "عدد التعليقات",
     "likeAria": "إعجاب بالمنشور",
-    "dislikeAria": "عدم إعجاب بالمنشور"
+    "dislikeAria": "عدم إعجاب بالمنشور",
+    "ownerReactionHint": "لا يمكنك التفاعل مع منشورك الخاص.",
+    "editAction": "تعديل",
+    "deleteAction": "حذف",
+    "detailsAction": "تفاصيل"
 }

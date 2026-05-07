@@ -7,5 +7,13 @@
     "errorTitle": "Could not load your posts",
     "errorSubtitle": "Something went wrong while loading your posts. Please try again.",
     "retry": "Try again",
-    "caption": "Manage and review all posts you have published."
+    "caption": "Manage and review all posts you have published.",
+    "confirmDelete": "Are you sure you want to delete this post?",
+    "deleteSuccess": "Post deleted successfully.",
+    "deleteError": "Unable to delete post. Please try again.",
+    "editTitlePrompt": "Update post title",
+    "editDescriptionPrompt": "Update post description",
+    "editContentPrompt": "Update post content",
+    "editSuccess": "Post updated successfully.",
+    "editError": "Unable to update post. Please try again."
 }
